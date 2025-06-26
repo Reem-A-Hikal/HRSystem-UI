@@ -1,1 +1,9 @@
-<router-outlet />
+<div style="display: flex; min-height: 100vh">
+  <app-sidebar></app-sidebar>
+  <div style="flex: 1; display: flex; flex-direction: column">
+    <app-topbar></app-topbar>
+    <main style="padding: 20px">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
