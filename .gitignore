@@ -1,42 +1,46 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
+### ----- Angular Specific ----- ###
+## Build directories
 /dist
-/tmp
+/.angular/cache
 /out-tsc
-/bazel-out
 
-# Node
+## Dependencies
 /node_modules
+/.npm
+/.yarn
+
+## Logs
 npm-debug.log
 yarn-error.log
+*.log
 
-# IDEs and editors
+## Environment files
+/.env
+/environments/environment.ts
+/environments/environment.*.ts
+
+### ----- API Specific (e.g., .NET) ----- ###
+## Compiled output
+/bin
+/obj
+*.user
+*.suo
+*.pyc
+
+## Config files
+/appsettings.json
+/appsettings.*.json
+
+### ----- IDE & Tools ----- ###
+## IDEs and editors
 .idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# Visual Studio Code
+.vscode/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+## System files
 .DS_Store
 Thumbs.db

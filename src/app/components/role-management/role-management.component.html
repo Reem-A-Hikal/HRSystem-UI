@@ -1,0 +1,36 @@
+<div class="role-management-container">
+  <h2 class="title">Role Management</h2>
+
+  <div class="table-controls">
+    <input type="text" placeholder="Search" class="search-input" />
+    <button class="add-role-btn">+ Add New Role</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="roles-table">
+      <thead>
+        <tr>
+          <th>Group Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roles">
+          <td>{{ role.name }}</td>
+          <td class="actions">
+            <i class="bi bi-pencil-square edit-icon" title="Edit"></i>
+            <i class="bi bi-trash delete-icon" title="Delete"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button class="page-btn">&lt;</button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn">&gt;</button>
+  </div>
+</div>
