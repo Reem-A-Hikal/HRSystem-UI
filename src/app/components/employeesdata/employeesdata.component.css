@@ -1,0 +1,223 @@
+:root {
+  --primary-color: #4a739c;
+  --secondary-color: #b2c9e5;
+  --background-color: #cfdbe8;
+  --border-color: #dee2e6;
+  --text-dark: #1a1a1a;
+  --text-muted: #6c757d;
+}
+
+/* === General === */
+body {
+  background-color: var(--background-color);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-container {
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+/* === Title === */
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* === Add Button === */
+.add-btn {
+  background-color: #9bb5cc;
+  color: white;
+  font-weight: 600;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.add-btn:hover {
+  color: #4a739c;
+  background-color: white;
+}
+
+/* === Search === */
+.search-container {
+  position: relative;
+  max-width: 280px;
+  width: 100%;
+}
+
+.search-container .bi-search {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 40px;
+  padding-right: 14px;
+  height: 40px;
+  border-radius: 25px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-dark);
+  transition: 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 4px rgba(74, 115, 156, 0.3);
+}
+
+/* === Table === */
+.table-container {
+  border-radius: 10px;
+  overflow-x: auto;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+}
+
+.table-header th {
+  background-color: var(--secondary-color);
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+  padding: 14px 10px;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: inset 0 -1px 0 var(--border-color), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+  font-size: 14px;
+  white-space: nowrap;
+  padding: 14px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Alternate Row Background */
+.table tbody tr:nth-child(even) {
+  background-color: #f9fcff;
+}
+
+/* Hover */
+.table-hover tbody tr:hover {
+  background-color: #f1f5f9;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* === Action Buttons === */
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0 4px;
+  border-radius: 6px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn {
+  background-color: #88a9cc;
+  color: white;
+  border: none;
+}
+
+.edit-btn:hover {
+  background-color: #7497bd;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+/* === Pagination === */
+.pagination-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: white;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.25s ease-in-out;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.pagination-btn.active-page {
+  background-color: var(--secondary-color);
+  color: var(--text-dark);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 115, 156, 0.2);
+}
+
+.pagination-btn:disabled {
+  background-color: #f1f1f1;
+  color: #aaa;
+  cursor: not-allowed;
+  border-color: #ccc;
+  opacity: 0.7;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 20px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 11px;
+    padding: 8px 6px;
+  }
+
+  .add-btn {
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .search-container {
+    max-width: 100%;
+  }
+
+  .pagination-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+}
