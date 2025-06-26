@@ -14,11 +14,11 @@ export class RoleManagementComponent {
     { id: 2, name: 'Manager' },
     { id: 3, name: 'Employee' },
     { id: 4, name: 'Intern' },
-    { id: 5, name: 'Contractor' },
-    { id: 6, name: 'Consultant' },
-    { id: 7, name: 'Temporary' },
-    { id: 8, name: 'Part-time' },
-    { id: 9, name: 'Freelancer' },
-    { id: 10, name: 'Team Lead' },
+    // { id: 5, name: 'Contractor' },
+    // { id: 6, name: 'Consultant' },
+    // { id: 7, name: 'Temporary' },
+    // { id: 8, name: 'Part-time' },
+    // { id: 9, name: 'Freelancer' },
+    // { id: 10, name: 'Team Lead' },
   ];
 }
