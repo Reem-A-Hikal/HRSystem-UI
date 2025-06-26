@@ -1,0 +1,107 @@
+.role-management-container {
+  padding: 40px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 250px;
+}
+
+.add-role-btn {
+  background-color: #B2C9E5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.add-role-btn:hover {
+  background-color: #B2C9E5;
+}
+
+.table-wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.roles-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.roles-table th,
+.roles-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.roles-table th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.actions i {
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.edit-icon:hover {
+  color: B2C9E5;
+}
+
+.delete-icon:hover {
+  color: #ef4444;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-btn {
+  margin: 0 4px;
+  padding: 6px 12px;
+  background-color: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #1f2937;
+  transition: background-color 0.2s ease;
+}
+
+.page-btn:hover {
+  background-color: #cbd5e1;
+}
+
+.page-btn.active {
+  background-color: #B2C9E5;
+  color: white;
+}
