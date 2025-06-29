@@ -1,36 +1,82 @@
-<div class="role-management-container">
-  <h2 class="title">Role Management</h2>
+<div class="role-management-container py-5 px-4">
+  <h3 class="title mb-4">Role Management</h3>
 
   <div class="table-controls">
-    <input type="text" placeholder="Search" class="search-input" />
-    <button class="add-role-btn">+ Add New Role</button>
+    <div class="search-container">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        class="form-control search-input"
+        placeholder="Search role..."
+        [(ngModel)]="searchTerm"
+      />
+    </div>   
+
+   <button 
+  class="btn add-btn rounded-pill px-4 py-2"
+  (click)="goToAddPage()"
+>
+  <i class="bi bi-plus-circle me-2"></i> Add Role
+</button>
+
   </div>
 
-  <div class="table-wrapper">
-    <table class="roles-table">
-      <thead>
-        <tr>
-          <th>Group Name</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let role of roles">
-          <td>{{ role.name }}</td>
-          <td class="actions">
-            <i class="bi bi-pencil-square edit-icon" title="Edit"></i>
-            <i class="bi bi-trash delete-icon" title="Delete"></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="table-center">
+    <div class="table-wrapper">
+      <table class="roles-table">
+        <thead>
+          <tr>
+            <th>Group Name</th>
+            <th style="width: 120px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of paginatedRoles; let i = index">
+            <td>{{ role.name }}</td>
+            <td>
+              <button
+                class="btn btn-sm icon-btn edit-btn me-1"
+                (click)="editRole(i)"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-sm icon-btn delete-btn"
+                (click)="deleteRole(i)"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <div class="pagination">
-    <button class="page-btn">&lt;</button>
-    <button class="page-btn active">1</button>
-    <button class="page-btn">2</button>
-    <button class="page-btn">3</button>
-    <button class="page-btn">&gt;</button>
+    <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)"
+      >
+        ‹
+      </button>
+
+      <button
+        *ngFor="let page of totalPages"
+        (click)="goToPage(page)"
+        [ngClass]="{ 'active-page': currentPage === page }"
+        class="pagination-btn"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === totalPages.length"
+        (click)="goToPage(currentPage + 1)"
+      >
+        ›
+      </button>
+    </div>
   </div>
 </div>

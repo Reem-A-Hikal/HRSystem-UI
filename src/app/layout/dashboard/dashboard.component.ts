@@ -1,14 +1,9 @@
-import {
-  Component,
-  OnInit,
-  HostListener,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, HostListener, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { CommonModule } from '@angular/common';
 import { BodyComponent } from '../body/body.component';
-import { TopbarComponent } from "../../shared/topbar/topbar.component";
+import { TopbarComponent } from '../../shared/topbar/topbar.component';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -25,10 +20,10 @@ interface SideNavToggle {
     RouterModule,
     CommonModule,
     BodyComponent,
-    TopbarComponent
-],
+    TopbarComponent,
+  ],
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
 

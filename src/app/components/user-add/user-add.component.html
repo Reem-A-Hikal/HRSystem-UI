@@ -1,0 +1,56 @@
+<div class="container mt-5">
+    <div class="card-header text-black ">
+      <h4 class="mb-3">{{ isEditing ? 'Edit User' : 'Add User' }}</h4>
+    </div>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+        <!-- Full Name -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Full Name</label>
+          <input type="text" class="form-control" [(ngModel)]="user.fullName" name="fullName" required />
+        </div>
+
+        <!-- Username -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Username</label>
+          <input type="text" class="form-control" [(ngModel)]="user.username" name="username" required />
+        </div>
+
+        <!-- Role -->
+        <div class="mb-3">
+          <label for="role" class="form-label">Role</label>
+          <select
+            id="role"
+            class="form-select"
+            [(ngModel)]="user.role"
+            name="role"
+          >
+            <option *ngFor="let role of roles" [value]="role.name">
+              {{ role.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Email Address</label>
+          <input type="email" class="form-control" [(ngModel)]="user.email" name="email" required />
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Password</label>
+          <input type="password" class="form-control" [(ngModel)]="user.password" name="password" required />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-end">
+      <button type="submit" class="btn save-btn">
+        <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
+      </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

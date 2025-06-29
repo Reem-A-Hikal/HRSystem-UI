@@ -8,6 +8,11 @@ import { SalaryReportComponent } from './components/Reports/SalaryReport/SalaryR
 import { EditRecordComponent } from './components/Reports/editRecord/editRecord.component';
 import { ManageAttendanceComponent } from './components/AttendancePage/manageAttendance/manageAttendance.component';
 import { PrintReportComponent } from './components/Reports/PrintReport/PrintReport.component';
+import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
+import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import { AddRoleComponent } from './components/role-add/role-add.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
+import { AddUserComponent } from './components/user-add/user-add.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -26,6 +31,13 @@ export const routes: Routes = [
       },
       { path: 'EditRecord', component: EditRecordComponent },
       { path: 'PrintReport', component: PrintReportComponent },
+
+      { path: 'add-employee', component: AddEmployeeComponent },
+      { path: 'edit-employee/:id', component: EditEmployeeComponent },
+
+      { path: 'addRole', component: AddRoleComponent },
+      { path: 'users', component: UserManagementComponent },
+      { path: 'add-user', component: AddUserComponent },
     ],
   },
 ];

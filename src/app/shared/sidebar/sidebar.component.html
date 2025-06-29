@@ -7,27 +7,27 @@
       <i class="fal fa-bars">HR</i>
     </button>
     @if (!isLeftSidebarCollapsed()) {
-      <div class="logo-text" @fadeInOut>Pioneers</div>
-      <button @rotate class="btn-close" (click)="closeSidenav()">
-        <i class="fal fa-times close-icon"></i>
-      </button>
+    <div class="logo-text" @fadeInOut>Pioneers</div>
+    <button @rotate class="btn-close" (click)="closeSidenav()">
+      <i class="fal fa-times close-icon"></i>
+    </button>
     }
   </div>
   <div class="sidenav-nav">
     @for (item of items; track $index) {
-      <li class="sidenav-nav-item">
-        <a
-          class="sidenav-nav-link"
-          [routerLink]="item.routeLink"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <i class="sidenav-link-icon" [class]="item.icon"></i>
-          @if (!isLeftSidebarCollapsed()) {
-            <span @fadeInOut class="sidenav-link-text">{{ item.label }}</span>
-          }
-        </a>
-      </li>
+    <li class="sidenav-nav-item">
+      <a
+        class="sidenav-nav-link"
+        [routerLink]="item.routeLink"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="sidenav-link-icon" [class]="item.icon"></i>
+        @if (!isLeftSidebarCollapsed()) {
+        <span @fadeInOut class="sidenav-link-text">{{ item.label }}</span>
+        }
+      </a>
+    </li>
     }
   </div>
 </div>

@@ -1,0 +1,199 @@
+<div class="container">
+  <div class="form-container">
+    <h1 class="form-title">Add New Employee</h1>
+    <p class="form-subtitle">
+      Please fill in the employee details step by step.
+    </p>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-labels">
+        <span [class.active]="step >= 1">Step 1</span>
+        <span [class.active]="step >= 2">Step 2</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="step * 50"></div>
+      </div>
+    </div>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <!-- Step 1: Personal Info -->
+      <div *ngIf="step === 1">
+        <h2 class="section-title">Personal Information</h2>
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" formControlName="name" />
+          <div class="error" *ngIf="f['name'].touched && f['name'].invalid">
+            <div *ngIf="f['name'].errors?.['required']">Name is required.</div>
+            <div *ngIf="f['name'].errors?.['minlength']">
+              At least 3 characters.
+            </div>
+            <div *ngIf="f['name'].errors?.['pattern']">
+              Only letters and spaces allowed.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gender</label>
+            <select formControlName="gender">
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+            <div
+              class="error"
+              *ngIf="f['gender'].touched && f['gender'].invalid"
+            >
+              Gender is required.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nationality</label>
+            <select formControlName="nationality">
+              <option value="">Select</option>
+              <option value="egyptian">Egyptian</option>
+              <option value="saudi">Saudi</option>
+              <option value="other">Other</option>
+            </select>
+            <div
+              class="error"
+              *ngIf="f['nationality'].touched && f['nationality'].invalid"
+            >
+              Nationality is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Birth Date</label>
+          <input type="date" formControlName="birthDate" />
+          <div
+            class="error"
+            *ngIf="f['birthDate'].touched && f['birthDate'].errors"
+          >
+            <div *ngIf="f['birthDate'].errors?.['required']">
+              Birth Date is required.
+            </div>
+            <div *ngIf="f['birthDate'].errors?.['futureDate']">
+              Date cannot be in the future.
+            </div>
+            <div *ngIf="f['birthDate'].errors?.['tooYoung']">
+              Must be at least 18 years old.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>National ID</label>
+          <input type="text" formControlName="nationalId" />
+          <div
+            class="error"
+            *ngIf="f['nationalId'].touched && f['nationalId'].errors"
+          >
+            <div *ngIf="f['nationalId'].errors?.['required']">
+              National ID is required.
+            </div>
+            <div *ngIf="f['nationalId'].errors?.['pattern']">
+              Must be 14 digits, starting with 2 or 3.
+            </div>
+          </div>
+        </div>
+
+        <button type="button" (click)="nextStep()">Next</button>
+      </div>
+
+      <!-- Step 2: Job Info -->
+      <div *ngIf="step === 2">
+        <h2 class="section-title">Job Information</h2>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" formControlName="phone" />
+          <div class="error" *ngIf="f['phone'].touched && f['phone'].invalid">
+            <div *ngIf="f['phone'].errors?.['required']">
+              Phone number is required.
+            </div>
+            <div *ngIf="f['phone'].errors?.['pattern']">
+              Valid phone number (e.g., 01012345678).
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" formControlName="address" />
+          <div
+            class="error"
+            *ngIf="f['address'].touched && f['address'].invalid"
+          >
+            Address is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Department</label>
+          <select formControlName="department">
+            <option value="">Select</option>
+            <option value="hr">HR</option>
+            <option value="it">IT</option>
+            <option value="finance">Finance</option>
+          </select>
+          <div
+            class="error"
+            *ngIf="f['department'].touched && f['department'].invalid"
+          >
+            Department is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Base Salary</label>
+          <input type="number" formControlName="baseSalary" />
+          <div
+            class="error"
+            *ngIf="f['baseSalary'].touched && f['baseSalary'].errors"
+          >
+            <div *ngIf="f['baseSalary'].errors?.['required']">
+              Salary is required.
+            </div>
+            <div *ngIf="f['baseSalary'].errors?.['min']">Minimum is 7000.</div>
+            <div *ngIf="f['baseSalary'].errors?.['max']">
+              Maximum is 100000.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Contract Date</label>
+          <input type="date" formControlName="contractDate" />
+          <div
+            class="error"
+            *ngIf="f['contractDate'].touched && f['contractDate'].errors"
+          >
+            <div *ngIf="f['contractDate'].errors?.['required']">
+              Contract date is required.
+            </div>
+            <div *ngIf="f['contractDate'].errors?.['futureDate']">
+              Cannot be in the future.
+            </div>
+            <div *ngIf="f['contractDate'].errors?.['beforeBirth']">
+              Contract must be after birth.
+            </div>
+            <div *ngIf="f['contractDate'].errors?.['tooYoungAtContract']">
+              Must be at least 18 at contract.
+            </div>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button type="button" (click)="prevStep()">Back</button>
+          <button type="submit">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
