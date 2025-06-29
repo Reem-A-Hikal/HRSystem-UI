@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { IEmployee } from '../../../models/IEmployee';
 
 @Component({
   selector: 'app-employeesdata',
@@ -10,8 +11,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./employeesdata.component.css'],
 })
 export class EmployeesdataComponent {
-  employees: Employee[] = [
+  employees: IEmployee[] = [
     {
+      id: 1,
       name: 'Sophia Carter',
       department: 'Marketing',
       salary: '$65,000',
@@ -28,10 +30,15 @@ export class EmployeesdataComponent {
   searchTerm: string = '';
   currentPage = 1;
   itemsPerPage = 5;
+  isLoading: boolean = false;
+  pageSize: number = 5;
 
   constructor(private router: Router) {}
 
-  get pagedEmployees(): Employee[] {
+  get isEmpty(): boolean {
+    return this.employees.length === 0;
+  }
+  get pagedEmployees(): IEmployee[] {
     const filtered = this.employees.filter((emp) =>
       emp.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
@@ -52,25 +59,17 @@ export class EmployeesdataComponent {
   }
 
   goToAddPage() {
-    this.router.navigate(['/add']);
+    this.router.navigate(['/dashboard/add-employee']);
   }
 
-  editEmployee(index: number) {}
-
-  deleteEmployee(index: number) {
-    this.employees.splice(index, 1);
+  editEmployee(id: number) {
+    this.router.navigate([`/dashboard/edit-employee/${id}`]);
   }
-}
 
-interface Employee {
-  name: string;
-  department: string;
-  salary: string;
-  address: string;
-  phone: string;
-  gender: string;
-  nationality: string;
-  nationalId: string;
-  dob: string;
-  contractDate: string;
+  deleteEmployee(id: number) {
+    const index = this.employees.findIndex((emp) => emp.id === id);
+    if (index !== -1) {
+      this.employees.splice(index, 1);
+    }
+  }
 }

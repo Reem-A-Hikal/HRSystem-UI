@@ -1,45 +1,30 @@
-:root {
-  --primary-color: #4a739c;
-  --secondary-color: #b2c9e5;
-  --background-color: #cfdbe8;
-  --border-color: #dee2e6;
-  --text-dark: #1a1a1a;
-  --text-muted: #6c757d;
-}
-
-/* === General === */
-body {
-  background-color: var(--background-color);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.main-container {
-  background-color: var(--background-color);
+.role-management-container {
+  padding: 40px;
   min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* === Title === */
-.page-title {
+.title {
   font-size: 26px;
   font-weight: 700;
-  color: var(--primary-color);
+  margin-bottom: 30px;
+  color: #111827;
 }
 
-/* === Add Button === */
-.add-btn {
-  background-color: #9bb5cc;
-  color: white;
-  font-weight: 600;
-  border: none;
-  transition: background-color 0.3s;
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.table-center {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.add-btn:hover {
-  color: #4a739c;
-  background-color: white;
-}
 
-/* === Search === */
 .search-container {
   position: relative;
   max-width: 280px;
@@ -80,49 +65,51 @@ body {
   box-shadow: 0 0 4px rgba(74, 115, 156, 0.3);
 }
 
-/* === Table === */
-.table-container {
-  border-radius: 10px;
-  overflow-x: auto;
-  background-color: white;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--border-color);
-}
 
-.table-header th {
-  background-color: var(--secondary-color);
-  color: black;
-  font-size: 14px;
+.add-btn {
+  background-color: #9bb5cc;
+  color: white;
   font-weight: 600;
-  text-align: center;
-  text-transform: capitalize;
-  padding: 14px 10px;
-  letter-spacing: 0.3px;
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: inset 0 -1px 0 var(--border-color), 0 2px 4px rgba(0, 0, 0, 0.06);
+  border: none;
+  transition: background-color 0.3s;
 }
 
-.table th,
-.table td {
-  vertical-align: middle;
+.add-btn:hover {
+  color: #4a739c;
+  background-color: white;
+}
+
+.table-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.roles-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.roles-table th,
+.roles-table td {
+  padding: 18px 20px;
+  text-align: left;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.roles-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
   font-size: 14px;
-  white-space: nowrap;
-  padding: 14px 12px;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
+  text-transform: uppercase;
 }
 
-/* Alternate Row Background */
-.table tbody tr:nth-child(even) {
-  background-color: #f9fcff;
+.roles-table td {
+  font-size: 15px;
+  color: #111827;
 }
-
-/* Hover */
-.table-hover tbody tr:hover {
-  background-color: #f1f5f9;
-  transition: background-color 0.2s ease-in-out;
-}
-
 /* === Action Buttons === */
 .icon-btn {
   width: 32px;
@@ -192,32 +179,4 @@ body {
   cursor: not-allowed;
   border-color: #ccc;
   opacity: 0.7;
-}
-
-/* === Responsive === */
-@media (max-width: 768px) {
-  .page-title {
-    font-size: 20px;
-  }
-
-  .table th,
-  .table td {
-    font-size: 11px;
-    padding: 8px 6px;
-  }
-
-  .add-btn {
-    width: 100%;
-    margin-top: 12px;
-  }
-
-  .search-container {
-    max-width: 100%;
-  }
-
-  .pagination-btn {
-    width: 34px;
-    height: 34px;
-    font-size: 12px;
-  }
 }

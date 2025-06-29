@@ -1,0 +1,93 @@
+<div class="d-flex flex-column">
+  <main class="main-content flex-grow-1 d-flex justify-content-center">
+    <div class="content-container">
+      <h1 class="page-title mb-4">
+        {{ isEditMode ? "Edit" : "Add" }} Attendance Record
+      </h1>
+      <form [formGroup]="attendanceForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="form-label" for="employeeSelect">Employee Name</label>
+          <select
+            class="form-select"
+            id="employeeSelect"
+            formControlName="employeeId"
+          >
+            <option [value]="null" selected>Select Employee</option>
+            <option *ngFor="let employee of employees" [value]="employee.id">
+              {{ employee.name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="form-label" for="departmentSelect">Department</label>
+          <select
+            class="form-select"
+            id="departmentSelect"
+            formControlName="departmentId"
+          >
+            <option [value]="null" selected>Select Department</option>
+            <option
+              *ngFor="let department of departments"
+              [value]="department.id"
+            >
+              {{ department.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Date</label>
+          <input
+            type="date"
+            class="form-control"
+            placeholder="Select date"
+            title="Select date"
+            formControlName="date"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Check-in Time</label>
+          <input
+            type="time"
+            class="form-control"
+            placeholder="Select check-in time"
+            title="Select check-in time"
+            formControlName="checkInTime"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Check-out Time</label>
+          <input
+            type="time"
+            class="form-control"
+            placeholder="Select check-out time"
+            title="Select check-out time"
+            formControlName="checkOutTime"
+          />
+        </div>
+
+        <div
+          class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4"
+        >
+          <a
+            style="line-height: 40px"
+            [routerLink]="['/dashboard/Attendance']"
+            class="btn btn-cancel flex-fill flex-sm-unset text-center"
+          >
+            <i class="bi bi-x-circle me-2"></i>
+            <span>Cancel</span>
+          </a>
+          <button
+            type="submit"
+            class="btn btn-save flex-fill flex-sm-unset text-center"
+          >
+            <i class="bi bi-save me-2"></i>
+            <span>{{ isEditMode ? "Update" : "Save" }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

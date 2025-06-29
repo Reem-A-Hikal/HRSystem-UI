@@ -1,0 +1,37 @@
+export const navbarData = [
+  {
+    routeLink: '/dashboard',
+    icon: 'bi bi-columns-gap',
+    label: 'Dashboard',
+  },
+  {
+    routeLink: '/dashboard/Roles',
+    icon: 'bi bi-shield',
+    label: 'Roles',
+  },
+  {
+    routeLink: '/dashboard/Users',
+    icon: 'bi bi-person-badge',
+    label: 'Users',
+  },
+  {
+    routeLink: '/dashboard/Employees',
+    icon: 'bi bi-people',
+    label: 'Employees',
+  },
+  {
+    routeLink: '/dashboard/Attendance',
+    icon: 'bi bi-calendar',
+    label: 'Attendance',
+  },
+  {
+    routeLink: '/dashboard/SalaryReport',
+    icon: 'bi bi-receipt',
+    label: 'Report',
+  },
+  {
+    routeLink: '/dashboard/Settings',
+    icon: 'bi bi-gear',
+    label: 'Settings',
+  },
+];

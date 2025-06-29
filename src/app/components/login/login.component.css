@@ -105,7 +105,7 @@ body {
 }
 
 .form-control:valid:not(:placeholder-shown) {
-  border-color: #28a745;
+  border-color: rgb(41, 166, 70);
 }
 .form-control:invalid:not(:placeholder-shown) {
   border-color: #dc3545;

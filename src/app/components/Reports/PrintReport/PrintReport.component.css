@@ -1,0 +1,73 @@
+body {
+  font-family: "Inter", "Noto Sans", sans-serif;
+  background-color: #f8f9fa;
+  color: #0d151c;
+}
+.navbar-brand {
+  font-weight: bold;
+}
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.page-subtitle {
+  color: #49749c;
+  font-size: 0.875rem;
+}
+.section-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.info-label {
+  color: #49749c;
+  font-size: 0.875rem;
+}
+.info-value {
+  font-size: 0.875rem;
+}
+.border-custom {
+  border-color: #cedce8 !important;
+}
+.btn-export {
+  background-color: #e7edf4;
+  color: #0d151c;
+  border-radius: 20px;
+  font-weight: bold;
+  padding: 8px 16px;
+}
+.btn-print {
+  background-color: #0b80ee;
+  color: white;
+  border-radius: 20px;
+  font-weight: bold;
+  padding: 8px 16px;
+}
+.table-custom th {
+  background-color: #f8f9fa;
+  color: #0d151c;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+.table-custom td {
+  height: 72px;
+  vertical-align: middle;
+  font-size: 0.875rem;
+}
+.amount-value {
+  color: #49749c;
+}
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  background-color: #0d151c;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #6c757d;
+}
