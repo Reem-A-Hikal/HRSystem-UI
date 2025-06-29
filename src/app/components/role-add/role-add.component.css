@@ -1,0 +1,54 @@
+.role-add-container {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 1rem;
+}
+
+.input-section {
+  margin-bottom: 1.5rem;
+}
+
+input[type="text"] {
+  padding: 8px 12px;
+  width: 300px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+.table-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+th, td {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+th {
+  background-color: #f3f4f6;
+}
+
+.save-btn {
+  padding: 0.6rem 1.5rem;
+  background-color: #9bb5cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}

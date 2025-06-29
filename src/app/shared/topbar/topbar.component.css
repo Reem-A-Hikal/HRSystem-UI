@@ -14,7 +14,7 @@
 }
 
 .home-btn {
-  background-color: #9CB9DB;
+  background-color: #B2C9E5;
   color: white;
   border: none;
   border-radius: 8px;
@@ -24,5 +24,5 @@
 }
 
 .home-btn:hover {
-  background-color: #7b96b4;
+  background-color: #B2C9E5;
 }
