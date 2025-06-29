@@ -1,0 +1,190 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h1 class="page-title mb-4 text-center fw-bold">
+            Edit Salary Record
+          </h1>
+          <form>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label for="employeeName" class="form-label fw-semibold"
+                  >Employee Name</label
+                >
+                <input
+                  type="text"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="employeeName"
+                  placeholder="Enter employee name"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="department" class="form-label fw-semibold"
+                  >Department</label
+                >
+                <select
+                  class="form-select rounded-3 border-primary-subtle shadow-sm"
+                  id="department"
+                >
+                  <option selected disabled>Select department</option>
+                  <option>Engineering</option>
+                  <option>Marketing</option>
+                  <option>HR</option>
+                  <option>Finance</option>
+                  <option>Operations</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label for="month" class="form-label fw-semibold">Month</label>
+                <select
+                  class="form-select rounded-3 border-primary-subtle shadow-sm"
+                  id="month"
+                >
+                  <option selected disabled>Select month</option>
+                  <option>January</option>
+                  <option>February</option>
+                  <option>March</option>
+                  <option>April</option>
+                  <option>May</option>
+                  <option>June</option>
+                  <option>July</option>
+                  <option>August</option>
+                  <option>September</option>
+                  <option>October</option>
+                  <option>November</option>
+                  <option>December</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label for="year" class="form-label fw-semibold">Year</label>
+                <select
+                  class="form-select rounded-3 border-primary-subtle shadow-sm"
+                  id="year"
+                >
+                  <option selected disabled>Select year</option>
+                  <option>2023</option>
+                  <option>2024</option>
+                  <option>2025</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label for="basicSalary" class="form-label fw-semibold"
+                  >Basic Salary</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="basicSalary"
+                  placeholder="0.00"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="attendanceDays" class="form-label fw-semibold"
+                  >Attendance Days</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="attendanceDays"
+                  placeholder="0"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="absenceDays" class="form-label fw-semibold"
+                  >Absence Days</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="absenceDays"
+                  placeholder="0"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="overtimeHours" class="form-label fw-semibold"
+                  >Overtime (Hours)</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="overtimeHours"
+                  placeholder="0"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="deductionHours" class="form-label fw-semibold"
+                  >Deduction (Hours)</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="deductionHours"
+                  placeholder="0"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="totalOvertime" class="form-label fw-semibold"
+                  >Total Overtime</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="totalOvertime"
+                  placeholder="0.00"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="totalDeduction" class="form-label fw-semibold"
+                  >Total Deduction</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-primary-subtle shadow-sm"
+                  id="totalDeduction"
+                  placeholder="0.00"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="netSalary" class="form-label fw-semibold"
+                  >Net Salary</label
+                >
+                <input
+                  type="number"
+                  class="form-control rounded-3 border-success shadow-sm fw-bold text-success"
+                  id="netSalary"
+                  placeholder="0.00"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div
+                class="col-12 d-flex flex-column flex-md-row justify-content-end align-items-stretch gap-3"
+              >
+                <button
+                  type="button"
+                  class="btn-save btn btn-primary px-4 py-2 rounded-pill shadow-sm flex-fill flex-md-grow-0"
+                >
+                  <i class="bi bi-save me-2"></i>
+                  <span class="d-none d-sm-inline">Save Changes</span>
+                  <span class="d-inline d-sm-none">Save</span>
+                </button>
+                <a
+                  type="button"
+                  class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm flex-fill flex-md-grow-0"
+                  [routerLink]="['/dashboard/Salary']"
+                >
+                  <i class="bi bi-x-circle me-2"></i>
+                  <span class="d-none d-sm-inline">Cancel</span>
+                  <span class="d-inline d-sm-none">Cancel</span>
+                </a>
+              </div>
+              <div class="col-12 mt-3 d-md-none"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

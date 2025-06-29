@@ -1,0 +1,105 @@
+<div class="container py-5 bg-gradient rounded-4 shadow-lg" style="background: linear-gradient(135deg, #f8fafc 0%, #e3e9f7 100%);">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="d-flex flex-column gap-2 mb-4 align-items-center">
+        <h1 class="page-title mb-1 fw-bold text-primary">{{employeeName}} Payslip</h1>
+        <p class="page-subtitle mb-0 text-secondary fs-5">
+          View and print the payslip for {{employeeName}}.
+        </p>
+      </div>
+
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+          <h3 class="section-title mb-3 text-primary">Employee Information</h3>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="bg-white p-3 rounded-3 border-start border-4 border-primary">
+                <p class="info-label mb-1 text-muted">Employee Name</p>
+                <p class="info-value mb-0 fw-semibold">Sophia Clark</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="bg-white p-3 rounded-3 border-start border-4 border-success">
+                <p class="info-label mb-1 text-muted">Department</p>
+                <p class="info-value mb-0 fw-semibold">Marketing</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="bg-white p-3 rounded-3 border-start border-4 border-info">
+                <p class="info-label mb-1 text-muted">Month</p>
+                <p class="info-value mb-0 fw-semibold">July</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="bg-white p-3 rounded-3 border-start border-4 border-warning">
+                <p class="info-label mb-1 text-muted">Year</p>
+                <p class="info-value mb-0 fw-semibold">2024</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+          <h3 class="section-title mb-3 text-primary">Salary Breakdown</h3>
+          <div class="table-responsive">
+            <table class="table table-hover table-borderless align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="px-4 py-3 w-50">Item</th>
+                  <th class="px-4 py-3 w-50">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="px-4 py-2">Basic Salary</td>
+                  <td class="px-4 py-2 amount-value fw-bold text-success">$5,000</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">Attendance Days</td>
+                  <td class="px-4 py-2 amount-value">20</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">Absence Days</td>
+                  <td class="px-4 py-2 amount-value text-danger">2</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">Overtime (Hours)</td>
+                  <td class="px-4 py-2 amount-value text-info">10</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">Deduction (Hours)</td>
+                  <td class="px-4 py-2 amount-value text-warning">5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body">
+          <h3 class="section-title mb-3 text-primary">Net Salary</h3>
+          <div class="row align-items-center">
+            <div class="col-md-3">
+              <p class="info-label mb-1 text-muted">Net Salary</p>
+            </div>
+            <div class="col-md-9">
+              <p class="info-value mb-0 fs-3 fw-bold text-success">$4,800</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-3 mt-4">
+        <button class="btn btn-outline-primary px-4 py-2 shadow-sm">
+          <i class="bi bi-file-earmark-arrow-down me-2"></i>Export
+        </button>
+        <button class="btn btn-primary px-4 py-2 shadow-sm">
+          <i class="bi bi-printer me-2"></i>Print
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

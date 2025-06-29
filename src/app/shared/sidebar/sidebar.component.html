@@ -1,27 +1,33 @@
-<div class="sidebar">
-  <h4 class="sidebar-title">
-    <i class="fa fa-bars"></i>
-</h4>
-  <ul class="nav-links">
-    <li>
-      <i class="bi bi-speedometer2"></i>
-      <a routerLink="/dashboard">Dashboard</a>
-    </li>
-    <li>
-      <i class="bi bi-shield-lock"></i>
-      <a routerLink="/roles">Roles</a>
-    </li>
-    <li>
-      <i class="bi bi-people"></i>
-      <a routerLink="/users">Users</a>
-    </li>
-    <li>
-      <i class="bi bi-person-badge"></i>
-      <a routerLink="/employees">Employees</a>
-    </li>
-    <li>
-      <i class="bi bi-gear"></i>
-      <a routerLink="/settings">Settings</a>
-    </li>
-  </ul>
+<div
+  class="sidenav"
+  [ngClass]="isLeftSidebarCollapsed() ? 'sidenav-collapsed' : ''"
+>
+  <div class="logo-container">
+    <button class="logo" (click)="toggleCollapse()">
+      <i class="fal fa-bars">HR</i>
+    </button>
+    @if (!isLeftSidebarCollapsed()) {
+      <div class="logo-text" @fadeInOut>Pioneers</div>
+      <button @rotate class="btn-close" (click)="closeSidenav()">
+        <i class="fal fa-times close-icon"></i>
+      </button>
+    }
+  </div>
+  <div class="sidenav-nav">
+    @for (item of items; track $index) {
+      <li class="sidenav-nav-item">
+        <a
+          class="sidenav-nav-link"
+          [routerLink]="item.routeLink"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="sidenav-link-icon" [class]="item.icon"></i>
+          @if (!isLeftSidebarCollapsed()) {
+            <span @fadeInOut class="sidenav-link-text">{{ item.label }}</span>
+          }
+        </a>
+      </li>
+    }
+  </div>
 </div>
