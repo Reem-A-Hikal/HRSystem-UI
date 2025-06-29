@@ -7,6 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/Auth.service';
+import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,11 @@ export class LoginComponent implements OnInit {
   isSubmitted: Boolean = false;
   showPassword: boolean = false;
 
-  constructor(public formBuilder: FormBuilder, private toastr: ToastrService) {}
+  constructor(
+    public formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.FormValidation();
@@ -57,14 +63,21 @@ export class LoginComponent implements OnInit {
     // console.log(this.loginForm.value, this.loginForm.controls);
     this.isSubmitted = true;
     if (this.loginForm.invalid) {
-      this.toastr.warning(
+      this.toastr.error(
         'Please fill in all required fields correctly.',
         'Validation Error'
       );
       return;
     }
-    this.toastr.success('Login successful!', 'Success');
-    console.log('Login successful', this.loginForm.value);
+
+    this.authService.login(this.loginForm.value).subscribe(
+      (response) => this.toastr.success('Login successful', 'Success'),
+      (error) => {
+        this.toastr.error('Invalid credentials', 'Error');
+        console.log(error);
+      }
+    );
+
     // Reset the form after successful submission
     this.loginForm.reset();
     this.isSubmitted = false;
