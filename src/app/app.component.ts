@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { OfficialHolidayComponent } from "./components/official-holiday/official-holiday.component";
 
 @Component({
   selector: 'app-root',
