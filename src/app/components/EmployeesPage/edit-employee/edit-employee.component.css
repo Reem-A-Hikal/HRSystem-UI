@@ -1,11 +1,11 @@
 .container {
   max-width: 800px;
-  margin: 40px auto;
+  min-height: 90vh;
   padding: 24px;
 }
 
 .form-container {
-  background-color: #f8f9fa;
+  background-color: #fff;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);

@@ -61,4 +61,5 @@ export class SidebarComponent {
   closeSidenav(): void {
     this.changeIsLeftSidebarCollapsed.emit(true);
   }
+  onLogout(){}
 }

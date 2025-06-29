@@ -10,15 +10,11 @@
         placeholder="Search role..."
         [(ngModel)]="searchTerm"
       />
-    </div>   
+    </div>
 
-   <button 
-  class="btn add-btn rounded-pill px-4 py-2"
-  (click)="goToAddPage()"
->
-  <i class="bi bi-plus-circle me-2"></i> Add Role
-</button>
-
+    <button class="btn add-btn rounded-pill px-4 py-2" (click)="goToAddPage()">
+      <i class="bi bi-plus-circle me-2"></i> Add Role
+    </button>
   </div>
 
   <div class="table-center">
@@ -27,7 +23,7 @@
         <thead>
           <tr>
             <th>Group Name</th>
-            <th style="width: 120px;">Actions</th>
+            <th style="width: 120px">Actions</th>
           </tr>
         </thead>
         <tbody>

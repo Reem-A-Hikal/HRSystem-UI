@@ -29,5 +29,21 @@
       </a>
     </li>
     }
+    <li class="sidenav-nav-item logout-item" style="margin-top: auto; display: flex;">
+      <a
+      class="sidenav-nav-link"
+      (click)="onLogout()"
+      tabindex="0"
+      aria-label="Logout"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      style="flex: 1;"
+      >
+      <i class="sidenav-link-icon bi bi-box-arrow-left"></i>
+      @if (!isLeftSidebarCollapsed()) {
+      <span @fadeInOut class="sidenav-link-text">Logout</span>
+      }
+      </a>
+    </li>
   </div>
 </div>
