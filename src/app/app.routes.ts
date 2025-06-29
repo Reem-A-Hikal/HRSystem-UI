@@ -5,6 +5,7 @@ import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { EmployeesdataComponent } from './components/employeesdata/employeesdata.component';
 import { OfficialHolidayComponent } from './components/official-holiday/official-holiday.component';
 import { EditOfficialHolidayComponent } from './components/edit-official-holiday/edit-official-holiday.component';
+import { GeneralSettingComponent } from './components/general-setting/general-setting.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -15,7 +16,8 @@ export const routes: Routes = [
       { path: 'roles', component: RoleManagementComponent },
       { path: 'employees', component: EmployeesdataComponent },
       { path:'official-holiday', component:OfficialHolidayComponent },
-      { path:'edit-official-holiday/:id', component: EditOfficialHolidayComponent }
+      { path:'edit-official-holiday/:id', component: EditOfficialHolidayComponent },
+      { path: 'general-setting', component:GeneralSettingComponent },
     ],
   },
 ];
