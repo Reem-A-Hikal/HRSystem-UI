@@ -1,18 +1,18 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { RoleManagementComponent } from './components/role-management/role-management.component';
+import { RoleManagementComponent } from './components/RolesPage/role-management/role-management.component';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
-import { EmployeesdataComponent } from './components/employeesdata/employeesdata.component';
+import { EmployeesdataComponent } from './components/EmployeesPage/employeesdata/employeesdata.component';
 import { AttendanceComponent } from './components/AttendancePage/Attendance/Attendance.component';
 import { SalaryReportComponent } from './components/Reports/SalaryReport/SalaryReport.component';
 import { EditRecordComponent } from './components/Reports/editRecord/editRecord.component';
 import { ManageAttendanceComponent } from './components/AttendancePage/manageAttendance/manageAttendance.component';
 import { PrintReportComponent } from './components/Reports/PrintReport/PrintReport.component';
-import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
-import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
-import { AddRoleComponent } from './components/role-add/role-add.component';
-import { UserManagementComponent } from './components/user-management/user-management.component';
-import { AddUserComponent } from './components/user-add/user-add.component';
+import { AddEmployeeComponent } from './components/EmployeesPage/add-employee/add-employee.component';
+import { EditEmployeeComponent } from './components/EmployeesPage/edit-employee/edit-employee.component';
+import { UserManagementComponent } from './components/UsersPage/user-management/user-management.component';
+import { AddUserComponent } from './components/UsersPage/user-add/user-add.component';
+import { AddRoleComponent } from './components/RolesPage/role-add/role-add.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -36,7 +36,7 @@ export const routes: Routes = [
       { path: 'edit-employee/:id', component: EditEmployeeComponent },
 
       { path: 'addRole', component: AddRoleComponent },
-      { path: 'users', component: UserManagementComponent },
+      { path: 'Users', component: UserManagementComponent },
       { path: 'add-user', component: AddUserComponent },
     ],
   },

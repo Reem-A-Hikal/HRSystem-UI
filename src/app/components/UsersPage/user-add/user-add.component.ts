@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RoleService } from '../../services/role.service';
-import { UserService } from '../../services/user.service';
+import { RoleService } from '../../../services/role.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-add-user',
