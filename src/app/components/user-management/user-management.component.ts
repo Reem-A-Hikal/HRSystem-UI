@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../../services/user.service';
+
 
 @Component({
   selector: 'app-user-management',
@@ -11,6 +13,14 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./user-management.component.css']
 })
 export class UserManagementComponent {
+  isEditing: boolean = false;
+  constructor(private router: Router, private userService: UserService) {}
+
+  editUser(user: any) {
+    this.isEditing
+    this.userService.setEditingUser(user);
+    this.router.navigate(['/dashboard/add-user']);
+  }
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
@@ -54,10 +64,7 @@ export class UserManagementComponent {
     }
   }
 
-  editUser(user: any) {
-    console.log('Edit user:', user);
-    // يمكنك التنقل لصفحة التعديل هنا
-  }
+  // Removed duplicate editUser method to fix duplicate implementation error
 
   deleteUser(user: any) {
     const confirmed = confirm(`Are you sure you want to delete ${user.fullName}?`);

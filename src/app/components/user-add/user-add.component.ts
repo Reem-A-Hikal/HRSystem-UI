@@ -1,8 +1,9 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RoleService } from '../../services/role.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-add-user',
@@ -12,9 +13,8 @@ import { RoleService } from '../../services/role.service';
   styleUrls: ['./user-add.component.css'],
 })
 export class AddUserComponent implements OnInit {
-    roles: any[] = [];
-
-constructor(private router: Router, private roleService: RoleService) {}
+  isEditing: boolean = false;
+  roles: any[] = [];
 
   user = {
     fullName: '',
@@ -24,8 +24,22 @@ constructor(private router: Router, private roleService: RoleService) {}
     password: '',
   };
 
-    ngOnInit() {
+  constructor(
+    private router: Router,
+    private roleService: RoleService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit() {
     this.roles = this.roleService.getRoles();
+
+    const editingUser = this.userService.getEditingUser();
+    if (editingUser) {
+      this.user = { ...editingUser };
+      this.isEditing = true;
+      // Optional: clear editing user after loading
+      this.userService.clearEditingUser();
+    }
   }
 
   onSubmit() {
