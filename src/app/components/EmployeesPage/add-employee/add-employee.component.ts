@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { EmployeeService } from '../../../services/Employee.service';
 // import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
@@ -26,7 +27,8 @@ export class AddEmployeeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     // private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private empService: EmployeeService
   ) {}
 
   ngOnInit(): void {
@@ -154,7 +156,10 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('clicked');
+    console.log(this.employeeForm.value);
     if (this.employeeForm.valid) {
+      // this.empService.createEmployee(this.employeeForm.value)
       this.router.navigate(['/dashboard/employees']);
     } else {
       this.employeeForm.markAllAsTouched();

@@ -1,4 +1,4 @@
-<div style="min-height: 90vh;" class="container">
+<div style="min-height: 90vh" class="container">
   <div class="form-container">
     <h1 class="form-title text-center">Add New Employee</h1>
     <p class="form-subtitle text-center">
@@ -23,7 +23,12 @@
 
         <div class="form-group">
           <label>Name</label>
-          <input type="text" formControlName="name" placeholder="Enter employee name" title="Employee Name" />
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Enter employee name"
+            title="Employee Name"
+          />
           <div class="error" *ngIf="f['name'].touched && f['name'].invalid">
             <div *ngIf="f['name'].errors?.['required']">Name is required.</div>
             <div *ngIf="f['name'].errors?.['minlength']">
@@ -70,7 +75,12 @@
 
         <div class="form-group">
           <label>Birth Date</label>
-          <input type="date" formControlName="birthDate" title="Birth Date" placeholder="Select birth date" />
+          <input
+            type="date"
+            formControlName="birthDate"
+            title="Birth Date"
+            placeholder="Select birth date"
+          />
           <div
             class="error"
             *ngIf="f['birthDate'].touched && f['birthDate'].errors"
@@ -89,7 +99,12 @@
 
         <div class="form-group">
           <label>National ID</label>
-          <input type="text" formControlName="nationalId" title="National ID" placeholder="Enter national ID" />
+          <input
+            type="text"
+            formControlName="nationalId"
+            title="National ID"
+            placeholder="Enter national ID"
+          />
           <div
             class="error"
             *ngIf="f['nationalId'].touched && f['nationalId'].errors"
@@ -112,7 +127,12 @@
 
         <div class="form-group">
           <label>Phone Number</label>
-          <input type="tel" formControlName="phone" title="Phone Number" placeholder="Enter phone number" />
+          <input
+            type="tel"
+            formControlName="phone"
+            title="Phone Number"
+            placeholder="Enter phone number"
+          />
           <div class="error" *ngIf="f['phone'].touched && f['phone'].invalid">
             <div *ngIf="f['phone'].errors?.['required']">
               Phone number is required.
@@ -125,7 +145,12 @@
 
         <div class="form-group">
           <label>Address</label>
-          <input type="text" formControlName="address" title="Address" placeholder="Enter address" />
+          <input
+            type="text"
+            formControlName="address"
+            title="Address"
+            placeholder="Enter address"
+          />
           <div
             class="error"
             *ngIf="f['address'].touched && f['address'].invalid"
@@ -152,7 +177,12 @@
 
         <div class="form-group">
           <label>Base Salary</label>
-          <input type="number" formControlName="baseSalary" title="Base Salary" placeholder="Enter base salary" />
+          <input
+            type="number"
+            formControlName="baseSalary"
+            title="Base Salary"
+            placeholder="Enter base salary"
+          />
           <div
             class="error"
             *ngIf="f['baseSalary'].touched && f['baseSalary'].errors"
@@ -169,7 +199,12 @@
 
         <div class="form-group">
           <label>Contract Date</label>
-          <input type="date" formControlName="contractDate" title="Contract Date" placeholder="Select contract date" />
+          <input
+            type="date"
+            formControlName="contractDate"
+            title="Contract Date"
+            placeholder="Select contract date"
+          />
           <div
             class="error"
             *ngIf="f['contractDate'].touched && f['contractDate'].errors"
