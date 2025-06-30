@@ -30,9 +30,14 @@ export class EmployeesdataComponent {
   searchTerm: string = '';
   currentPage = 1;
   itemsPerPage = 5;
+  isLoading: boolean = false;
+  pageSize: number = 5;
 
   constructor(private router: Router) {}
 
+  get isEmpty(): boolean {
+    return this.employees.length === 0;
+  }
   get pagedEmployees(): IEmployee[] {
     const filtered = this.employees.filter((emp) =>
       emp.name.toLowerCase().includes(this.searchTerm.toLowerCase())

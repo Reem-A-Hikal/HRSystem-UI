@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RoleManagementComponent } from './role-management.component';
+import { OfficialHolidayComponent } from './official-holiday.component';
 
-describe('RoleManagementComponent', () => {
-  let component: RoleManagementComponent;
-  let fixture: ComponentFixture<RoleManagementComponent>;
+describe('OfficialHolidayComponent', () => {
+  let component: OfficialHolidayComponent;
+  let fixture: ComponentFixture<OfficialHolidayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoleManagementComponent]
+      imports: [OfficialHolidayComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RoleManagementComponent);
+    fixture = TestBed.createComponent(OfficialHolidayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

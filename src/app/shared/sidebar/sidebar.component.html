@@ -4,13 +4,11 @@
 >
   <div class="logo-container">
     <button class="logo" (click)="toggleCollapse()">
-      <i class="fal fa-bars">HR</i>
+      <i class="bi bi-bars">HR</i>
     </button>
     @if (!isLeftSidebarCollapsed()) {
     <div class="logo-text" @fadeInOut>Pioneers</div>
-    <button @rotate class="btn-close" (click)="closeSidenav()">
-      <i class="fal fa-times close-icon"></i>
-    </button>
+    <button @rotate class="btn-close" (click)="closeSidenav()"></button>
     }
   </div>
   <div class="sidenav-nav">
@@ -29,5 +27,24 @@
       </a>
     </li>
     }
+    <li
+      class="sidenav-nav-item logout-item"
+      style="margin-top: auto; display: flex"
+    >
+      <a
+        class="sidenav-nav-link"
+        (click)="onLogout()"
+        tabindex="0"
+        aria-label="Logout"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        style="flex: 1"
+      >
+        <i class="sidenav-link-icon bi bi-box-arrow-left"></i>
+        @if (!isLeftSidebarCollapsed()) {
+        <span @fadeInOut class="sidenav-link-text">Logout</span>
+        }
+      </a>
+    </li>
   </div>
 </div>

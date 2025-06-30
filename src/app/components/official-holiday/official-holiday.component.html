@@ -1,0 +1,77 @@
+<div class="container-fluid min-vh-100 d-flex flex-column">
+  <!-- Main Content -->
+  <main class="container py-4 flex-grow-1">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="mb-4">
+          <h1 class="fs-2 fw-bold mb-0">Official holidays</h1>
+        </div>
+        <h3 class="fs-5 fw-bold pt-3 pb-2">Create a holiday</h3>
+        <form class="row g-3 align-items-end mb-4" (ngSubmit)="createHoliday()">
+          <div class="col-12 col-md-6">
+            <label for="holidayName" class="form-label">Holiday name</label>
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              id="holidayName"
+              placeholder="e.g. Independence Day"
+              [(ngModel)]="holidayName"
+              name="holidayName"
+              required
+            />
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="holidayDate" class="form-label">Date</label>
+            <input
+              type="date"
+              class="form-control form-control-lg"
+              id="holidayDate"
+              [(ngModel)]="holidayDate"
+              name="holidayDate"
+              required
+            />
+          </div>
+          <div class="col-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary fw-bold px-4">
+              Create holiday
+            </button>
+          </div>
+        </form>
+        <h3 class="fs-5 fw-bold pt-3 pb-2">All holidays</h3>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered table-striped table-hover align-middle bg-white shadow-sm rounded"
+          >
+            <thead class="table-primary">
+              <tr>
+                <th>Holiday name</th>
+                <th>Date</th>
+                <th style="width: 140px">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let holiday of holidays">
+                <td>{{ holiday.name }}</td>
+                <td>{{ holiday.date }}</td>
+                <td>
+                  <button
+                    class="btn btn-outline-secondary btn-sm me-1"
+                    (click)="editHoliday(holiday)"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="deleteHoliday(holiday.id)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

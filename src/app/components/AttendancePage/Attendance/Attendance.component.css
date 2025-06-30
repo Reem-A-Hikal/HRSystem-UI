@@ -1,6 +1,5 @@
 body {
   background-color: #f8f9fa;
-  font-family: "Segoe UI", Arial, sans-serif;
   color: #101518;
   margin: 0;
   min-height: 100vh;
@@ -9,7 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.PageContainer {
+.content-container {
   width: 96%;
   max-width: 1200px;
   margin: 2.5rem auto;
@@ -20,7 +19,7 @@ body {
   transition: box-shadow 0.3s;
 }
 
-.PageContainer:hover {
+.content-container:hover {
   box-shadow: 0 12px 40px rgba(44, 62, 80, 0.15);
 }
 
@@ -101,7 +100,7 @@ body {
   transform: translateY(-2px) scale(1.03);
 }
 @media (max-width: 767.98px) {
-  .PageContainer {
+  .content-container {
     padding: 1.2rem 0.4rem;
   }
   .table-responsive table thead {

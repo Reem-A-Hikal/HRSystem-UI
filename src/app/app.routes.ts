@@ -13,6 +13,9 @@ import { EditEmployeeComponent } from './components/EmployeesPage/edit-employee/
 import { UserManagementComponent } from './components/UsersPage/user-management/user-management.component';
 import { AddUserComponent } from './components/UsersPage/user-add/user-add.component';
 import { AddRoleComponent } from './components/RolesPage/role-add/role-add.component';
+import { OfficialHolidayComponent } from './components/official-holiday/official-holiday.component';
+import { EditOfficialHolidayComponent } from './components/edit-official-holiday/edit-official-holiday.component';
+import { GeneralSettingComponent } from './components/general-setting/general-setting.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -33,6 +36,13 @@ export const routes: Routes = [
       { path: 'addRole', component: AddRoleComponent },
       { path: 'Users', component: UserManagementComponent },
       { path: 'add-user', component: AddUserComponent },
+
+      { path: 'official-holiday', component: OfficialHolidayComponent },
+      {
+        path: 'edit-official-holiday/:id',
+        component: EditOfficialHolidayComponent,
+      },
+      { path: 'general-setting', component: GeneralSettingComponent },
     ],
   },
 ];

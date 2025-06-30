@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserManagementComponent } from './user-management.component';
+import { GeneralSettingComponent } from './general-setting.component';
 
-describe('UserManagementComponent', () => {
-  let component: UserManagementComponent;
-  let fixture: ComponentFixture<UserManagementComponent>;
+describe('GeneralSettingComponent', () => {
+  let component: GeneralSettingComponent;
+  let fixture: ComponentFixture<GeneralSettingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserManagementComponent]
+      imports: [GeneralSettingComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UserManagementComponent);
+    fixture = TestBed.createComponent(GeneralSettingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
