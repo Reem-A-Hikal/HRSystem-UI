@@ -25,16 +25,11 @@ export const routes: Routes = [
       { path: 'Attendance', component: AttendanceComponent },
       { path: 'ManageAttendance', component: ManageAttendanceComponent },
       { path: 'ManageAttendance/:id', component: ManageAttendanceComponent },
-      {
-        path: 'SalaryReport',
-        component: SalaryReportComponent,
-      },
+      { path: 'SalaryReport',component: SalaryReportComponent},
       { path: 'EditRecord', component: EditRecordComponent },
       { path: 'PrintReport', component: PrintReportComponent },
-
       { path: 'add-employee', component: AddEmployeeComponent },
       { path: 'edit-employee/:id', component: EditEmployeeComponent },
-
       { path: 'addRole', component: AddRoleComponent },
       { path: 'Users', component: UserManagementComponent },
       { path: 'add-user', component: AddUserComponent },
