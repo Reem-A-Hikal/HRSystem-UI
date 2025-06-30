@@ -30,7 +30,12 @@ export const navbarData = [
     label: 'Report',
   },
   {
-    routeLink: '/dashboard/Settings',
+    routeLink: '/dashboard/official-holiday',
+    icon: 'bi bi-calendar2-day',
+    label: 'Holidays',
+  },
+  {
+    routeLink: '/dashboard/general-setting',
     icon: 'bi bi-gear',
     label: 'Settings',
   },

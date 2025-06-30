@@ -42,9 +42,12 @@ export const routes: Routes = [
       { path: 'Users', component: UserManagementComponent },
       { path: 'add-user', component: AddUserComponent },
 
-      { path:'official-holiday', component:OfficialHolidayComponent },
-      { path:'edit-official-holiday/:id', component: EditOfficialHolidayComponent },
-      { path: 'general-setting', component:GeneralSettingComponent }
+      { path: 'official-holiday', component: OfficialHolidayComponent },
+      {
+        path: 'edit-official-holiday/:id',
+        component: EditOfficialHolidayComponent,
+      },
+      { path: 'general-setting', component: GeneralSettingComponent },
     ],
   },
 ];
