@@ -52,7 +52,7 @@
             <tbody>
               <tr *ngFor="let holiday of holidays">
                 <td>{{ holiday.name }}</td>
-                <td>{{ holiday.date }}</td>
+                <td>{{ holiday.date | date:'longDate' }}</td>
                 <td>
                   <button
                     class="btn btn-outline-secondary btn-sm me-1"
@@ -70,6 +70,32 @@
               </tr>
             </tbody>
           </table>
+          <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)"
+      >
+        ‹
+      </button>
+
+      <button
+        *ngFor="let page of totalPages"
+        (click)="goToPage(page)"
+        [ngClass]="{ 'active-page': currentPage === page }"
+        class="pagination-btn"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === totalPages.length"
+        (click)="goToPage(currentPage + 1)"
+      >
+        ›
+      </button>
+    </div>
         </div>
       </div>
     </div>
