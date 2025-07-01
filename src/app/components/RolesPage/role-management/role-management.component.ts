@@ -15,6 +15,7 @@ export class RoleManagementComponent {
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
+  isLoading: boolean = false;
 
   roles: any[] = [];
 
@@ -23,7 +24,12 @@ export class RoleManagementComponent {
   ngOnInit() {
     this.roles = this.roleService.getRoles();
   }
-
+  get isEmpty(): boolean {
+    return this.roles.length === 0;
+  }
+  get hasResults(): boolean {
+    return this.paginatedRoles.length > 0;
+  }
   get filteredRoles() {
     return this.roles.filter((role) =>
       role.name.toLowerCase().includes(this.searchTerm.toLowerCase())

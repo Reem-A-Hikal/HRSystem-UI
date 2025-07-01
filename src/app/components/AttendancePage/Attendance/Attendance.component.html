@@ -41,18 +41,11 @@
             [(ngModel)]="endDate"
           />
         </div>
-        <div class="flex-grow-1 flex-wrap flex-md-nowrap flex d-flex align-items-end gap-3">
+        <div
+          class="flex-grow-1 flex-wrap flex-md-nowrap flex d-flex align-items-end gap-3"
+        >
           <button
             class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 shadow filter-btn"
-            style="
-              height: 52px;
-              border-radius: 14px;
-              font-size: 1.13rem;
-              font-weight: 600;
-              letter-spacing: 0.5px;
-              box-shadow: 0 2px 12px rgba(0, 123, 255, 0.1);
-              transition: all 0.18s;
-            "
             (click)="applyFilters()"
           >
             <i class="bi bi-funnel-fill fs-5"></i>
@@ -60,15 +53,6 @@
           </button>
           <button
             class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 shadow reset-btn"
-            style="
-              height: 52px;
-              border-radius: 14px;
-              font-size: 1.13rem;
-              font-weight: 600;
-              letter-spacing: 0.5px;
-              box-shadow: 0 2px 12px rgba(108, 117, 125, 0.08);
-              transition: all 0.18s;
-            "
             (click)="resetFilters()"
           >
             <i class="bi bi-arrow-clockwise fs-5"></i>
@@ -129,13 +113,13 @@
               <td data-label="Date" class="time-col">{{ record.date }}</td>
               <td data-label="Actions" class="actions-col">
                 <div>
-                  <a [routerLink]="['/dashboard/ManageAttendance', record.id]" >
+                  <a [routerLink]="['/dashboard/ManageAttendance', record.id]">
                     <i
-                    style="cursor: pointer"
-                    class="bi bi-pencil-square fs-3 text-primary p-0"
-                    title="Edit"
-                    (click)="onEdit(record)"
-                  ></i>
+                      style="cursor: pointer"
+                      class="bi bi-pencil-square fs-3 text-primary p-0"
+                      title="Edit"
+                      (click)="onEdit(record)"
+                    ></i>
                   </a>
                   |
                   <i
@@ -177,7 +161,10 @@
       @if (!isEmpty) {
       <nav aria-label="Page navigation" class="d-flex justify-content-center">
         <ul class="pagination">
-          <li class="page-item d-none d-md-block" [class.disabled]="pagination.currentPage === 1">
+          <li
+            class="page-item d-none d-md-block"
+            [class.disabled]="pagination.currentPage === 1"
+          >
             <a
               class="page-link"
               (click)="onPageChange(pagination.currentPage - 1)"
