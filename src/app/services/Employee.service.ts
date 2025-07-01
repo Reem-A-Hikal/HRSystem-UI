@@ -21,11 +21,44 @@ export class EmployeeService {
     );
   }
 
+  // Get All Employees
+  getAllEmployees(): Observable<IEmployee[]> {
+    return this.http.get<IEmployee[]>(
+      `${environment.apiBaseUrl}/Employees`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // Get single Employee by ID
+  getEmployeeById(id: number): Observable<IEmployee> {
+    return this.http.get<IEmployee>(
+      `${environment.apiBaseUrl}/Employees/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // Update Employee
+  updateEmployee(id: number, employeeData: IEmployee): Observable<any> {
+    return this.http.put<any>(
+      `${environment.apiBaseUrl}/Employees/${id}`,
+      employeeData,
+      this.getAuthHeaders()
+    );
+  }
+
+  // Delete Employee
+  deleteEmployee(id: number): Observable<any> {
+    return this.http.delete<any>(
+      `${environment.apiBaseUrl}/Employees/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
   private getAuthHeaders() {
     return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem(this.TOKEN_KEY)}`,
+        Authorization: `Bearer ${localStorage.getItem(this.TOKEN_KEY)}`,
       }),
     };
   }

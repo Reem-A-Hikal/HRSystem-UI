@@ -1,0 +1,49 @@
+<div class="details-container" *ngIf="employee">
+  <h2 class="details-title text-center">Employee Profile</h2>
+
+  <div class="details-grid">
+    <div class="detail-item">
+      <strong>Name:</strong> {{ employee.fullName }}
+    </div>
+    <div class="detail-item">
+      <strong>Gender:</strong> {{ employee.gender }}
+    </div>
+    <div class="detail-item">
+      <strong>Nationality:</strong> {{ employee.nationality }}
+    </div>
+    <div class="detail-item">
+      <strong>Birth Date:</strong> {{ employee.birthDate | date }}
+    </div>
+    <div class="detail-item">
+      <strong>National ID:</strong> {{ employee.nationalId }}
+    </div>
+    <div class="detail-item"><strong>Email:</strong> {{ employee.email }}</div>
+    <!-- <div class="detail-item">
+      <strong>Password:</strong> {{ employee.password }}
+    </div> -->
+    <div class="detail-item"><strong>Phone:</strong> {{ employee.phone }}</div>
+    <div class="detail-item">
+      <strong>Address:</strong> {{ employee.address }}
+    </div>
+    <div class="detail-item">
+      <strong>Department:</strong> {{ employee.department }}
+    </div>
+    <div class="detail-item">
+      <strong>Base Salary:</strong> {{ employee.baseSalary }}
+    </div>
+    <div class="detail-item">
+      <strong>Contract Date:</strong> {{ employee.contractDate }}
+    </div>
+    <div class="detail-item">
+      <strong>Start Time:</strong> {{ employee.startTime }}
+    </div>
+    <div class="detail-item">
+      <strong>End Time:</strong> {{ employee.endTime }}
+    </div>
+  </div>
+  <div class="text-start mt-4">
+    <button class="btn btn-primary" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Back
+    </button>
+  </div>
+</div>

@@ -16,6 +16,7 @@ import { AddRoleComponent } from './components/RolesPage/role-add/role-add.compo
 import { OfficialHolidayComponent } from './components/official-holiday/official-holiday.component';
 import { EditOfficialHolidayComponent } from './components/edit-official-holiday/edit-official-holiday.component';
 import { GeneralSettingComponent } from './components/general-setting/general-setting.component';
+import { ViewEmployeeComponent } from './components/EmployeesPage/view-employee/view-employee.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -28,10 +29,11 @@ export const routes: Routes = [
       { path: 'Attendance', component: AttendanceComponent },
       { path: 'ManageAttendance', component: ManageAttendanceComponent },
       { path: 'ManageAttendance/:id', component: ManageAttendanceComponent },
-      { path: 'SalaryReport',component: SalaryReportComponent},
+      { path: 'SalaryReport', component: SalaryReportComponent },
       { path: 'EditRecord', component: EditRecordComponent },
       { path: 'PrintReport', component: PrintReportComponent },
       { path: 'add-employee', component: AddEmployeeComponent },
+      { path: 'view-employee/:id', component: ViewEmployeeComponent },
       { path: 'edit-employee/:id', component: EditEmployeeComponent },
       { path: 'addRole', component: AddRoleComponent },
       { path: 'Users', component: UserManagementComponent },
