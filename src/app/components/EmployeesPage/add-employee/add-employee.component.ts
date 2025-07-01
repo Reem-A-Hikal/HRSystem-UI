@@ -11,7 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../../../services/Employee.service';
-// import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-employee',
@@ -26,9 +26,9 @@ export class AddEmployeeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    // private snackBar: MatSnackBar,
     private router: Router,
-    private empService: EmployeeService
+    private empService: EmployeeService,
+    private Toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +56,8 @@ export class AddEmployeeComponent implements OnInit {
           '',
           [Validators.required, Validators.pattern('^[23][0-9]{13}$')],
         ],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
         address: ['', Validators.required],
         phone: [
           '',
@@ -63,12 +65,20 @@ export class AddEmployeeComponent implements OnInit {
         ],
         department: ['', Validators.required],
         baseSalary: [null, [Validators.required, Validators.min(7000)]],
-        contractDate: ['', [Validators.required, this.noFutureDateValidator()]],
+        contractDate: ['', Validators.required],
+        startTime: ['', Validators.required],
+        endTime: ['', Validators.required],
       },
-      { validators: this.contractAfter18YearsValidator() }
+      {
+        validators: [
+          this.contractAfter18YearsValidator(),
+
+          this.workingHoursMinimumValidator(8), // Minimum working hours of 8
+        ],
+      }
     );
 
-    // Re-check validation if birthDate or contractDate change
+    // Trigger re-validation if birthDate or contractDate change
     this.employeeForm.get('birthDate')?.valueChanges.subscribe(() => {
       this.employeeForm.updateValueAndValidity();
     });
@@ -111,24 +121,66 @@ export class AddEmployeeComponent implements OnInit {
   contractAfter18YearsValidator(): ValidatorFn {
     return (group: AbstractControl): { [key: string]: any } | null => {
       const birthDateValue = group.get('birthDate')?.value;
-      const contractDateValue = group.get('contractDate')?.value;
+      const contractDateControl = group.get('contractDate');
+      const contractDateValue = contractDateControl?.value;
 
       if (!birthDateValue || !contractDateValue) return null;
 
       const birthDate = new Date(birthDateValue);
       const contractDate = new Date(contractDateValue);
 
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const errors: any = { ...(contractDateControl?.errors || {}) };
+
+      if (contractDate > today) {
+        errors.futureDate = true;
+      }
+
       if (contractDate < birthDate) {
-        return { beforeBirth: true };
+        errors.beforeBirth = true;
       }
 
       const minContractDate = new Date(birthDate);
       minContractDate.setFullYear(minContractDate.getFullYear() + 18);
 
       if (contractDate < minContractDate) {
-        return { tooYoungAtContract: true };
+        errors.tooYoungAtContract = true;
       }
 
+      if (Object.keys(errors).length > 0) {
+        contractDateControl?.setErrors(errors);
+        return errors;
+      } else {
+        contractDateControl?.setErrors(null);
+        return null;
+      }
+    };
+  }
+
+  workingHoursMinimumValidator(minHours: number): ValidatorFn {
+    return (group: AbstractControl): { [key: string]: any } | null => {
+      const start = group.get('startTime')?.value;
+      const end = group.get('endTime')?.value;
+
+      if (!start || !end) return null;
+
+      const [startH, startM] = start.split(':').map(Number);
+      const [endH, endM] = end.split(':').map(Number);
+
+      const startMinutes = startH * 60 + startM;
+      const endMinutes = endH * 60 + endM;
+
+      const diffMinutes = endMinutes - startMinutes;
+      const diffHours = diffMinutes / 60;
+
+      if (diffHours < minHours) {
+        group.get('endTime')?.setErrors({ minWorkingHours: true });
+        return { minWorkingHours: true };
+      }
+
+      group.get('endTime')?.setErrors(null);
       return null;
     };
   }
@@ -141,6 +193,8 @@ export class AddEmployeeComponent implements OnInit {
         'nationality',
         'birthDate',
         'nationalId',
+        'email',
+        'password',
       ];
       const step1Valid = step1Fields.every((field) => this.f[field].valid);
       if (step1Valid) {
@@ -156,11 +210,19 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('clicked');
-    console.log(this.employeeForm.value);
     if (this.employeeForm.valid) {
-      // this.empService.createEmployee(this.employeeForm.value)
-      this.router.navigate(['/dashboard/employees']);
+      this.empService.createEmployee(this.employeeForm.value).subscribe({
+        next: (res) => {
+          console.log('Employee Created!', res);
+          this.Toastr.success('Employee created successfully!', 'Success');
+
+          this.router.navigate(['/dashboard/Employees']);
+          // this.router.navigate([`/dashboard/view-employee/${res.id}`]);
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
     } else {
       this.employeeForm.markAllAsTouched();
     }
