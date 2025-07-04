@@ -1,6 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IEmployee } from '../models/IEmployee';
+import {
+  ICreateEmployeeRequest,
+  IEmployee,
+  IUpdateEmployeeRequest,
+} from '../models/IEmployee';
 import { Observable } from 'rxjs';
 import { ICreateEmployeeResponse } from '../models/IAuthResponse';
 import { environment } from '../../environments/environment.development';
@@ -13,7 +17,10 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) {}
 
-  createEmployee(employeeData: IEmployee): Observable<ICreateEmployeeResponse> {
+  // Create Employee
+  createEmployee(
+    employeeData: ICreateEmployeeRequest
+  ): Observable<ICreateEmployeeResponse> {
     return this.http.post<ICreateEmployeeResponse>(
       `${environment.apiBaseUrl}/Accounts/register`,
       employeeData,
@@ -24,32 +31,43 @@ export class EmployeeService {
   // Get All Employees
   getAllEmployees(): Observable<IEmployee[]> {
     return this.http.get<IEmployee[]>(
-      `${environment.apiBaseUrl}/Employees`,
+      `${environment.apiBaseUrl}/Employee`,
       this.getAuthHeaders()
     );
   }
 
-  // Get single Employee by ID
-  getEmployeeById(id: number): Observable<IEmployee> {
+  // Get Employee by ID
+  getEmployeeById(id: string): Observable<IEmployee> {
     return this.http.get<IEmployee>(
-      `${environment.apiBaseUrl}/Employees/${id}`,
+      `${environment.apiBaseUrl}/Employee/${id}`,
       this.getAuthHeaders()
     );
   }
 
   // Update Employee
-  updateEmployee(id: number, employeeData: IEmployee): Observable<any> {
+  updateEmployee(
+    id: string,
+    employeeData: IUpdateEmployeeRequest
+  ): Observable<any> {
     return this.http.put<any>(
-      `${environment.apiBaseUrl}/Employees/${id}`,
+      `${environment.apiBaseUrl}/Employee/${id}`,
       employeeData,
       this.getAuthHeaders()
     );
   }
 
   // Delete Employee
-  deleteEmployee(id: number): Observable<any> {
+  deleteEmployee(id: string): Observable<any> {
     return this.http.delete<any>(
-      `${environment.apiBaseUrl}/Employees/${id}`,
+      `${environment.apiBaseUrl}/Employee/${id}`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // Get Departments
+  getDepartments() {
+    return this.http.get<{ id: number; name: string }[]>(
+      `${environment.apiBaseUrl}/Department`,
       this.getAuthHeaders()
     );
   }

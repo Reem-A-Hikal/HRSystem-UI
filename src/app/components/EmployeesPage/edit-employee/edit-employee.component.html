@@ -2,7 +2,7 @@
   <div class="form-container">
     <h1 class="form-title text-center">Edit Employee</h1>
     <p class="form-subtitle text-center">
-      Update employee details step by step.
+      Please update the employee details step by step.
     </p>
 
     <!-- Progress Bar -->
@@ -25,15 +25,20 @@
           <label>Name</label>
           <input
             type="text"
-            formControlName="name"
+            formControlName="fullName"
             placeholder="Enter employee name"
           />
-          <div class="error" *ngIf="f['name'].touched && f['name'].errors">
-            <div *ngIf="f['name'].errors?.['required']">Name is required.</div>
-            <div *ngIf="f['name'].errors?.['minlength']">
+          <div
+            class="error"
+            *ngIf="f['fullName'].touched && f['fullName'].errors"
+          >
+            <div *ngIf="f['fullName'].errors?.['required']">
+              Name is required.
+            </div>
+            <div *ngIf="f['fullName'].errors?.['minlength']">
               At least 3 characters.
             </div>
-            <div *ngIf="f['name'].errors?.['pattern']">
+            <div *ngIf="f['fullName'].errors?.['pattern']">
               Only letters and spaces allowed.
             </div>
           </div>
@@ -44,8 +49,8 @@
             <label>Gender</label>
             <select formControlName="gender">
               <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
             <div
               class="error"
@@ -57,12 +62,13 @@
 
           <div class="form-group">
             <label>Nationality</label>
-            <select formControlName="nationality">
-              <option value="">Select</option>
-              <option value="egyptian">Egyptian</option>
-              <option value="saudi">Saudi</option>
-              <option value="other">Other</option>
+            <select formControlName="nationality" class="form-control">
+              <option value="" disabled selected>Select</option>
+              <option *ngFor="let nat of nationalities" [value]="nat">
+                {{ nat }}
+              </option>
             </select>
+
             <div
               class="error"
               *ngIf="f['nationality'].touched && f['nationality'].errors"
@@ -74,18 +80,18 @@
 
         <div class="form-group">
           <label>Birth Date</label>
-          <input type="date" formControlName="birthDate" />
+          <input type="date" formControlName="dateOfBirth" />
           <div
             class="error"
-            *ngIf="f['birthDate'].touched && f['birthDate'].errors"
+            *ngIf="f['dateOfBirth'].touched && f['dateOfBirth'].errors"
           >
-            <div *ngIf="f['birthDate'].errors?.['required']">
+            <div *ngIf="f['dateOfBirth'].errors?.['required']">
               Birth Date is required.
             </div>
-            <div *ngIf="f['birthDate'].errors?.['futureDate']">
+            <div *ngIf="f['dateOfBirth'].errors?.['futureDate']">
               Date cannot be in the future.
             </div>
-            <div *ngIf="f['birthDate'].errors?.['tooYoung']">
+            <div *ngIf="f['dateOfBirth'].errors?.['tooYoung']">
               Must be at least 18 years old.
             </div>
           </div>
@@ -125,26 +131,25 @@
         </div>
 
         <div class="form-group">
-          <label>Password</label>
+          <label>Password <small>(optional)</small></label>
           <input
             type="password"
             formControlName="password"
-            placeholder="Enter password"
+            placeholder="Leave blank to keep current password"
           />
           <div
             class="error"
             *ngIf="f['password'].touched && f['password'].errors"
           >
-            <div *ngIf="f['password'].errors?.['required']">
-              Password is required.
-            </div>
             <div *ngIf="f['password'].errors?.['minlength']">
               Minimum 6 characters.
             </div>
           </div>
         </div>
-
-        <button type="button" (click)="nextStep()">Next</button>
+        <div class="button-row">
+          <button type="button" (click)="goBack()">Back</button>
+          <button type="button" (click)="nextStep()">Next</button>
+        </div>
       </div>
 
       <!-- Step 2 -->
@@ -153,14 +158,17 @@
           <label>Phone Number</label>
           <input
             type="tel"
-            formControlName="phone"
+            formControlName="phoneNumber"
             placeholder="Enter phone number"
           />
-          <div class="error" *ngIf="f['phone'].touched && f['phone'].errors">
-            <div *ngIf="f['phone'].errors?.['required']">
+          <div
+            class="error"
+            *ngIf="f['phoneNumber'].touched && f['phoneNumber'].errors"
+          >
+            <div *ngIf="f['phoneNumber'].errors?.['required']">
               Phone number is required.
             </div>
-            <div *ngIf="f['phone'].errors?.['pattern']">
+            <div *ngIf="f['phoneNumber'].errors?.['pattern']">
               Valid phone number (e.g., 01012345678).
             </div>
           </div>
@@ -184,16 +192,20 @@
         <div class="form-row">
           <div class="form-group">
             <label>Department</label>
-            <select formControlName="department">
-              <option value="">Select</option>
-              <option value="hr">HR</option>
-              <option value="it">IT</option>
-              <option value="finance">Finance</option>
+
+            <select formControlName="departmentId">
+              <option [ngValue]="null" disabled>Select</option>
+              <option *ngFor="let dept of departments" [ngValue]="dept.id">
+                {{ dept.name }}
+              </option>
             </select>
+
             <div
               class="error"
-              *ngIf="f['department'].touched && f['department'].errors"
+              *ngIf="f['departmentId'].touched && f['departmentId'].errors"
             >
+              <!-- *ngIf="f['departmentName'].touched && f['departmentName'].errors"  -->
+
               Department is required.
             </div>
           </div>
@@ -202,19 +214,18 @@
             <label>Base Salary</label>
             <input
               type="number"
-              formControlName="baseSalary"
+              formControlName="salary"
               placeholder="Enter base salary"
             />
             <div
               class="error"
-              *ngIf="f['baseSalary'].touched && f['baseSalary'].errors"
+              *ngIf="f['salary'].touched && f['salary'].errors"
             >
-              <div *ngIf="f['baseSalary'].errors?.['required']">
+              <div *ngIf="f['salary'].errors?.['required']">
                 Salary is required.
               </div>
-              <div *ngIf="f['baseSalary'].errors?.['min']">
-                Minimum is 7000.
-              </div>
+              <div *ngIf="f['salary'].errors?.['min']">Minimum is 7000.</div>
+              <div *ngIf="f['salary'].errors?.['max']">Maximum is 100,000.</div>
             </div>
           </div>
         </div>
