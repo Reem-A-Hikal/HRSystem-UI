@@ -11,7 +11,7 @@ import { EmployeeService } from '../../../services/Employee.service';
   styleUrls: ['./view-employee.component.css'],
 })
 export class ViewEmployeeComponent implements OnInit {
-  employeeId!: number;
+  employeeId!: string;
   employee!: IEmployee;
 
   constructor(
@@ -21,7 +21,7 @@ export class ViewEmployeeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.employeeId = +this.route.snapshot.paramMap.get('id')!;
+    this.employeeId = this.route.snapshot.paramMap.get('id')!;
     this.empService.getEmployeeById(this.employeeId).subscribe({
       next: (emp) => {
         if (emp) {
