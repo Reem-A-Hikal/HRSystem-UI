@@ -7,17 +7,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  AttendanceService,
-} from '../../../services/Attendance.service';
+import { AttendanceService } from '../../../services/Attendance.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Department, Employee } from '../../../models/IAttendance';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 
 @Component({
   selector: 'app-manageAttendance',
   standalone: true,
-  imports: [FormsModule, RouterLink, ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [
+    FormsModule,
+    RouterLink,
+    ReactiveFormsModule,
+    CommonModule,
+    HttpClientModule,
+    BsDatepickerModule,
+    TimepickerModule,
+  ],
   templateUrl: './manageAttendance.component.html',
   styleUrls: ['./manageAttendance.component.css'],
 })
@@ -26,6 +34,7 @@ export class ManageAttendanceComponent implements OnInit {
   isEditMode = false;
   recordId: string | null = null;
   errorMessage: string = '';
+  checkInTimeModel: any;
 
   employees: Employee[] = [];
   departments: Department[] = [];
@@ -61,7 +70,7 @@ export class ManageAttendanceComponent implements OnInit {
   }
 
   loadRecordForEditing() {
-    console.log(this.recordId)
+    console.log(this.recordId);
     this.attendanceService
       .getAttendanceRecord(this.recordId)
       .subscribe((record) => {

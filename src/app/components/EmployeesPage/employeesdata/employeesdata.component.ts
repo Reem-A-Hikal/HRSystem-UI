@@ -73,15 +73,15 @@ export class EmployeesdataComponent implements OnInit {
   }
 
   goToAddPage() {
-    this.router.navigate(['/dashboard/add-employee']);
+    this.router.navigate(['/dashboard/Employees/add-employee']);
   }
 
   viewEmployeeDetails(id: string) {
-    this.router.navigate([`/dashboard/view-employee/${id}`]);
+    this.router.navigate([`/dashboard/Employees/view-employee/${id}`]);
   }
 
   editEmployee(id: string) {
-    this.router.navigate([`/dashboard/edit-employee/${id}`]);
+    this.router.navigate([`/dashboard/Employees/edit-employee/${id}`]);
   }
 
   deleteEmployee(id: string) {

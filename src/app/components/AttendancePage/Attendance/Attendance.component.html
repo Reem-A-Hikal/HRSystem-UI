@@ -16,6 +16,7 @@
               class="form-control search-box"
               placeholder="Search by employee name"
               [(ngModel)]="searchTerm"
+              (input)="onSearchChange()"
               (keyup.enter)="applyFilters()"
             />
           </div>
@@ -25,21 +26,43 @@
       <div class="d-flex flex-wrap gap-4 p-3" style="max-width: 100%">
         <div class="flex-grow-1">
           <label class="form-label">Start Date</label>
-          <input
-            type="date"
-            class="form-control date-input"
-            placeholder="Select start date"
-            [(ngModel)]="startDate"
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              title=""
+              class="form-control date-input"
+              placeholder="Select start date"
+              [(ngModel)]="startDate"
+              [bsConfig]="{
+                dateInputFormat: 'YYYY-MM-DD',
+                containerClass: 'theme-dark-blue'
+              }"
+              bsDatepicker
+              autocomplete="off"
+            />
+            <span class="input-group-text">
+              <i class="bi bi-calendar-event"></i>
+            </span>
+          </div>
         </div>
         <div class="flex-grow-1">
           <label class="form-label">End Date</label>
-          <input
-            type="date"
-            class="form-control date-input"
-            placeholder="Select end date"
-            [(ngModel)]="endDate"
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control date-input"
+              placeholder="Select end date"
+              [(ngModel)]="endDate"
+              [bsConfig]="{
+                dateInputFormat: 'YYYY-MM-DD',
+                containerClass: 'theme-dark-blue'
+              }"
+              bsDatepicker
+            />
+            <span class="input-group-text">
+              <i class="bi bi-calendar-event"></i>
+            </span>
+          </div>
         </div>
         <div
           class="flex-grow-1 flex-wrap flex-md-nowrap flex d-flex align-items-end gap-3"
@@ -78,7 +101,7 @@
 
       <div class="d-flex flex-wrap justify-content-end gap-3 pb-3">
         <a
-          [routerLink]="['/dashboard/ManageAttendance']"
+          [routerLink]="['ManageAttendance']"
           class="btn btn-primary fw-bold"
           >+ New Entry</a
         >
@@ -113,7 +136,7 @@
               <td data-label="Date" class="time-col">{{ record.date }}</td>
               <td data-label="Actions" class="actions-col">
                 <div>
-                  <a [routerLink]="['/dashboard/ManageAttendance', record.id]">
+                  <a [routerLink]="['ManageAttendance', record.id]">
                     <i
                       style="cursor: pointer"
                       class="bi bi-pencil-square fs-3 text-primary p-0"
@@ -170,7 +193,9 @@
               (click)="onPageChange(pagination.currentPage - 1)"
               aria-label="Previous"
             >
-              <span aria-hidden="true">Previous</span>
+              <span aria-hidden="true" class="fw-light">
+                <i class="bi bi-chevron-left"></i>
+              </span>
             </a>
           </li>
           <li
@@ -189,7 +214,9 @@
               (click)="onPageChange(pagination.currentPage + 1)"
               aria-label="Next"
             >
-              <span aria-hidden="true">Next</span>
+              <span aria-hidden="true" class="fw-light">
+                <i class="bi bi-chevron-right"></i>
+              </span>
             </a>
           </li>
         </ul>
