@@ -1,78 +1,184 @@
-<div class="role-management-container py-5 px-4">
-  <h3 class="title mb-4">Role Management</h3>
+<div class="d-flex flex-column">
+  <main
+    style="min-height: 90vh"
+    class="main-content flex-grow-1 d-flex justify-content-center"
+  >
+    <div class="content-container">
+      <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
+        <h1 class="fw-bold">Role Management</h1>
+      </div>
 
-  <div class="table-controls">
-    <div class="search-container">
-      <i class="bi bi-search"></i>
-      <input
-        type="text"
-        class="form-control search-input"
-        placeholder="Search role..."
-        [(ngModel)]="searchTerm"
-      />
-    </div>
+      <div class="p-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text search-icon">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control search-box"
+              placeholder="Search by employee name"
+              [(ngModel)]="searchTerm"
+            />
+          </div>
+        </div>
+      </div>
 
-    <button class="btn add-btn rounded-pill px-4 py-2" (click)="goToAddPage()">
-      <i class="bi bi-plus-circle me-2"></i> Add Role
-    </button>
-  </div>
+      <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
+        <a (click)="goToAddPage()" class="btn btn-primary fw-bold">
+          + Add Role
+        </a>
+      </div>
 
-  <div class="table-center">
-    <div class="table-wrapper">
-      <table class="roles-table">
-        <thead>
-          <tr>
-            <th>Group Name</th>
-            <th style="width: 120px">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let role of paginatedRoles; let i = index">
-            <td>{{ role.name }}</td>
-            <td>
-              <button
-                class="btn btn-sm icon-btn edit-btn me-1"
-                (click)="editRole(i)"
-              >
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button
-                class="btn btn-sm icon-btn delete-btn"
-                (click)="deleteRole(i)"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
-      <button
-        class="pagination-btn"
-        [disabled]="currentPage === 1"
-        (click)="goToPage(currentPage - 1)"
+      <!-- isLoading -->
+      <div
+        *ngIf="isLoading"
+        class="loading-overlay d-flex flex-column align-items-center justify-content-center p-5"
       >
-        ‹
-      </button>
+        <div
+          class="spinner-border text-primary mb-3"
+          style="width: 3rem; height: 3rem"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="fw-semibold text-primary fs-5">
+          Loading roles records...
+        </div>
+      </div>
 
-      <button
-        *ngFor="let page of totalPages"
-        (click)="goToPage(page)"
-        [ngClass]="{ 'active-page': currentPage === page }"
-        class="pagination-btn"
+      <div
+        *ngIf="!isLoading && !isEmpty"
+        class="table-responsive tablecontainer pb-2 mb-4"
       >
-        {{ page }}
-      </button>
+        <table class="table table-borderless m-0 align-middle">
+          <thead class="d-md-table-header-group text-center">
+            <tr>
+              <th>Group Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody style="text-align: center">
+            <tr *ngFor="let role of paginatedRoles; let i = index">
+              <td>{{ role.name }}</td>
+              <td data-label="Actions">
+                <div class="fw-bold">
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-pencil-square fs-3 text-primary me-2"
+                    title="Edit"
+                    (click)="editRole(i)"
+                  ></i>
+                  |
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-trash fs-3 text-danger"
+                    title="Delete"
+                    (click)="deleteRole(i)"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <button
-        class="pagination-btn"
-        [disabled]="currentPage === totalPages.length"
-        (click)="goToPage(currentPage + 1)"
+        <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
+          <button
+            class="pagination-btn"
+            [disabled]="currentPage === 1"
+            (click)="goToPage(currentPage - 1)"
+          >
+            ‹
+          </button>
+
+          <button
+            *ngFor="let page of totalPages"
+            (click)="goToPage(page)"
+            [ngClass]="{ 'active-page': currentPage === page }"
+            class="pagination-btn"
+          >
+            {{ page }}
+          </button>
+
+          <button
+            class="pagination-btn"
+            [disabled]="currentPage === totalPages.length"
+            (click)="goToPage(currentPage + 1)"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      <!-- 
+      <div
+        *ngIf="!isLoading && !isEmpty && hasResults"
+        class="table-responsive tablecontainer p-0 mb-4"
+        #tablecontainer
       >
-        ›
-      </button>
+        <table class="table table-borderless m-0 align-middle">
+          <thead class="d-md-table-header-group">
+            <tr style="text-align: center">
+              <th style="min-width: 140px">Name</th>
+              <th>Department</th>
+              <th style="min-width: 131px">Base Salary</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th style="min-width: 122px">Contract</th>
+              <th style="min-width: 122px">Start Time</th>
+              <th style="min-width: 122px">End Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody style="text-align: center">
+            <tr
+              *ngFor="
+                let emp of pagedEmployees;
+                let i = index;
+                trackBy: trackById
+              "
+            >
+              <td data-label="Employee Name">{{ emp.fullName }}</td>
+              <td data-label="Department">{{ emp.department }}</td>
+              <td data-label="Salary">
+                {{ emp.baseSalary | currency : "EGP" }}
+              </td>
+              <td style="min-width: 106px" data-label="Phone">
+                {{ emp.phone }}
+              </td>
+              <td data-label="Gender">{{ emp.gender }}</td>
+              <td data-label="ContractDate">
+                {{ emp.contractDate | date : "mediumDate" }}
+              </td>
+              <td data-label="StartTime">{{ emp.startTime }}</td>
+              <td data-label="EndTime">{{ emp.endTime }}</td>
+              <td data-label="Actions">
+                <div>
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-eye fs-5 text-success me-2"
+                    title="View Details"
+                    (click)="viewEmployeeDetails(emp.id)"
+                  ></i>
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-pencil-square fs-5 text-primary me-2"
+                    title="Edit"
+                    (click)="editEmployee(emp.id)"
+                  ></i>
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-trash fs-5 text-danger"
+                    title="Delete"
+                    (click)="deleteEmployee(emp.id)"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      -->
     </div>
-  </div>
+  </main>
 </div>

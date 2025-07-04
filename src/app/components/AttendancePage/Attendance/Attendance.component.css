@@ -80,6 +80,15 @@ body {
   box-shadow: 0 0 0 3px #dce8f3;
   outline: none;
 }
+.filter-btn {
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1.13rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 12px rgba(0, 123, 255, 0.1);
+  transition: all 0.18s;
+}
 .filter-btn i,
 .reset-btn i {
   margin-bottom: 2px;
@@ -90,6 +99,15 @@ body {
   color: #fff !important;
   box-shadow: 0 6px 24px rgba(0, 123, 255, 0.18);
   transform: translateY(-2px) scale(1.03);
+}
+.reset-btn {
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1.13rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 12px rgba(108, 117, 125, 0.08);
+  transition: all 0.18s;
 }
 .reset-btn:hover,
 .reset-btn:focus {

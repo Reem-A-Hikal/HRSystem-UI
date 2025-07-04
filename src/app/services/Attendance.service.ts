@@ -1,27 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { AttendanceRecord, Department, Employee } from '../models/IAttendance';
 
-export interface AttendanceRecord {
-  id?: string;
-  employeeId: string;
-  departmentId: string;
-  date: string;
-  checkInTime: string;
-  checkOutTime: string;
-  employeeName?: string;
-  departmentName?: string;
-}
-export interface Employee {
-  id: string;
-  name: string;
-  departmentId: string;
-}
-
-export interface Department {
-  id: string;
-  name: string;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -31,16 +11,7 @@ export class AttendanceService {
   // private departmentsUrl = 'api/departments';
 
   private mockRecords: AttendanceRecord[] = [
-    {
-      id: '1',
-      employeeId: '101',
-      departmentId: '201',
-      date: '2023-06-01',
-      checkInTime: '09:00',
-      checkOutTime: '17:00',
-      employeeName: 'John Doe',
-      departmentName: 'IT',
-    },
+
     // Add more mock records as needed
   ];
   constructor() {}
@@ -58,11 +29,6 @@ export class AttendanceService {
       );
     } else {
       return of({
-        employeeId: '',
-        departmentId: '',
-        date: '',
-        checkInTime: '',
-        checkOutTime: '',
       } as AttendanceRecord);
     }
   }
