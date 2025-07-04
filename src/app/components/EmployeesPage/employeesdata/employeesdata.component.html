@@ -60,7 +60,7 @@
               <th>Department</th>
               <th style="min-width: 131px">Base Salary</th>
               <th>Phone</th>
-              <th>Gender</th>
+              <!-- <th>Gender</th> -->
               <th style="min-width: 122px">Contract</th>
               <th style="min-width: 122px">Start Time</th>
               <th style="min-width: 122px">End Time</th>
@@ -75,20 +75,22 @@
                 trackBy: trackById
               "
             >
-              <td data-label="Employee Name">{{ emp.fullName }}</td>
+              <td data-label="Employee Name">{{ emp.name }}</td>
               <td data-label="Department">{{ emp.department }}</td>
               <td data-label="Salary">
-                {{ emp.baseSalary | currency : "EGP" }}
+                {{ emp.baseSalary }}
               </td>
               <td style="min-width: 106px" data-label="Phone">
-                {{ emp.phone }}
+                {{ emp.phoneNumber }}
+                <!-- {{ emp["phoneNumber"] }} -->
               </td>
-              <td data-label="Gender">{{ emp.gender }}</td>
+              <!-- <td data-label="Gender">{{ emp.gender }}</td> -->
               <td data-label="ContractDate">
                 {{ emp.contractDate | date : "mediumDate" }}
               </td>
-              <td data-label="StartTime">{{ emp.startTime }}</td>
-              <td data-label="EndTime">{{ emp.endTime }}</td>
+              <!-- <td data-label="StartTime">{{ emp.startTime }}</td> -->
+              <td>{{ emp.startTime | date : "HH:mm" }}</td>
+              <td data-label="EndTime">{{ emp.endTime | date : "HH:mm" }}</td>
               <td data-label="Actions">
                 <div>
                   <i
