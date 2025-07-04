@@ -251,3 +251,39 @@ body {
     font-size: 11px;
   }
 }
+.custom-swal-popup {
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 8px 30px rgba(44, 62, 80, 0.1);
+}
+
+.custom-swal-confirm {
+  background-color: #4a739c !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.custom-swal-confirm:hover {
+  background-color: #3a5b7c !important;
+  transform: scale(1.05);
+}
+
+.custom-swal-cancel {
+  background-color: #e74c3c !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.custom-swal-cancel:hover {
+  background-color: #c0392b !important;
+  transform: scale(1.05);
+}

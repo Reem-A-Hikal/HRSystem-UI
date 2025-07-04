@@ -9,4 +9,5 @@ export interface IAuthResponse {
 
 export interface ICreateEmployeeResponse {
   message: string;
+  employeeId: string;
 }

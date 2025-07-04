@@ -2,9 +2,7 @@
   <h2 class="details-title text-center">Employee Profile</h2>
 
   <div class="details-grid">
-    <div class="detail-item">
-      <strong>Name:</strong> {{ employee.fullName }}
-    </div>
+    <div class="detail-item"><strong>Name:</strong> {{ employee.name }}</div>
     <div class="detail-item">
       <strong>Gender:</strong> {{ employee.gender }}
     </div>
@@ -21,7 +19,9 @@
     <!-- <div class="detail-item">
       <strong>Password:</strong> {{ employee.password }}
     </div> -->
-    <div class="detail-item"><strong>Phone:</strong> {{ employee.phone }}</div>
+    <div class="detail-item">
+      <strong>Phone:</strong> {{ employee.phoneNumber }}
+    </div>
     <div class="detail-item">
       <strong>Address:</strong> {{ employee.address }}
     </div>
@@ -32,13 +32,14 @@
       <strong>Base Salary:</strong> {{ employee.baseSalary }}
     </div>
     <div class="detail-item">
-      <strong>Contract Date:</strong> {{ employee.contractDate }}
+      <strong>Contract Date:</strong>
+      {{ employee.contractDate | date : "mediumDate" }}
     </div>
     <div class="detail-item">
-      <strong>Start Time:</strong> {{ employee.startTime }}
+      <strong>Start Time:</strong> {{ employee.startTime | date : "HH:mm" }}
     </div>
     <div class="detail-item">
-      <strong>End Time:</strong> {{ employee.endTime }}
+      <strong>End Time:</strong> {{ employee.endTime | date : "HH:mm" }}
     </div>
   </div>
   <div class="text-start mt-4">

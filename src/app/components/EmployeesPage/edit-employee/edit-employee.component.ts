@@ -11,6 +11,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmployeeService } from '../../../services/Employee.service';
 import { ToastrService } from 'ngx-toastr';
+import { IUpdateEmployeeRequest, IEmployee } from '../../../models/IEmployee';
+import { countries } from 'countries-list';
+import { forkJoin } from 'rxjs';
+import id from '@angular/common/locales/id';
 
 @Component({
   selector: 'app-edit-employee',
@@ -22,7 +26,13 @@ import { ToastrService } from 'ngx-toastr';
 export class EditEmployeeComponent implements OnInit {
   employeeForm!: FormGroup;
   step = 1;
-  employeeId!: number;
+  employeeId!: string;
+  isEditMode = true;
+
+  departments: { id: number; name: string }[] = [];
+  nationalities: string[] = [];
+
+  private employeeData!: IEmployee;
 
   constructor(
     private fb: FormBuilder,
@@ -33,9 +43,13 @@ export class EditEmployeeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.nationalities = Object.values(countries)
+      .map((c) => c.name)
+      .sort();
+
     this.employeeForm = this.fb.group(
       {
-        name: [
+        fullName: [
           '',
           [
             Validators.required,
@@ -45,7 +59,7 @@ export class EditEmployeeComponent implements OnInit {
         ],
         gender: ['', Validators.required],
         nationality: ['', Validators.required],
-        birthDate: [
+        dateOfBirth: [
           '',
           [
             Validators.required,
@@ -58,14 +72,16 @@ export class EditEmployeeComponent implements OnInit {
           [Validators.required, Validators.pattern('^[23][0-9]{13}$')],
         ],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: ['', [Validators.minLength(6)]],
         address: ['', Validators.required],
-        phone: [
+        phoneNumber: [
           '',
           [Validators.required, Validators.pattern('^01[0125][0-9]{8}$')],
         ],
-        department: ['', Validators.required],
-        baseSalary: [
+        // departmentId: ['', Validators.required],
+        departmentId: [null, Validators.required],
+
+        salary: [
           null,
           [Validators.required, Validators.min(7000), Validators.max(100000)],
         ],
@@ -84,10 +100,16 @@ export class EditEmployeeComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
-        this.employeeId = +id;
-        this.empService.getEmployeeById(this.employeeId).subscribe({
-          next: (emp) => {
-            this.employeeForm.patchValue(emp);
+        this.employeeId = id;
+
+        forkJoin({
+          departments: this.empService.getDepartments(),
+          employee: this.empService.getEmployeeById(id),
+        }).subscribe({
+          next: ({ departments, employee }) => {
+            this.departments = departments;
+            this.employeeData = employee;
+            this.patchEmployeeForm(employee);
           },
           error: (err) => {
             console.error(err);
@@ -97,20 +119,75 @@ export class EditEmployeeComponent implements OnInit {
     });
   }
 
+  patchEmployeeForm(emp: IEmployee) {
+    this.employeeForm.patchValue({
+      fullName: emp.name || '',
+      dateOfBirth: this.formatDate(emp.birthDate) ?? '',
+      departmentId: this.getDepartmentIdByName(emp.department) ?? null,
+      salary: emp.baseSalary,
+      gender: emp.gender || '',
+      nationality: emp.nationality || '',
+      nationalId: emp.nationalId || '',
+      email: emp.email || '',
+      password: '',
+      address: emp.address || '',
+      phoneNumber: emp.phoneNumber || '',
+      contractDate: this.formatDate(emp.contractDate),
+      startTime: this.formatTime(emp.startTime),
+      endTime: this.formatTime(emp.endTime),
+    });
+  }
+
   onSubmit() {
     if (this.employeeForm.valid) {
-      this.empService
-        .updateEmployee(this.employeeId, this.employeeForm.value)
-        .subscribe({
-          next: (res) => {
-            console.log('Employee updated:', res);
-            this.toastr.success('Employee updated successfully!', 'Success');
-            this.router.navigate(['/dashboard/Employees']);
-          },
-          error: (err) => {
-            console.error(err);
-          },
-        });
+      const payload: IUpdateEmployeeRequest = {
+        id: this.employeeId.toString(),
+        name: this.employeeForm.value.fullName,
+        dateOfBirth: this.employeeForm.value.dateOfBirth,
+        departmentId: +this.employeeForm.value.departmentId,
+        // departmentId: this.employeeForm.value.departmentId,
+
+        baseSalary: this.employeeForm.value.salary,
+        gender: this.employeeForm.value.gender,
+        nationality: this.employeeForm.value.nationality,
+        nationalId: this.employeeForm.value.nationalId,
+        email: this.employeeForm.value.email,
+        address: this.employeeForm.value.address,
+        phoneNumber: this.employeeForm.value.phoneNumber
+          ? this.employeeForm.value.phoneNumber.replace(/\D/g, '')
+          : '',
+        contractDate: this.employeeForm.value.contractDate,
+        startTime: this.convertTimeToDateTime(
+          this.employeeForm.value.startTime,
+          this.employeeForm.value.contractDate
+        ),
+        endTime: this.convertTimeToDateTime(
+          this.employeeForm.value.endTime,
+          this.employeeForm.value.contractDate
+        ),
+        ...(this.employeeForm.value.password
+          ? { password: this.employeeForm.value.password }
+          : {}),
+      };
+
+      console.log('Payload:', payload);
+
+      this.empService.updateEmployee(this.employeeId, payload).subscribe({
+        next: (res) => {
+          this.toastr.success('Employee updated successfully!', 'Success');
+          // this.router.navigate(['/dashboard/Employees']);
+          // this.router.navigate([`/dashboard/view-employee/${id}`]);
+          this.router.navigate(['/dashboard/view-employee', this.employeeId]);
+        },
+        error: (err) => {
+          console.error('HTTP Error:', err);
+          console.error('Validation Errors:', err?.error?.errors);
+          this.toastr.error(
+            'Error updating employee. Check validation errors.',
+            'Error'
+          );
+        },
+      });
     } else {
       this.employeeForm.markAllAsTouched();
     }
@@ -119,13 +196,12 @@ export class EditEmployeeComponent implements OnInit {
   nextStep() {
     if (this.step === 1) {
       const step1Fields = [
-        'name',
+        'fullName',
         'gender',
         'nationality',
-        'birthDate',
+        'dateOfBirth',
         'nationalId',
         'email',
-        'password',
       ];
       const step1Valid = step1Fields.every((field) => this.f[field].valid);
       if (step1Valid) {
@@ -138,6 +214,10 @@ export class EditEmployeeComponent implements OnInit {
 
   prevStep() {
     if (this.step > 1) this.step--;
+  }
+
+  goBack() {
+    this.router.navigate(['/dashboard/Employees']);
   }
 
   get f() {
@@ -173,7 +253,7 @@ export class EditEmployeeComponent implements OnInit {
 
   contractAfter18YearsValidator(): ValidatorFn {
     return (group: AbstractControl): { [key: string]: any } | null => {
-      const birthDateValue = group.get('birthDate')?.value;
+      const birthDateValue = group.get('dateOfBirth')?.value;
       const contractDateControl = group.get('contractDate');
       const contractDateValue = contractDateControl?.value;
 
@@ -236,5 +316,25 @@ export class EditEmployeeComponent implements OnInit {
       group.get('endTime')?.setErrors(null);
       return null;
     };
+  }
+
+  formatTime(value: string | null | undefined): string {
+    if (!value || value === '0001-01-01T00:00:00') return '';
+    return value.substring(11, 16);
+  }
+
+  formatDate(value: string | null | undefined): string | null {
+    if (!value || value.startsWith('0001')) return null;
+    return value.substring(0, 10);
+  }
+
+  getDepartmentIdByName(departmentName: string): number | null {
+    const dept = this.departments.find((d) => d.name === departmentName);
+    return dept ? dept.id : null;
+  }
+
+  convertTimeToDateTime(time: string, date: string): string {
+    if (!time || !date) return '';
+    return `${date}T${time}:00`;
   }
 }

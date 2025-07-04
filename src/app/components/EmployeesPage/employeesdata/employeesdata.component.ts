@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IEmployee } from '../../../models/IEmployee';
 import { EmployeeService } from '../../../services/Employee.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employeesdata',
@@ -49,7 +50,7 @@ export class EmployeesdataComponent implements OnInit {
 
   get pagedEmployees(): IEmployee[] {
     const filtered = this.employees.filter((emp) =>
-      emp.fullName.toLowerCase().includes(this.searchTerm.toLowerCase())
+      emp.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return filtered.slice(start, start + this.itemsPerPage);
@@ -61,7 +62,7 @@ export class EmployeesdataComponent implements OnInit {
 
   get totalPages(): number[] {
     const filtered = this.employees.filter((emp) =>
-      emp.fullName.toLowerCase().includes(this.searchTerm.toLowerCase())
+      emp.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
     const pages = Math.ceil(filtered.length / this.itemsPerPage);
     return Array.from({ length: pages }, (_, i) => i + 1);
@@ -75,25 +76,66 @@ export class EmployeesdataComponent implements OnInit {
     this.router.navigate(['/dashboard/Employees/add-employee']);
   }
 
-  viewEmployeeDetails(id: number) {
+  viewEmployeeDetails(id: string) {
     this.router.navigate([`/dashboard/Employees/view-employee/${id}`]);
   }
 
-  editEmployee(id: number) {
+  editEmployee(id: string) {
     this.router.navigate([`/dashboard/Employees/edit-employee/${id}`]);
   }
 
-  deleteEmployee(id: number) {
-    this.employeeService.deleteEmployee(id).subscribe({
-      next: () => {
-        console.log('Employee deleted!');
-        this.loadEmployees();
+  deleteEmployee(id: string) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#4a739c',
+      cancelButtonColor: '#e74c3c',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      background: '#ffffff',
+      color: '#101518',
+      customClass: {
+        popup: 'custom-swal-popup',
+        confirmButton: 'custom-swal-confirm',
+        cancelButton: 'custom-swal-cancel',
       },
-      error: (err) => console.error(err),
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.employeeService.deleteEmployee(id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'The employee has been deleted.',
+              icon: 'success',
+              confirmButtonColor: '#4a739c',
+              customClass: {
+                popup: 'custom-swal-popup',
+                confirmButton: 'custom-swal-confirm',
+              },
+            });
+            this.loadEmployees();
+          },
+          error: (err) => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'An error occurred while deleting the employee.',
+              icon: 'error',
+              confirmButtonColor: '#4a739c',
+              customClass: {
+                popup: 'custom-swal-popup',
+                confirmButton: 'custom-swal-confirm',
+              },
+            });
+            console.error(err);
+          },
+        });
+      }
     });
   }
 
-  trackById(index: number, employee: IEmployee): number {
+  trackById(index: number, employee: IEmployee): string {
     return employee.id;
   }
 }
