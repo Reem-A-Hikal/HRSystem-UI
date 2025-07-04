@@ -2,18 +2,20 @@ body {
   background-color: #f8f9fa;
   color: #101518;
   margin: 0;
-  height: 100vh;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.main {
+  height: 90vh;
+  min-height: 90vh;
+}
 .content-container {
   width: 96%;
   height: fit-content;
   max-width: 1200px;
   margin: 2.5rem auto;
-  padding: 2.5rem 1.5rem;
+  padding: 1rem;
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 6px 32px rgba(44, 62, 80, 0.1);

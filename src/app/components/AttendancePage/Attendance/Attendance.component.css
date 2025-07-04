@@ -71,7 +71,6 @@ body {
   border-radius: 14px;
   padding: 0 1.1rem;
   font-size: 1.05rem;
-  background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 

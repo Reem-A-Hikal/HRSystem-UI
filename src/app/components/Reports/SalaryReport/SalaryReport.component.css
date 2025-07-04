@@ -244,3 +244,7 @@ body {
   color: #0d151c;
   outline: none;
 }
+
+.select-box {
+  padding: 15px;
+}

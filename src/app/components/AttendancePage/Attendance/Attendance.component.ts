@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 interface AttendanceRecord {
   id: number;
@@ -20,7 +21,7 @@ export interface Pagination {
 }
 @Component({
   selector: 'app-Attendance',
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, BsDatepickerModule],
   templateUrl: './Attendance.component.html',
   styleUrls: ['./Attendance.component.css'],
 })
@@ -96,6 +97,7 @@ export class AttendanceComponent implements OnInit {
   searchTerm: string = '';
   startDate: string = '';
   endDate: string = '';
+  filteredNames: string[] = [];
   constructor() {}
 
   ngOnInit() {
@@ -105,6 +107,15 @@ export class AttendanceComponent implements OnInit {
 
   get isEmpty(): boolean {
     return this.filteredList.length === 0;
+  }
+  onSearchChange() {
+    const search = this.searchTerm.toLowerCase();
+    this.filteredNames = this.attendanceList
+      .map((r) => r.employeeName)
+      .filter(
+        (name, index, self) =>
+          name.toLowerCase().includes(search) && self.indexOf(name) === index
+      );
   }
 
   applyFilters() {

@@ -41,8 +41,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label>Gender</label>
-            <select formControlName="gender">
+            <label for="genderSelect">Gender</label>
+            <select id="genderSelect" formControlName="gender">
               <option value="">Select</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -56,8 +56,8 @@
           </div>
 
           <div class="form-group">
-            <label>Nationality</label>
-            <select formControlName="nationality">
+            <label for="nationalitySelect">Nationality</label>
+            <select id="nationalitySelect" formControlName="nationality">
               <option value="">Select</option>
               <option value="egyptian">Egyptian</option>
               <option value="saudi">Saudi</option>
@@ -74,7 +74,7 @@
 
         <div class="form-group">
           <label>Birth Date</label>
-          <input type="date" formControlName="birthDate" />
+          <input type="date" formControlName="birthDate" placeholder="Select birth date" title="Birth Date" />
           <div
             class="error"
             *ngIf="f['birthDate'].touched && f['birthDate'].errors"
@@ -93,7 +93,7 @@
 
         <div class="form-group">
           <label>National ID</label>
-          <input type="text" formControlName="nationalId" />
+          <input type="text" formControlName="nationalId" placeholder="Enter national ID" title="National ID" />
           <div
             class="error"
             *ngIf="f['nationalId'].touched && f['nationalId'].errors"
@@ -184,7 +184,7 @@
         <div class="form-row">
           <div class="form-group">
             <label>Department</label>
-            <select formControlName="department">
+            <select formControlName="department" title="Department">
               <option value="">Select</option>
               <option value="hr">HR</option>
               <option value="it">IT</option>
@@ -221,7 +221,7 @@
 
         <div class="form-group">
           <label>Contract Date</label>
-          <input type="date" formControlName="contractDate" />
+          <input type="date" formControlName="contractDate" placeholder="Select contract date" title="Contract Date" />
           <div
             class="error"
             *ngIf="f['contractDate'].touched && f['contractDate'].errors"
@@ -244,7 +244,7 @@
         <div class="form-row">
           <div class="form-group">
             <label>Start Time</label>
-            <input type="time" formControlName="startTime" />
+            <input type="time" formControlName="startTime" placeholder="Select start time" title="Start Time" />
             <div
               class="error"
               *ngIf="f['startTime'].touched && f['startTime'].errors"
@@ -257,7 +257,7 @@
 
           <div class="form-group">
             <label>End Time</label>
-            <input type="time" formControlName="endTime" />
+            <input type="time" formControlName="endTime" placeholder="Select end time" title="End Time" />
             <div
               class="error"
               *ngIf="f['endTime'].touched && f['endTime'].errors"

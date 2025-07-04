@@ -12,7 +12,7 @@
             id="employeeSelect"
             formControlName="employeeId"
           >
-            <option [value]="null" selected>Select Employee</option>
+            <option value="" disabled selected>Select Employee</option>
             <option *ngFor="let employee of employees" [value]="employee.id">
               {{ employee.name }}
             </option>
@@ -25,7 +25,7 @@
             id="departmentSelect"
             formControlName="departmentId"
           >
-            <option [value]="null" selected>Select Department</option>
+            <option value="" disabled selected>Select Department</option>
             <option
               *ngFor="let department of departments"
               [value]="department.id"
@@ -35,37 +35,74 @@
           </select>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 position-relative">
           <label class="form-label">Date</label>
           <input
-            type="date"
-            class="form-control"
+            type="text"
+            class="form-control pe-5"
             placeholder="Select date"
             title="Select date"
             formControlName="date"
+            bsDatepicker
+            [bsConfig]="{
+              dateInputFormat: 'YYYY-MM-DD',
+              containerClass: 'theme-dark-blue'
+            }"
           />
+          <i
+            class="bi bi-calendar-date position-absolute"
+            style="right: 25px; top: 48px; pointer-events: none; color: #6c757d"
+          ></i>
         </div>
 
         <div class="mb-4">
           <label class="form-label">Check-in Time</label>
-          <input
-            type="time"
-            class="form-control"
+          <timepicker
+            id="checkInTime"
+            class="time"
             placeholder="Select check-in time"
             title="Select check-in time"
-            formControlName="checkInTime"
-          />
+            [formControlName]="'checkInTime'"
+            [showMeridian]="true"
+            [hourStep]="1"
+            [minuteStep]="5"
+            [arrowkeys]="true"
+          ></timepicker>
+          <div
+            *ngIf="
+              attendanceForm.get('checkInTime')?.invalid &&
+              (attendanceForm.get('checkInTime')?.dirty ||
+                attendanceForm.get('checkInTime')?.touched)
+            "
+            class="text-danger mt-1"
+          >
+            Please select a valid check-in time.
+          </div>
         </div>
 
         <div class="mb-4">
           <label class="form-label">Check-out Time</label>
-          <input
-            type="time"
-            class="form-control"
+          <timepicker
+            id="checkOutTime"
+            class="time"
             placeholder="Select check-out time"
             title="Select check-out time"
-            formControlName="checkOutTime"
-          />
+            [formControlName]="'checkOutTime'"
+            [showMeridian]="true"
+            [hourStep]="1"
+            [minuteStep]="5"
+            [arrowkeys]="true"
+          ></timepicker>
+          <div
+            *ngIf="
+              attendanceForm.get('checkOutTime')?.invalid &&
+              (attendanceForm.get('checkOutTime')?.dirty ||
+                attendanceForm.get('checkOutTime')?.touched)
+            "
+            class="text-danger mt-1"
+          >
+            Please select a valid check-in time.
+          </div>
         </div>
 
         <div
