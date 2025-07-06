@@ -52,10 +52,9 @@ body {
   background-color: #dce8f3;
   color: #101518;
   border-radius: 22px;
-  font-weight: bold;
   border: none;
   padding: 0.55rem 1.6rem;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
 }
 .btn-primary:hover {

@@ -16,7 +16,6 @@
               class="form-control search-box"
               placeholder="Search by employee name"
               [(ngModel)]="searchTerm"
-              (input)="onSearchChange()"
               (keyup.enter)="applyFilters()"
             />
           </div>
@@ -29,13 +28,13 @@
           <div class="input-group">
             <input
               type="text"
-              title=""
               class="form-control date-input"
               placeholder="Select start date"
               [(ngModel)]="startDate"
               [bsConfig]="{
                 dateInputFormat: 'YYYY-MM-DD',
-                containerClass: 'theme-dark-blue'
+                containerClass: 'theme-dark-blue',
+                returnFocusToInput: true,
               }"
               bsDatepicker
               autocomplete="off"
@@ -55,7 +54,8 @@
               [(ngModel)]="endDate"
               [bsConfig]="{
                 dateInputFormat: 'YYYY-MM-DD',
-                containerClass: 'theme-dark-blue'
+                containerClass: 'theme-dark-blue',
+                returnFocusToInput: true,
               }"
               bsDatepicker
             />
@@ -100,16 +100,14 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 pb-3">
-        <a
-          [routerLink]="['ManageAttendance']"
-          class="btn btn-primary fw-bold"
+        <a [routerLink]="['ManageAttendance']" class="btn btn-primary fw-bold"
           >+ New Entry</a
         >
       </div>
       @if (!isEmpty) {
       <div class="table-responsive tablecontainer p-0 mb-4" #tablecontainer>
         <table class="table table-borderless m-0 align-middle">
-          <thead class="d-md-table-header-group">
+          <thead class="d-md-table-header-group text-center">
             <tr>
               <th style="min-width: 160px">Department</th>
               <th style="min-width: 160px">Employee Name</th>
@@ -119,21 +117,23 @@
               <th style="min-width: 120px; color: #5c748a">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let record of pagedAttendance">
+          <tbody class="text-center">
+            <tr *ngFor="let record of filteredList">
               <td data-label="Department" class="department-col">
-                {{ record.department }}
+                {{ record.departmentName }}
               </td>
               <td data-label="Employee Name" class="employee-col">
                 {{ record.employeeName }}
               </td>
               <td data-label="Check-in Time" class="time-col">
-                {{ record.checkInTime }}
+                {{ record.arrivalTime | date : "shortTime" }}
               </td>
               <td data-label="Check-out Time" class="time-col">
-                {{ record.checkOutTime }}
+                {{ record.departureTime | date : "shortTime" }}
               </td>
-              <td data-label="Date" class="time-col">{{ record.date }}</td>
+              <td data-label="Date" class="time-col">
+                {{ record.date | date : "yyyy-MM-dd" }}
+              </td>
               <td data-label="Actions" class="actions-col">
                 <div>
                   <a [routerLink]="['ManageAttendance', record.id]">
@@ -141,7 +141,6 @@
                       style="cursor: pointer"
                       class="bi bi-pencil-square fs-3 text-primary p-0"
                       title="Edit"
-                      (click)="onEdit(record)"
                     ></i>
                   </a>
                   |
@@ -149,7 +148,7 @@
                     style="cursor: pointer"
                     class="bi bi-trash fs-3 text-danger p-0"
                     title="Delete"
-                    (click)="onDelete(record)"
+                    (click)="onDelete(record.id)"
                   ></i>
                 </div>
               </td>
@@ -186,11 +185,11 @@
         <ul class="pagination">
           <li
             class="page-item d-none d-md-block"
-            [class.disabled]="pagination.currentPage === 1"
+            [class.disabled]="pagination.pageIndex === 1"
           >
             <a
               class="page-link"
-              (click)="onPageChange(pagination.currentPage - 1)"
+              (click)="onPageChange(pagination.pageIndex - 1)"
               aria-label="Previous"
             >
               <span aria-hidden="true" class="fw-light">
@@ -201,17 +200,17 @@
           <li
             *ngFor="let page of getPages()"
             class="page-item"
-            [class.active]="page === pagination.currentPage"
+            [class.active]="page === pagination.pageIndex"
           >
             <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
           </li>
           <li
             class="page-item d-none d-md-block"
-            [class.disabled]="pagination.currentPage === pagination.totalPages"
+            [class.disabled]="pagination.pageIndex === pagination.totalPages"
           >
             <a
               class="page-link"
-              (click)="onPageChange(pagination.currentPage + 1)"
+              (click)="onPageChange(pagination.pageIndex + 1)"
               aria-label="Next"
             >
               <span aria-hidden="true" class="fw-light">
