@@ -16,13 +16,16 @@ export class AddUserComponent implements OnInit {
   isEditing: boolean = false;
   roles: any[] = [];
 
-  user = {
-    fullName: '',
-    username: '',
-    role: '',
-    email: '',
-    password: '',
-  };
+user = {
+  id: '',
+  fullName: '',
+  username: '',
+  role: '',
+  email: '',
+  password: ''
+};
+
+
 
   constructor(
     private router: Router,
@@ -31,8 +34,9 @@ export class AddUserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.roles = this.roleService.getRoles();
-
+  this.roleService.getRoles().subscribe((data) => {
+  this.roles = data;
+});
     const editingUser = this.userService.getEditingUser();
     if (editingUser) {
       this.user = { ...editingUser };
@@ -43,7 +47,34 @@ export class AddUserComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('User submitted:', this.user);
-    this.router.navigate(['/dashboard/users']);
+  if (this.isEditing) {
+    this.userService.updateUser(this.user).subscribe({
+      next: () => {
+        console.log('User updated successfully');
+        this.router.navigate(['/dashboard/Users']); 
+      },
+      error: (err) => console.error('Error updating user:', err.error),
+    });
+  } else {
+    this.userService.addUser(this.user).subscribe({
+      next: (res) => {
+        console.log('User added successfully:', res);
+
+        const roleBody = { roleName: this.user.role };
+
+       this.userService.assignRole(res.userId, this.user.role).subscribe({
+        next: () => {
+          console.log("Role assigned successfully");
+          this.router.navigate(['/dashboard/Users']);
+        },
+        error: (err) => console.error("Error assigning role:", err.error),
+      });
+
+      },
+      error: (err) => console.error('Error adding user:', err.error),
+    });
   }
+}
+
+
 }

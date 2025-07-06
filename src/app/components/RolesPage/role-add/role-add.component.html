@@ -19,28 +19,30 @@
       </div>
 
       <!-- Permissions Table -->
-      <div class="table-responsive">
-        <table class="table text-center align-middle table-wrapper">
-          <thead class="table-light ">
-            <tr>
-              <th class="text-start">Module Name</th>
-              <th>View</th>
-              <th>Edit</th>
-              <th>Delete</th>
-              <th>Add</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let module of modules">
-              <td class="text-start">{{ module.name }}</td>
-              <td><input type="checkbox" [(ngModel)]="module.permissions.view" /></td>
-              <td><input type="checkbox" [(ngModel)]="module.permissions.edit" /></td>
-              <td><input type="checkbox" [(ngModel)]="module.permissions.delete" /></td>
-              <td><input type="checkbox" [(ngModel)]="module.permissions.add" /></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+     <div *ngIf="permissions.length > 0" class="table-responsive">
+  <table class="table text-center align-middle table-wrapper">
+    <thead class="table-light">
+      <tr>
+        <th class="text-start">Page</th>
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>Add</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let module of getModules()">
+        <tr>
+          <td class="text-start">{{ module }}</td>
+          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'View')" (change)="togglePermission(module, 'View', $event)" /></td>
+          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'Edit')" (change)="togglePermission(module, 'Edit', $event)" /></td>
+          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'Delete')" (change)="togglePermission(module, 'Delete', $event)" /></td>
+          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'Add')" (change)="togglePermission(module, 'Add', $event)" /></td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
 
       <!-- Save Button -->
       <div class="text-end mt-4">

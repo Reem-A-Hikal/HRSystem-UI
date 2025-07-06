@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
+
 
 @Component({
   selector: 'app-user-management',
@@ -11,88 +13,33 @@ import { UserService } from '../../../services/user.service';
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
 })
-export class UserManagementComponent {
+export class UserManagementComponent implements OnInit {
   isEditing: boolean = false;
   constructor(private router: Router, private userService: UserService) {}
+  ngOnInit(): void {
+  this.userService.getUsers().subscribe((data) => {
+    this.users = data;
+  });
+}
 
-  editUser(user: any) {
-    this.isEditing;
-    this.userService.setEditingUser(user);
-    this.router.navigate(['/dashboard/add-user']);
-  }
+editUser(user: any) {
+  this.isEditing = true; 
+  this.userService.setEditingUser(user); 
+  this.router.navigate(['/dashboard/add-user']); 
+}
+
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
 
-  users = [
-    {
-      fullName: 'Sophia Clark',
-      username: 'sophia.clark',
-      email: 'sophia.clark@example.com',
-      role: 'Manager',
-    },
-    {
-      fullName: 'Liam Walker',
-      username: 'liam.walker',
-      email: 'liam.walker@example.com',
-      role: 'Developer',
-    },
-    {
-      fullName: 'Olivia Carter',
-      username: 'olivia.carter',
-      email: 'olivia.carter@example.com',
-      role: 'Designer',
-    },
-    {
-      fullName: 'Noah Hayes',
-      username: 'noah.hayes',
-      email: 'noah.hayes@example.com',
-      role: 'Analyst',
-    },
-    {
-      fullName: 'Ava Bennett',
-      username: 'ava.bennett',
-      email: 'ava.bennett@example.com',
-      role: 'HR Specialist',
-    },
-    {
-      fullName: 'Ethan Reed',
-      username: 'ethan.reed',
-      email: 'ethan.reed@example.com',
-      role: 'Sales Rep',
-    },
-    {
-      fullName: 'Isabella Morgan',
-      username: 'isabella.morgan',
-      email: 'isabella.morgan@example.com',
-      role: 'Marketing Coordinator',
-    },
-    {
-      fullName: 'Jackson Cooper',
-      username: 'jackson.cooper',
-      email: 'jackson.cooper@example.com',
-      role: 'IT Support',
-    },
-    {
-      fullName: 'Mia Foster',
-      username: 'mia.foster',
-      email: 'mia.foster@example.com',
-      role: 'Project Manager',
-    },
-    {
-      fullName: 'Aiden Hughes',
-      username: 'aiden.hughes',
-      email: 'aiden.hughes@example.com',
-      role: 'Customer Service',
-    },
-  ];
+  users: any[] = [];
 
   get filteredUsers() {
     const term = this.searchTerm.toLowerCase();
     return this.users.filter(
       (user) =>
         user.fullName.toLowerCase().includes(term) ||
-        user.username.toLowerCase().includes(term) ||
+        user.userName.toLowerCase().includes(term) ||
         user.email.toLowerCase().includes(term) ||
         user.role.toLowerCase().includes(term)
     );
@@ -114,23 +61,27 @@ export class UserManagementComponent {
     }
   }
 
-  // Removed duplicate editUser method to fix duplicate implementation error
 
   deleteUser(user: any) {
-    const confirmed = confirm(
-      `Are you sure you want to delete ${user.fullName}?`
-    );
-    if (confirmed) {
-      this.users = this.users.filter((u) => u !== user);
-      const maxPage = Math.ceil(this.filteredUsers.length / this.pageSize);
-      if (this.currentPage > maxPage) {
-        this.currentPage = maxPage;
-      }
-    }
+  const confirmed = confirm(`Are you sure you want to delete ${user.fullName}?`);
+  if (confirmed) {
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        console.log('User deleted successfully');
+        this.users = this.users.filter((u) => u.id !== user.id);
+
+        const maxPage = Math.ceil(this.filteredUsers.length / this.pageSize);
+        if (this.currentPage > maxPage) {
+          this.currentPage = maxPage;
+        }
+      },
+      error: (err) => console.error('Error deleting user:', err),
+    });
   }
+}
+
 
   addUser() {
     console.log('Add new user clicked');
-    // يمكنك التنقل لصفحة الإضافة هنا
   }
 }

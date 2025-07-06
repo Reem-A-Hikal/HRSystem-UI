@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { RoleService } from '../../../services/role.service';
   templateUrl: './role-management.component.html',
   styleUrls: ['./role-management.component.css'],
 })
-export class RoleManagementComponent {
+export class RoleManagementComponent implements OnInit {
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
@@ -20,9 +20,12 @@ export class RoleManagementComponent {
 
   constructor(private router: Router, private roleService: RoleService) {}
 
-  ngOnInit() {
-    this.roles = this.roleService.getRoles();
-  }
+ngOnInit() {
+  this.roleService.getRoles().subscribe((data) => {
+    this.roles = data;
+  });
+}
+
 
   get filteredRoles() {
     return this.roles.filter((role) =>
@@ -47,23 +50,28 @@ export class RoleManagementComponent {
   }
 
   goToAddPage() {
-    this.roleService.clearEditingRole(); // وضع الإضافة
+    this.roleService.clearEditingRole(); 
     this.router.navigate(['/dashboard/addRole']);
   }
 
-  editRole(index: number) {
-    const role = this.paginatedRoles[index];
-    this.roleService.setEditingRole(role); // حفظ الدور للتعديل
-    this.router.navigate(['/dashboard/addRole']); // إعادة التوجيه إلى صفحة الإضافة
-  }
+editRole(index: number) {
+  const role = this.paginatedRoles[index];
 
-  deleteRole(index: number) {
-    const role = this.paginatedRoles[index];
-    const confirmed = confirm(
-      `Are you sure you want to delete the role "${role.name}"?`
-    );
-    if (confirmed) {
-      const globalIndex = this.roles.findIndex((r) => r.id === role.id);
+  this.roleService.getRoleById(role.id).subscribe((fullRoleData) => {
+    this.roleService.setEditingRole(fullRoleData);
+    this.router.navigate(['/dashboard/addRole']);
+  });
+}
+
+
+ deleteRole(index: number) {
+  const role = this.paginatedRoles[index];
+  const confirmed = confirm(`Are you sure you want to delete the role "${role.name}"?`);
+
+  if (confirmed) {
+    this.roleService.deleteRole(role.id).subscribe(() => {
+
+      const globalIndex = this.roles.findIndex(r => r.id === role.id);
       if (globalIndex !== -1) {
         this.roles.splice(globalIndex, 1);
         const maxPage = Math.ceil(this.filteredRoles.length / this.pageSize);
@@ -71,6 +79,8 @@ export class RoleManagementComponent {
           this.currentPage = maxPage;
         }
       }
-    }
+    });
   }
+}
+
 }
