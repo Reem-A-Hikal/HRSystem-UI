@@ -9,11 +9,10 @@ import {
 } from '@angular/forms';
 import {
   AttendanceService,
-  Department,
-  Employee,
-} from '../Service/Attendance.service';
+} from '../../../services/Attendance.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Department, Employee } from '../../../models/IAttendance';
 
 @Component({
   selector: 'app-manageAttendance',
@@ -68,7 +67,6 @@ export class ManageAttendanceComponent implements OnInit {
       .subscribe((record) => {
         this.attendanceForm.patchValue({
           employeeId: record.employeeId,
-          departmentId: record.departmentId,
           date: record.date,
           checkInTime: record.checkInTime,
           checkOutTime: record.checkOutTime,

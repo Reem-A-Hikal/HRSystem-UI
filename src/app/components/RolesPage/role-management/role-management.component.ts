@@ -15,18 +15,17 @@ export class RoleManagementComponent implements OnInit {
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
+  isLoading: boolean = false;
 
   roles: any[] = [];
 
   constructor(private router: Router, private roleService: RoleService) {}
 
-ngOnInit() {
+ ngOnInit() {
   this.roleService.getRoles().subscribe((data) => {
     this.roles = data;
   });
 }
-
-
   get filteredRoles() {
     return this.roles.filter((role) =>
       role.name.toLowerCase().includes(this.searchTerm.toLowerCase())
