@@ -72,6 +72,14 @@ export class EmployeeService {
     );
   }
 
+  // Get Employees By Department
+  getEmployeesByDepartment(departmentId: number): Observable<IEmployee[]> {
+    return this.http.get<IEmployee[]>(
+      `${environment.apiBaseUrl}/Employee/department/${departmentId}`,
+      this.getAuthHeaders()
+    );
+  }
+
   private getAuthHeaders() {
     return {
       headers: new HttpHeaders({
