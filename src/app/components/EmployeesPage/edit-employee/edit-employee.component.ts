@@ -177,7 +177,7 @@ export class EditEmployeeComponent implements OnInit {
           this.toastr.success('Employee updated successfully!', 'Success');
           // this.router.navigate(['/dashboard/Employees']);
           // this.router.navigate([`/dashboard/view-employee/${id}`]);
-          this.router.navigate(['/dashboard/view-employee', this.employeeId]);
+          this.router.navigate(['/dashboard/Employees/view-employee', this.employeeId]);
         },
         error: (err) => {
           console.error('HTTP Error:', err);

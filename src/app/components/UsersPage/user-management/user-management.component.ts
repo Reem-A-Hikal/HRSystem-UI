@@ -18,7 +18,7 @@ export class UserManagementComponent {
   editUser(user: any) {
     this.isEditing;
     this.userService.setEditingUser(user);
-    this.router.navigate(['/dashboard/add-user']);
+    this.router.navigate(['/dashboard/Users/add-user']);
   }
   searchTerm: string = '';
   currentPage: number = 1;

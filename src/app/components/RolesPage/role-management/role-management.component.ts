@@ -53,14 +53,14 @@ export class RoleManagementComponent {
   }
 
   goToAddPage() {
-    this.roleService.clearEditingRole(); // وضع الإضافة
-    this.router.navigate(['/dashboard/addRole']);
+    this.roleService.clearEditingRole();
+    this.router.navigate(['/dashboard/Roles/manageRole']);
   }
 
   editRole(index: number) {
     const role = this.paginatedRoles[index];
-    this.roleService.setEditingRole(role); // حفظ الدور للتعديل
-    this.router.navigate(['/dashboard/addRole']); // إعادة التوجيه إلى صفحة الإضافة
+    this.roleService.setEditingRole(role);
+    this.router.navigate(['/dashboard/Roles/manageRole']);
   }
 
   deleteRole(index: number) {

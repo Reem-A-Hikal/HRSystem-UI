@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component , OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-official-holiday',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, BsDatepickerModule],
   templateUrl: './official-holiday.component.html',
   styleUrls: ['./official-holiday.component.css']
 })

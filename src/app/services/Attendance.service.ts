@@ -1,84 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { AttendanceRecord, Department, Employee } from '../models/IAttendance';
+import { Observable } from 'rxjs';
+import {
+  AttendanceDto,
+  AttendanceRecord,
+  AttendanceUpdateDto,
+  DeleteResponse,
+  PaginatedList,
+} from '../models/IAttendance';
+import { environment } from '../../environments/environment.development';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AttendanceService {
-  // private apiUrl = 'api/attendance';
-  // private employeesUrl = 'api/employees';
-  // private departmentsUrl = 'api/departments';
+  private apiUrl = `${environment.apiBaseUrl}/Attendance`;
+  constructor(private http: HttpClient) {}
 
-  private mockRecords: AttendanceRecord[] = [
-
-    // Add more mock records as needed
-  ];
-  constructor() {}
-
-  getAttendanceRecords(): Observable<AttendanceRecord[]> {
-    // return this.http.get<AttendanceRecord[]>(this.apiUrl);
-    return of(this.mockRecords);
+  getAll(): Observable<AttendanceRecord[]> {
+    return this.http.get<AttendanceRecord[]>(this.apiUrl);
   }
 
-  getAttendanceRecord(id: string | null): Observable<AttendanceRecord> {
-    // return this.http.get<AttendanceRecord>(`${this.apiUrl}/${id}`);
-    if (id) {
-      return of(
-        this.mockRecords.find((record) => record.id === id) as AttendanceRecord
-      );
-    } else {
-      return of({
-      } as AttendanceRecord);
-    }
+  getPaginated(
+    pageIndex: number = 1,
+    pageSize: number = 5,
+    searchTerm?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Observable<PaginatedList<AttendanceRecord>> {
+    let params = new HttpParams()
+      .set('pageIndex', pageIndex.toString())
+      .set('pageSize', pageSize.toString());
+
+    if (searchTerm) params = params.set('searchTerm', searchTerm);
+    if (startDate) params = params.set('startDate', startDate.toISOString());
+    if (endDate) params = params.set('endDate', endDate.toISOString());
+
+    return this.http.get<PaginatedList<AttendanceRecord>>(
+      `${this.apiUrl}/paginated`,
+      { params }
+    );
   }
 
-  addAttendance(record: AttendanceRecord): Observable<AttendanceRecord> {
-    // return this.http.post<AttendanceRecord>(this.apiUrl, record);
-    return of(record);
+  getById(id: number | null): Observable<AttendanceRecord> {
+    return this.http.get<AttendanceRecord>(`${this.apiUrl}/${id}`);
+  }
+
+  add(attendance: AttendanceDto): Observable<AttendanceUpdateDto> {
+    return this.http.post<AttendanceUpdateDto>(this.apiUrl, attendance);
   }
 
   updateAttendance(
-    id: string,
-    record: AttendanceRecord
-  ): Observable<AttendanceRecord> {
-    // return this.http.put<AttendanceRecord>(`${this.apiUrl}/${id}`, record);
-    return of(record);
+    attendance: AttendanceUpdateDto
+  ): Observable<AttendanceUpdateDto> {
+    return this.http.put<AttendanceUpdateDto>(this.apiUrl, attendance);
   }
 
-  deleteAttendance(id: string): Observable<boolean> {
-    // return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
-    return of(true);
-  }
-
-  getEmployees(): Observable<Employee[]> {
-    // return this.http.get<Employee[]>(this.employeesUrl);
-    return of([
-      {
-        id: '1',
-        name: 'John Doe',
-        departmentId: '1',
-      },
-      {
-        id: '2',
-        name: 'Jane Doe',
-        departmentId: '2',
-      },
-    ]);
-  }
-
-  getDepartments(): Observable<Department[]> {
-    // return this.http.get<Department[]>(this.departmentsUrl);
-    return of([
-      {
-        id: '1',
-        name: 'Sales',
-      },
-
-      {
-        id: '2',
-        name: 'Marketing',
-      },
-    ]);
+  deleteAttendance(id: number | null): Observable<DeleteResponse> {
+    return this.http.delete<DeleteResponse>(`${this.apiUrl}/${id}`);
   }
 }

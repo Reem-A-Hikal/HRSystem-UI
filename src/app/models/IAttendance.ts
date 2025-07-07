@@ -1,20 +1,30 @@
-export interface AttendanceRecord {
-  id: string;
-  employeeId: string;
+export interface AttendanceDto {
   date: string;
-  checkInTime: string;
-  checkOutTime: string;
+  arrivalTime: string;
+  departureTime: string;
+  employeeId: string;
+}
+
+export interface AttendanceUpdateDto extends AttendanceDto {
+  id: number | null;
+}
+
+export interface AttendanceRecord extends AttendanceUpdateDto {
+  departmentId: number;
   employeeName?: string;
   departmentName?: string;
 }
 
-export interface Employee {
-  id: string;
-  name: string;
-  departmentId: string;
+export interface PaginatedList<T> {
+  items: T[];
+  pageIndex: number;
+  totalPages: number;
+  totalItems: number;
+  pageSize: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 }
 
-export interface Department {
-  id: string;
-  name: string;
+export interface DeleteResponse {
+  message: string;
 }

@@ -24,24 +24,33 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     children: [
-      { path: 'Roles', component: RoleManagementComponent },
       { path: 'Employees', component: EmployeesdataComponent },
+      { path: 'Employees/add-employee', component: AddEmployeeComponent },
+      { path: 'Employees/view-employee/:id', component: ViewEmployeeComponent },
+      { path: 'Employees/edit-employee/:id', component: EditEmployeeComponent },
+
       { path: 'Attendance', component: AttendanceComponent },
-      { path: 'ManageAttendance', component: ManageAttendanceComponent },
-      { path: 'ManageAttendance/:id', component: ManageAttendanceComponent },
+      {
+        path: 'Attendance/ManageAttendance',
+        component: ManageAttendanceComponent,
+      },
+      {
+        path: 'Attendance/ManageAttendance/:id',
+        component: ManageAttendanceComponent,
+      },
       { path: 'SalaryReport', component: SalaryReportComponent },
-      { path: 'EditRecord', component: EditRecordComponent },
-      { path: 'PrintReport', component: PrintReportComponent },
-      { path: 'add-employee', component: AddEmployeeComponent },
-      { path: 'view-employee/:id', component: ViewEmployeeComponent },
-      { path: 'edit-employee/:id', component: EditEmployeeComponent },
-      { path: 'addRole', component: AddRoleComponent },
+      { path: 'SalaryReport/EditRecord', component: EditRecordComponent },
+      { path: 'SalaryReport/PrintReport', component: PrintReportComponent },
+
+      { path: 'Roles', component: RoleManagementComponent },
+      { path: 'Roles/manageRole', component: AddRoleComponent },
+
       { path: 'Users', component: UserManagementComponent },
-      { path: 'add-user', component: AddUserComponent },
+      { path: 'Users/add-user', component: AddUserComponent },
 
       { path: 'official-holiday', component: OfficialHolidayComponent },
       {
-        path: 'edit-official-holiday/:id',
+        path: 'official-holiday/edit/:id',
         component: EditOfficialHolidayComponent,
       },
       { path: 'general-setting', component: GeneralSettingComponent },

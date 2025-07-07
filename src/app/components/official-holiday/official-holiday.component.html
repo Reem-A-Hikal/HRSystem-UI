@@ -5,7 +5,10 @@
         <h1 class="fw-bold">Official Holidays</h1>
       </div>
       <h3 class="fs-5 fw-bold pt-3 pb-2 text-center">Create a holiday</h3>
-      <form class="d-flex flex-wrap gap-3 align-items-end mb-4" (ngSubmit)="createHoliday()">
+      <form
+        class="d-flex flex-wrap gap-3 p-3 align-items-end mb-4"
+        (ngSubmit)="createHoliday()"
+      >
         <div class="col-12 col-md-6">
           <label for="holidayName" class="form-label">Holiday name</label>
           <input
@@ -20,14 +23,26 @@
         </div>
         <div class="flex-grow-1">
           <label for="holidayDate" class="form-label">Date</label>
-          <input
-            type="date"
-            class="form-control form-control-lg"
-            id="holidayDate"
-            [(ngModel)]="holidayDate"
-            name="holidayDate"
-            required
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              id="holidayDate"
+              placeholder="Select date"
+              [(ngModel)]="holidayDate"
+              name="holidayDate"
+              [bsConfig]="{
+                dateInputFormat: 'YYYY-MM-DD',
+                containerClass: 'theme-dark-blue'
+              }"
+              bsDatepicker
+              autocomplete= off
+              required
+            />
+            <span class="input-group-text">
+              <i class="bi bi-calendar-event"></i>
+            </span>
+          </div>
         </div>
 
         <div class="col-12 d-flex justify-content-end">
@@ -38,7 +53,7 @@
       </form>
       <h3 class="fs-5 fw-bold pt-3 pb-2 text-center">All Holidays</h3>
       <div class="table-responsive tablecontainer p-0 mb-4" #tablecontainer>
-        <table class="table table-borderless m-0 align-middle">
+        <table class="table table-borderless m-0 align-middle p-3">
           <thead class="d-md-table-header-group">
             <tr>
               <th>Holiday name</th>
@@ -54,11 +69,11 @@
                 <div>
                   <a>
                     <i
-                    style="cursor: pointer"
-                    class="bi bi-pencil-square fs-3 text-primary p-0"
-                    title="Edit"
-                    (click)="editHoliday(holiday)"
-                  ></i>
+                      style="cursor: pointer"
+                      class="bi bi-pencil-square fs-3 text-primary p-0"
+                      title="Edit"
+                      (click)="editHoliday(holiday)"
+                    ></i>
                   </a>
                   |
                   <i
