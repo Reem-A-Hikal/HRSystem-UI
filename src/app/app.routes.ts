@@ -15,7 +15,7 @@ import { AddUserComponent } from './components/UsersPage/user-add/user-add.compo
 import { AddRoleComponent } from './components/RolesPage/role-add/role-add.component';
 import { OfficialHolidayComponent } from './components/official-holiday/official-holiday.component';
 import { EditOfficialHolidayComponent } from './components/edit-official-holiday/edit-official-holiday.component';
-import { GeneralSettingComponent } from './components/general-setting/general-setting.component';
+import { GeneralSettingComponent } from './components/general-setting/settings/general-setting.component';
 import { ViewEmployeeComponent } from './components/EmployeesPage/view-employee/view-employee.component';
 
 export const routes: Routes = [
