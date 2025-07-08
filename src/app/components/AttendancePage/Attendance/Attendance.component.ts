@@ -86,11 +86,13 @@ export class AttendanceComponent implements OnInit {
   applyFilters() {
     // Rule 3: Check if either search term or date range is provided
     this.isLoading = true;
-    if (!this.searchTerm || !this.startDate || !this.endDate) {
+    // if (!this.searchTerm || !this.startDate || !this.endDate) 
+    if (!this.searchTerm && (!this.startDate || !this.endDate)) {
       this.toastr.onError('Please enter employee name or select a date range');
       this.isLoading = false;
       return;
     }
+    
 
     if (this.searchTerm && this.searchTerm.trim().length < 3) {
       this.toastr.onError('Please enter a valid name (at least 3 characters)');
