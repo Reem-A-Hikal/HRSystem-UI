@@ -16,9 +16,7 @@
       <strong>National ID:</strong> {{ employee.nationalId }}
     </div>
     <div class="detail-item"><strong>Email:</strong> {{ employee.email }}</div>
-    <!-- <div class="detail-item">
-      <strong>Password:</strong> {{ employee.password }}
-    </div> -->
+    
     <div class="detail-item">
       <strong>Phone:</strong> {{ employee.phoneNumber }}
     </div>
@@ -46,5 +44,109 @@
     <button class="btn btn-primary" (click)="goBack()">
       <i class="bi bi-arrow-left"></i> Back
     </button>
+  </div>
+</div> -->
+
+<div class="details-container" *ngIf="employee">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="profile-image">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <h2 class="employee-name">{{ employee.name }}</h2>
+      <p class="employee-department p-0">{{ employee.department }}</p>
+    </div>
+
+    <div class="details-sections">
+      <!-- Personal Information Section -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <i class="bi bi-person-lines-fill"></i> Personal Information
+        </h3>
+        <div class="section-grid">
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-gender-ambiguous"></i> Gender</span>
+            <span class="detail-value">{{ employee.gender }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-globe"></i> Nationality</span>
+            <span class="detail-value">{{ employee.nationality }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-calendar-event"></i> Birth Date</span>
+            <span class="detail-value">{{ employee.birthDate | date }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-credit-card"></i> National ID</span>
+            <span class="detail-value">{{ employee.nationalId }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information Section -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <i class="bi bi-envelope-paper"></i> Contact Information
+        </h3>
+        <div class="section-grid">
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-envelope"></i> Email</span>
+            <span class="detail-value">{{ employee.email }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-telephone"></i> Phone</span>
+            <span class="detail-value">{{ employee.phoneNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-geo-alt"></i> Address</span>
+            <span class="detail-value">{{ employee.address }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employment Details Section -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <i class="bi bi-briefcase"></i> Employment Details
+        </h3>
+        <div class="section-grid">
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-building"></i> Department</span>
+            <span class="detail-value">{{ employee.department }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-cash-coin"></i> Base Salary</span>
+            <span class="detail-value">{{ employee.baseSalary | currency }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-file-earmark-text"></i> Contract Date</span>
+            <span class="detail-value">{{ employee.contractDate | date : "mediumDate" }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Section -->
+      <div class="detail-section">
+        <h3 class="section-title">
+          <i class="bi bi-clock-history"></i> Schedule
+        </h3>
+        <div class="section-grid">
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-clock"></i> Start Time</span>
+            <span class="detail-value">{{ employee.startTime | date : "HH:mm" }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label"><i class="bi bi-clock"></i> End Time</span>
+            <span class="detail-value">{{ employee.endTime | date : "HH:mm" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-back" (click)="goBack()">
+        <i class="bi bi-arrow-left-circle"></i> Back to List
+      </button>
+    </div>
   </div>
 </div>

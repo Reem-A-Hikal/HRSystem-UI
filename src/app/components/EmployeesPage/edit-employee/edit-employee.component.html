@@ -46,8 +46,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label>Gender</label>
-            <select formControlName="gender">
+            <label for="genderSelect">Gender</label>
+            <select id="genderSelect" formControlName="gender">
               <option value="">Select</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -61,8 +61,12 @@
           </div>
 
           <div class="form-group">
-            <label>Nationality</label>
-            <select formControlName="nationality" class="form-control">
+            <label for="nationalitySelect">Nationality</label>
+            <select
+              id="nationalitySelect"
+              formControlName="nationality"
+              class="form-control"
+            >
               <option value="" disabled selected>Select</option>
               <option *ngFor="let nat of nationalities" [value]="nat">
                 {{ nat }}
@@ -79,8 +83,8 @@
         </div>
 
         <div class="form-group">
-          <label>Birth Date</label>
-          <input type="date" formControlName="dateOfBirth" />
+          <label for="dateOfBirth">Birth Date</label>
+          <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
           <div
             class="error"
             *ngIf="f['dateOfBirth'].touched && f['dateOfBirth'].errors"
@@ -99,7 +103,12 @@
 
         <div class="form-group">
           <label>National ID</label>
-          <input type="text" formControlName="nationalId" />
+          <input
+            type="text"
+            formControlName="nationalId"
+            placeholder="Enter national ID"
+            title="National ID"
+          />
           <div
             class="error"
             *ngIf="f['nationalId'].touched && f['nationalId'].errors"
@@ -147,7 +156,7 @@
           </div>
         </div>
         <div class="button-row">
-          <button type="button" (click)="goBack()">Back</button>
+          <button type="button" (click)="goBack()">Cancel</button>
           <button type="button" (click)="nextStep()">Next</button>
         </div>
       </div>
@@ -191,9 +200,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label>Department</label>
-
-            <select formControlName="departmentId">
+            <label for="department">Department</label>
+            <select id="department" formControlName="departmentId">
               <option [ngValue]="null" disabled>Select</option>
               <option *ngFor="let dept of departments" [ngValue]="dept.id">
                 {{ dept.name }}
@@ -232,7 +240,12 @@
 
         <div class="form-group">
           <label>Contract Date</label>
-          <input type="date" formControlName="contractDate" />
+          <input
+            type="date"
+            formControlName="contractDate"
+            placeholder="Select contract date"
+            title="Contract Date"
+          />
           <div
             class="error"
             *ngIf="f['contractDate'].touched && f['contractDate'].errors"
@@ -255,7 +268,12 @@
         <div class="form-row">
           <div class="form-group">
             <label>Start Time</label>
-            <input type="time" formControlName="startTime" />
+            <input
+              type="time"
+              formControlName="startTime"
+              placeholder="Select start time"
+              title="Start Time"
+            />
             <div
               class="error"
               *ngIf="f['startTime'].touched && f['startTime'].errors"
@@ -268,7 +286,12 @@
 
           <div class="form-group">
             <label>End Time</label>
-            <input type="time" formControlName="endTime" />
+            <input
+              type="time"
+              formControlName="endTime"
+              placeholder="Select end time"
+              title="End Time"
+            />
             <div
               class="error"
               *ngIf="f['endTime'].touched && f['endTime'].errors"

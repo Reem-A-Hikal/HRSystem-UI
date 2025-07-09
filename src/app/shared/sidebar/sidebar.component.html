@@ -8,17 +8,36 @@
     </button>
     @if (!isLeftSidebarCollapsed()) {
     <div class="logo-text" @fadeInOut>Pioneers</div>
-    <button @rotate class="btn-close" (click)="closeSidenav()"></button>
+    <button
+      style="position: relative"
+      @rotate
+      class="btn-close"
+      (click)="closeSidenav()"
+    >
+      <span><i class="bi bi-x close"></i></span>
+    </button>
     }
   </div>
   <div class="sidenav-nav">
+    <li class="sidenav-nav-item">
+      <a
+        class="sidenav-nav-link"
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="sidenav-link-icon bi bi-speedometer2"></i>
+        @if (!isLeftSidebarCollapsed()) {
+        <span @fadeInOut class="sidenav-link-text">Dashboard</span>
+        }
+      </a>
+    </li>
     @for (item of items; track $index) {
     <li class="sidenav-nav-item">
       <a
         class="sidenav-nav-link"
         [routerLink]="item.routeLink"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
       >
         <i class="sidenav-link-icon" [class]="item.icon"></i>
         @if (!isLeftSidebarCollapsed()) {

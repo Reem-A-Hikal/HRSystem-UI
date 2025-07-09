@@ -1,9 +1,5 @@
 export const navbarData = [
-  {
-    routeLink: '/dashboard',
-    icon: 'bi bi-columns-gap',
-    label: 'Dashboard',
-  },
+  
   {
     routeLink: '/dashboard/Roles',
     icon: 'bi bi-shield',

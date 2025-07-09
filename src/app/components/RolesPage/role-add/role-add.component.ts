@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';      
-import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RoleService } from '../../../services/role.service';
 import { PermissionService } from '../../../services/permission.service';
 import { AuthService } from '../../../services/Auth.service';
@@ -12,7 +12,7 @@ import { AuthService } from '../../../services/Auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './role-add.component.html',
-  styleUrls: ['./role-add.component.css']
+  styleUrls: ['./role-add.component.css'],
 })
 export class AddRoleComponent implements OnInit {
   isEditing: boolean = false;
@@ -130,18 +130,28 @@ saveRole() {
   const editingRole = this.roleService.getEditingRole();
 
   if (editingRole) {
-    this.roleService.updateRole({ ...roleData, id: editingRole.id }).subscribe(() => {
-      this.router.navigate(['/dashboard/Roles']);
+    this.roleName = editingRole.name;
+    this.isEditing = true; // تعيين حالة التعديل
+
+    // Reset default permissions first
+    this.modules.forEach(module => {
+      module.permissions = { view: false, edit: false, delete: false, add: false };
     });
-  } else {
-    this.roleService.addRole(roleData).subscribe(() => {
-      this.router.navigate(['/dashboard/Roles']);
-    });
+
+    // Apply saved permissions
+    if (editingRole.permissions) {
+      for (const perm of editingRole.permissions) {
+        const mod = this.modules.find(m => m.name === perm.module);
+        if (mod) {
+          mod.permissions = {
+            view: perm.view || false,
+            edit: perm.edit || false,
+            delete: perm.delete || false,
+            add: perm.add || false,
+          };
+        }
+      }
+    }
   }
-
-  this.roleService.clearEditingRole();
 }
-
-
-
 }

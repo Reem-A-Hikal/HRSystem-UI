@@ -2,105 +2,81 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { AttendanceService } from '../../../services/Attendance.service';
+import {
+  AttendanceRecord,
+} from '../../../models/IAttendance';
+import { Pagination } from '../../../models/Pagination';
+import { ToastrService } from '../../../services/Toastr.service';
+import Swal from 'sweetalert2';
 
-interface AttendanceRecord {
-  id: number;
-  department: string;
-  employeeName: string;
-  checkInTime: string;
-  checkOutTime: string;
-  date: string;
-}
-
-export interface Pagination {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
-  totalPages: number;
-}
 @Component({
   selector: 'app-Attendance',
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, BsDatepickerModule],
   templateUrl: './Attendance.component.html',
   styleUrls: ['./Attendance.component.css'],
 })
 export class AttendanceComponent implements OnInit {
   @ViewChild('tablecontainer') tableContainer!: ElementRef;
-  attendanceList: AttendanceRecord[] = [
-    {
-      id: 1,
-      department: 'Engineering',
-      employeeName: 'Emily Carter',
-      checkInTime: '09:00 AM',
-      checkOutTime: '06:00 PM',
-      date: '2024-07-26',
-    },
-    {
-      id: 2,
-      department: 'Marketing',
-      employeeName: 'John Smith',
-      checkInTime: '08:30 AM',
-      checkOutTime: '05:30 PM',
-      date: '2024-07-26',
-    },
-    {
-      id: 3,
-      department: 'HR',
-      employeeName: 'Sarah Johnson',
-      checkInTime: '09:15 AM',
-      checkOutTime: '06:15 PM',
-      date: '2024-07-26',
-    },
-    {
-      id: 4,
-      department: 'Finance',
-      employeeName: 'Michael Brown',
-      checkInTime: '08:45 AM',
-      checkOutTime: '05:45 PM',
-      date: '2024-07-26',
-    },
-    {
-      id: 5,
-      department: 'Operations',
-      employeeName: 'Lisa Wilson',
-      checkInTime: '09:00 AM',
-      checkOutTime: '06:00 PM',
-      date: '2024-07-26',
-    },
-    {
-      id: 6,
-      department: 'Engineering',
-      employeeName: 'David Lee',
-      checkInTime: '09:30 AM',
-      checkOutTime: '06:30 PM',
-      date: '2024-07-27',
-    },
-    {
-      id: 7,
-      department: 'Marketing',
-      employeeName: 'Jennifer Davis',
-      checkInTime: '08:45 AM',
-      checkOutTime: '05:45 PM',
-      date: '2024-07-27',
-    },
-  ];
-  pagination: Pagination = {
-    currentPage: 1,
-    itemsPerPage: 5,
-    totalItems: 0,
-    totalPages: 0,
-  };
-  filteredList: AttendanceRecord[] = [];
-  pagedAttendance: AttendanceRecord[] = [];
   isLoading: boolean = false;
+
+  filteredList: AttendanceRecord[] = [];
+  pagination: Pagination = {
+    pageIndex: 1,
+    pageSize: 5,
+    totalPages: 0,
+    totalItems: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  };
+
   searchTerm: string = '';
-  startDate: string = '';
-  endDate: string = '';
-  constructor() {}
+  startDate?: Date;
+  endDate?: Date;
+
+  constructor(
+    private attendanceService: AttendanceService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
-    this.filteredList = [...this.attendanceList];
-    this.paginateRecords();
+    this.loadAttendances();
+  }
+
+  loadAttendances() {
+    this.isLoading = true;
+    this.filteredList = [];
+
+    this.attendanceService
+      .getPaginated(
+        this.pagination.pageIndex,
+        this.pagination.pageSize,
+        this.searchTerm?.trim(),
+        this.startDate,
+        this.endDate
+      )
+      .subscribe(
+        (response) => {
+          this.filteredList = response.items;
+          this.pagination.totalItems = response.totalItems;
+          this.pagination.totalPages = response.totalPages;
+
+          this.isLoading = false;
+          // console.log(this.filteredList);
+        },
+        (error) => {
+          this.isLoading = false;
+          // console.log('Failed to load attendance records', error);
+          if (error.status === 404) {
+            const errorMsg = error.error?.error || 'No matching records found';
+            this.toastr.onError(errorMsg);
+            this.filteredList.length = 0;
+          } else {
+            this.toastr.onError('An error occurred while loading data');
+          }
+        }
+      );
   }
 
   get isEmpty(): boolean {
@@ -108,86 +84,87 @@ export class AttendanceComponent implements OnInit {
   }
 
   applyFilters() {
+    // Rule 3: Check if either search term or date range is provided
     this.isLoading = true;
-    this.filteredList = this.attendanceList.filter((record) => {
-      const matchesSearch =
-        this.searchTerm === '' ||
-        record.employeeName
-          .toLowerCase()
-          .includes(this.searchTerm.toLowerCase());
+    // if (!this.searchTerm || !this.startDate || !this.endDate) 
+    if (!this.searchTerm && (!this.startDate || !this.endDate)) {
+      this.toastr.onError('Please enter employee name or select a date range');
+      this.isLoading = false;
+      return;
+    }
+    
 
-      const recordDate = new Date(record.date);
-      const startDate = this.startDate ? new Date(this.startDate) : null;
-      const endDate = this.endDate ? new Date(this.endDate) : null;
+    if (this.searchTerm && this.searchTerm.trim().length < 3) {
+      this.toastr.onError('Please enter a valid name (at least 3 characters)');
+      this.isLoading = false;
+      return;
+    }
 
-      const matchesDate =
-        (!startDate || recordDate >= startDate) &&
-        (!endDate || recordDate <= endDate);
+    // Rule 2: Check if start date is after end date
+    if (this.startDate && this.endDate && this.startDate > this.endDate) {
+      this.toastr.onError('Start date cannot be after end date');
+      this.isLoading = false;
+      return;
+    }
 
-      return matchesSearch && matchesDate;
-    });
     this.load();
   }
+
   resetFilters() {
     this.searchTerm = '';
-    this.startDate = '';
-    this.endDate = '';
-    this.filteredList = [...this.attendanceList];
+    this.startDate = undefined;
+    this.endDate = undefined;
     this.load();
   }
 
   load() {
     setTimeout(() => {
-      this.pagination.currentPage = 1;
-      this.paginateRecords();
+      this.pagination.pageIndex = 1;
+      this.loadAttendances();
       this.isLoading = false;
       this.scrollToTableTop();
     }, 300);
   }
 
-  paginateRecords() {
-    this.pagination.totalItems = this.filteredList.length;
-    this.pagination.totalPages = Math.ceil(
-      this.pagination.totalItems / this.pagination.itemsPerPage
-    );
-    const startIndex =
-      (this.pagination.currentPage - 1) * this.pagination.itemsPerPage;
-    const endIndex = startIndex + this.pagination.itemsPerPage;
-    this.pagedAttendance = this.filteredList.slice(startIndex, endIndex);
-  }
-  onPageChange(page: number) {
+  onPageChange(page: number): void {
     if (page >= 1 && page <= this.pagination.totalPages) {
-      this.pagination.currentPage = page;
-      this.paginateRecords();
+      this.pagination.pageIndex = page;
+      this.loadAttendances();
       this.scrollToTableTop();
     }
   }
 
   getPages(): number[] {
-    const pages = [];
-    const maxVisiblePages = 5; // Maximum number of pages to display
-    if (this.pagination.totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= this.pagination.totalPages; i++) {
+    const pages: number[] = [];
+    const maxVisiblePages = 3; // Maximum number of pages to display
+    const { pageIndex, totalPages } = this.pagination;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
       const half = Math.floor(maxVisiblePages / 2);
-      let start = this.pagination.currentPage - half;
-      let end = this.pagination.currentPage + half;
+      let start = pageIndex - half;
+      let end = pageIndex + half;
+
       if (start < 1) {
         start = 1;
         end = maxVisiblePages;
       }
-      if (end > this.pagination.totalPages) {
-        end = this.pagination.totalPages;
+
+      if (end > totalPages) {
+        end = totalPages;
         start = Math.max(1, end - maxVisiblePages + 1);
       }
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
     }
     return pages;
   }
+
   private scrollToTableTop() {
     setTimeout(() => {
       this.tableContainer?.nativeElement?.scrollIntoView({
@@ -196,24 +173,42 @@ export class AttendanceComponent implements OnInit {
       });
     }, 0);
   }
-  onEdit(record: AttendanceRecord) {
-    console.log('Editing record:', record);
-    // Implement your edit logic here
-  }
 
   // Function to handle delete action
-  onDelete(record: AttendanceRecord) {
-    console.log('Deleting record:', record);
-    if (
-      confirm(
-        `Are you sure you want to delete ${record.employeeName}'s attendance record?`
-      )
-    ) {
-      this.attendanceList = this.attendanceList.filter(
-        (item) => item !== record
-      );
-      this.applyFilters(); // Reapply filters after deletion
-    }
+  onDelete(id: number | null) {
+    Swal.fire({
+      title: `Are you sure?`,
+      text: `You are about to delete this attendance record.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.attendanceService.deleteAttendance(id).subscribe({
+          next: (res) => {
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'The attendance record has been deleted.',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false,
+            });
+            this.loadAttendances();
+          },
+          error: (err) => {
+            console.error('Delete failed', err);
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to delete attendance record.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
+          },
+        });
+      }
+    });
   }
 
   exportToExcel() {

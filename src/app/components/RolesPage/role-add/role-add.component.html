@@ -1,14 +1,23 @@
-<div *ngIf="authService.hasPermission('Roles-Add') || authService.hasPermission('Roles-Edit')" class="container mt-5">
-   <div class="card-header text-black">
-      <h4 class="mb-3">{{ isEditing ? 'Edit Role' : 'Add New Role' }}</h4>
+<div *ngIf="authService.hasPermission('Roles-Add') || authService.hasPermission('Roles-Edit')" class="main-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Role Management</h1>
+    <p class="text-muted mb-0">Manage user roles and permissions</p>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container">
+    <!-- Form Header -->
+    <div class="form-header">
+      <h4 class="text-center" id="formTitle">{{ isEditing ? "Edit Role" : "Add New Role" }}</h4>
 
     </div>
-  <div class="card shadow-sm">
-   
-    <div class="card-body">
+
+    <!-- Form Body -->
+    <div class="form-body">
       <!-- Role Name Input -->
       <div class="mb-4">
-        <label for="roleName" class="form-label fw-semibold">Role Name</label>
+        <label for="roleName" class="form-label">Role Name</label>
         <input
           type="text"
           id="roleName"
@@ -19,45 +28,35 @@
       </div>
 
       <!-- Permissions Table -->
-     <div *ngIf="permissions.length > 0" class="table-responsive">
-  <table class="table text-center align-middle table-wrapper">
-    <thead class="table-light">
-      <tr>
-        <th class="text-start">Page</th>
-        <th>View</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>Add</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngFor="let module of getModules()">
-        <tr>
-          <td class="text-start">{{ module }}</td>
-          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'View')" (change)="togglePermission(module, 'View', $event)" /></td>
-          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'Edit')" (change)="togglePermission(module, 'Edit', $event)" /></td>
-          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'Delete')" (change)="togglePermission(module, 'Delete', $event)" /></td>
-          <td><input type="checkbox" [checked]="isPermissionSelected(module, 'Add')" (change)="togglePermission(module, 'Add', $event)" /></td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
-</div>
+      <div class="table-responsive">
+        <table class="table text-center align-middle table-wrapper">
+          <thead class="table-light ">
+            <tr>
+              <th class="text-start">Module Name</th>
+              <th>View</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Add</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let module of modules">
+              <td class="text-start">{{ module.name }}</td>
+              <td><input type="checkbox" [(ngModel)]="module.permissions.view" /></td>
+              <td><input type="checkbox" [(ngModel)]="module.permissions.edit" /></td>
+              <td><input type="checkbox" [(ngModel)]="module.permissions.delete" /></td>
+              <td><input type="checkbox" [(ngModel)]="module.permissions.add" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Save Button -->
       <div class="text-end mt-4">
        
-        <button
-            class="btn save-btn"
-            (click)="saveRole()"
-            [disabled]="
-              (isEditing && !authService.hasPermission('Roles-Edit')) ||
-              (!isEditing && !authService.hasPermission('Roles-Add'))
-            "
-          >
-            <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
-        </button>
-
+        <button  class="btn save-btn" (click)="saveRole()">
+        <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
+      </button>
       </div>
     </div>
   </div>
