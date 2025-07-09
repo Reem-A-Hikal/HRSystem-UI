@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div *ngIf="authService.hasPermission('Roles-View')" class="d-flex flex-column">
   <main
     style="min-height: 90vh"
     class="main-content flex-grow-1 d-flex justify-content-center"
@@ -25,9 +25,14 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-        <a (click)="goToAddPage()" class="btn btn-primary fw-bold">
-          + Add Role
-        </a>
+       <a 
+        *ngIf="authService.hasPermission('Roles-Add')" 
+        (click)="goToAddPage()" 
+        class="btn btn-primary fw-bold">
+        + Add Role
+      </a>
+
+
       </div>
 
       <!-- isLoading -->
@@ -64,20 +69,23 @@
               <td data-label="Actions">
                 <div class="fw-bold">
                   <i
-                    style="cursor: pointer"
+                    *ngIf="authService.hasPermission('Roles-Edit')"
                     class="bi bi-pencil-square fs-3 text-primary me-2"
                     title="Edit"
                     (click)="editRole(i)"
                   ></i>
-                  |
+                  
+                  <span *ngIf="authService.hasPermission('Roles-Edit') && authService.hasPermission('Roles-Delete')">|</span>
+
                   <i
-                    style="cursor: pointer"
+                    *ngIf="authService.hasPermission('Roles-Delete')"
                     class="bi bi-trash fs-3 text-danger"
                     title="Delete"
                     (click)="deleteRole(i)"
                   ></i>
                 </div>
               </td>
+
             </tr>
           </tbody>
         </table>

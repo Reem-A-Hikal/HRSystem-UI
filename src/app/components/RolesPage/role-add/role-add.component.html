@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div *ngIf="authService.hasPermission('Roles-Add') || authService.hasPermission('Roles-Edit')" class="container mt-5">
    <div class="card-header text-black">
       <h4 class="mb-3">{{ isEditing ? 'Edit Role' : 'Add New Role' }}</h4>
 
@@ -47,9 +47,17 @@
       <!-- Save Button -->
       <div class="text-end mt-4">
        
-        <button  class="btn save-btn" (click)="saveRole()">
-        <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
-      </button>
+        <button
+            class="btn save-btn"
+            (click)="saveRole()"
+            [disabled]="
+              (isEditing && !authService.hasPermission('Roles-Edit')) ||
+              (!isEditing && !authService.hasPermission('Roles-Add'))
+            "
+          >
+            <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
+        </button>
+
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
+<div div class="d-flex flex-column min-vh-100"
+     *ngIf="authService.hasPermission('Users-Add') || authService.hasPermission('Users-Edit')">
 
-<div class="d-flex flex-column min-vh-100">
   <div
     class="main-content flex-grow-1 d-flex justify-content-center align-items-center"
   >
@@ -31,17 +32,17 @@
 
   <!-- Username -->
   <div class="mb-3">
-    <label class="form-label fw-semibold" for="username">Username</label>
+    <label class="form-label fw-semibold" for="userName">Username</label>
     <input
       id="username"
       type="text"
       class="form-control"
-      [(ngModel)]="user.username"
-      name="username"
+      [(ngModel)]="user.userName"
+      name="userName"
       required
       placeholder="Enter username"
       title="Username"
-      [ngClass]="{ 'is-invalid': userForm.submitted && !user.username }"
+      [ngClass]="{ 'is-invalid': userForm.submitted && !user.userName }"
     />
     <div class="invalid-feedback">Username is required.</div>
   </div>
@@ -50,7 +51,11 @@
   <div class="mb-3">
     <label for="role" class="form-label">Role</label>
     <select class="form-select" id="role" [(ngModel)]="user.role" name="role">
-    <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+      <option *ngFor="let role of filteredRoles" [value]="role.name">
+      {{ role.name }}
+    </option>
+
+
     </select>
 
 
@@ -106,14 +111,19 @@
     >
       <i class="bi bi-x-circle me-2"></i><span>Cancel</span>
     </a>
-    <button
-      class="btn btn-save flex-fill flex-sm-unset text-center"
-      type="submit"
-      [disabled]="userForm.invalid && userForm.submitted"
-    >
-      <i class="bi bi-save me-2"></i>
-      <span>{{ isEditing ? "Update" : "Save" }}</span>
-    </button>
+        <button
+        class="btn btn-save flex-fill flex-sm-unset text-center"
+        type="submit"
+        [disabled]="
+          (userForm.invalid && userForm.submitted) ||
+          (isEditing && !authService.hasPermission('Users-Edit')) ||
+          (!isEditing && !authService.hasPermission('Users-Add'))
+        "
+      >
+        <i class="bi bi-save me-2"></i>
+        <span>{{ isEditing ? "Update" : "Save" }}</span>
+      </button>
+
   </div>
 </form>
 

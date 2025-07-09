@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IEmployee } from '../../../models/IEmployee';
 import { EmployeeService } from '../../../services/Employee.service';
+import { AuthService } from '../../../services/Auth.service';
+
 
 @Component({
   selector: 'app-view-employee',
@@ -17,7 +19,8 @@ export class ViewEmployeeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private empService: EmployeeService,
-    private router: Router
+    private router: Router,
+     public authService: AuthService
   ) {}
 
   ngOnInit(): void {

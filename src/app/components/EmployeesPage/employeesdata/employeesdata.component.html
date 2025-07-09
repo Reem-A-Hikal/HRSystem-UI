@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column" >
   <main
     style="min-height: 90vh"
     class="main-content flex-grow-1 d-flex justify-content-center"
@@ -25,9 +25,10 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-        <a (click)="goToAddPage()" class="btn btn-primary fw-bold">
+        <a *ngIf="authService.hasPermission('Employees-Add')" (click)="goToAddPage()" class="btn btn-primary fw-bold">
           + Add Employee
         </a>
+
       </div>
 
       <!-- isLoading -->
@@ -93,24 +94,30 @@
               <td data-label="EndTime">{{ emp.endTime | date : "HH:mm" }}</td>
               <td data-label="Actions">
                 <div>
-                  <i
-                    style="cursor: pointer"
-                    class="bi bi-eye fs-5 text-success me-2"
-                    title="View Details"
-                    (click)="viewEmployeeDetails(emp.id)"
-                  ></i>
-                  <i
-                    style="cursor: pointer"
-                    class="bi bi-pencil-square fs-5 text-primary me-2"
-                    title="Edit"
-                    (click)="editEmployee(emp.id)"
-                  ></i>
-                  <i
-                    style="cursor: pointer"
-                    class="bi bi-trash fs-5 text-danger"
-                    title="Delete"
-                    (click)="deleteEmployee(emp.id)"
-                  ></i>
+                    <i
+                      *ngIf="authService.hasPermission('Employees-View')"
+                      style="cursor: pointer"
+                      class="bi bi-eye fs-5 text-success me-2"
+                      title="View Details"
+                      (click)="viewEmployeeDetails(emp.id)"
+                    ></i>
+
+                    <i
+                      *ngIf="authService.hasPermission('Employees-Edit')"
+                      style="cursor: pointer"
+                      class="bi bi-pencil-square fs-5 text-primary me-2"
+                      title="Edit"
+                      (click)="editEmployee(emp.id)"
+                    ></i>
+
+                    <i
+                      *ngIf="authService.hasPermission('Employees-Delete')"
+                      style="cursor: pointer"
+                      class="bi bi-trash fs-5 text-danger"
+                      title="Delete"
+                      (click)="deleteEmployee(emp.id)"
+                    ></i>
+
                 </div>
               </td>
             </tr>

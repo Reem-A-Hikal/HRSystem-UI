@@ -15,6 +15,7 @@ import { IUpdateEmployeeRequest, IEmployee } from '../../../models/IEmployee';
 import { countries } from 'countries-list';
 import { forkJoin } from 'rxjs';
 import id from '@angular/common/locales/id';
+import { AuthService } from '../../../services/Auth.service';
 
 @Component({
   selector: 'app-edit-employee',
@@ -39,7 +40,8 @@ export class EditEmployeeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private empService: EmployeeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

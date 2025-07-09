@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component , OnInit} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/Auth.service';
+
 
 @Component({
   selector: 'app-official-holiday',
@@ -11,6 +13,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./official-holiday.component.css']
 })
 export class OfficialHolidayComponent implements OnInit {
+
 holidays = [
   {id:1,name: 'Dependence day', date: '2025-10-04'}, 
   {id:2,name: 'Eid Al-Adha', date: '2025-6-1'}
@@ -19,7 +22,7 @@ holidays = [
   holidayName = '';
   holidayDate = '';
 
-  // constructor(private http: HttpClient) {}
+  constructor( public authService: AuthService) {}
 
   ngOnInit() {
     this.loadHolidays();

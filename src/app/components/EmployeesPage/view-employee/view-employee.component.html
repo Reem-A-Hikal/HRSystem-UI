@@ -1,4 +1,4 @@
-<div class="details-container" *ngIf="employee">
+<div class="details-container" *ngIf="employee && authService.hasPermission('Employees-View')">
   <h2 class="details-title text-center">Employee Profile</h2>
 
   <div class="details-grid">

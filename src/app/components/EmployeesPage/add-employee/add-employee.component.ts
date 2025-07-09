@@ -14,6 +14,7 @@ import { EmployeeService } from '../../../services/Employee.service';
 import { ToastrService } from 'ngx-toastr';
 import { ICreateEmployeeRequest } from '../../../models/IEmployee';
 import { countries } from 'countries-list';
+import { AuthService } from '../../../services/Auth.service';
 
 @Component({
   selector: 'app-add-employee',
@@ -33,7 +34,8 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private empService: EmployeeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

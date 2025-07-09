@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RoleService } from '../../../services/role.service';
+import { AuthService } from '../../../services/Auth.service';
+
 
 @Component({
   selector: 'app-role-management',
@@ -19,18 +21,21 @@ export class RoleManagementComponent implements OnInit {
 
   roles: any[] = [];
 
-  constructor(private router: Router, private roleService: RoleService) {}
+  constructor(private router: Router, private roleService: RoleService,  public authService: AuthService) {}
 
  ngOnInit() {
   this.roleService.getRoles().subscribe((data) => {
     this.roles = data;
   });
 }
-  get filteredRoles() {
-    return this.roles.filter((role) =>
+get filteredRoles() {
+  return this.roles
+    .filter(role => role.name !== 'HR' && role.name !== 'User')  
+    .filter(role =>
       role.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-  }
+}
+
 
   get paginatedRoles() {
     const start = (this.currentPage - 1) * this.pageSize;
@@ -81,5 +86,9 @@ editRole(index: number) {
     });
   }
 }
+get isEmpty(): boolean {
+  return !this.isLoading && this.filteredRoles.length === 0;
+}
+
 
 }

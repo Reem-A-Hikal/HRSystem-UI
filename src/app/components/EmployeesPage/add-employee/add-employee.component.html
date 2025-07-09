@@ -1,4 +1,4 @@
-<div style="min-height: 90vh" class="container">
+<div *ngIf="authService.hasPermission('Employees-Add')" style="min-height: 90vh" class="container">
   <div class="form-container">
     <h1 class="form-title text-center">Add New Employee</h1>
     <p class="form-subtitle text-center">

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { RoleService } from '../../../services/role.service';
 import { PermissionService } from '../../../services/permission.service';
+import { AuthService } from '../../../services/Auth.service';
+
 
 @Component({
   selector: 'app-add-role',
@@ -22,7 +24,8 @@ export class AddRoleComponent implements OnInit {
   constructor(
     private roleService: RoleService,
     private router: Router,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    public authService: AuthService
   ) {}
 
 ngOnInit() {
