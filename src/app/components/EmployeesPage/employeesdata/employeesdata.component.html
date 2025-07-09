@@ -1,12 +1,13 @@
 <div class="d-flex flex-column">
-  <main style="min-height: 90vh;" class="main-content flex-grow-1 d-flex justify-content-center">
+  <main
+    style="min-height: 90vh"
+    class="main-content flex-grow-1 d-flex justify-content-center"
+  >
     <div class="content-container">
-      <!-- Page Title -->
       <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
         <h1 class="fw-bold">Employee Details</h1>
       </div>
 
-      <!-- Search -->
       <div class="p-3">
         <div class="col-md-6">
           <div class="input-group">
@@ -24,57 +25,80 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-        <a (click)="goToAddPage()" class="btn btn-primary fw-bold"
-          >+ Add Employee</a
-        >
+        <a (click)="goToAddPage()" class="btn btn-primary fw-bold">
+          + Add Employee
+        </a>
       </div>
 
-      @if (!isEmpty) {
-      <div class="table-responsive tablecontainer p-0 mb-4" #tablecontainer>
+      <!-- isLoading -->
+      <div
+        *ngIf="isLoading"
+        class="loading-overlay d-flex flex-column align-items-center justify-content-center p-5"
+      >
+        <div
+          class="spinner-border text-primary mb-3"
+          style="width: 3rem; height: 3rem"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="fw-semibold text-primary fs-5">
+          Loading employee records...
+        </div>
+      </div>
+
+      <!-- Table data -->
+      <div
+        *ngIf="!isLoading && !isEmpty && hasResults"
+        class="table-responsive tablecontainer pb-2 mb-4"
+        #tablecontainer
+      >
         <table class="table table-borderless m-0 align-middle">
           <thead class="d-md-table-header-group">
             <tr style="text-align: center">
               <th style="min-width: 140px">Name</th>
               <th>Department</th>
               <th style="min-width: 131px">Base Salary</th>
-              <th>Address</th>
               <th>Phone</th>
-              <th>Gender</th>
-              <th>Nationality</th>
-              <th style="min-width: 140px">National ID</th>
-              <th style="min-width: 144px">Date of Birth</th>
+              <!-- <th>Gender</th> -->
               <th style="min-width: 122px">Contract</th>
+              <th style="min-width: 122px">Start Time</th>
+              <th style="min-width: 122px">End Time</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody style="text-align: center">
-            <tr *ngFor="let emp of pagedEmployees; let i = index">
-              <td data-label="Employee Name" class="department-col">
-                {{ emp.name }}
-              </td>
-              <td data-label="Department" class="employee-col">
-                {{ emp.department }}
-              </td>
-              <td data-label="Salary" class="time-col">
-                {{ emp.salary }}
-              </td>
-              <td
-                style="min-width: 146px"
-                data-label="Address"
-                class="time-col"
-              >
-                {{ emp.address }}
+            <tr
+              *ngFor="
+                let emp of pagedEmployees;
+                let i = index;
+                trackBy: trackById
+              "
+            >
+              <td data-label="Employee Name">{{ emp.name }}</td>
+              <td data-label="Department">{{ emp.department }}</td>
+              <td data-label="Salary">
+                {{ emp.baseSalary }}
               </td>
               <td style="min-width: 106px" data-label="Phone">
-                {{ emp.phone }}
+                {{ emp.phoneNumber }}
+                <!-- {{ emp["phoneNumber"] }} -->
               </td>
-              <td data-label="Gender">{{ emp.gender }}</td>
-              <td data-label="Nationality">{{ emp.nationality }}</td>
-              <td data-label="NationalId">{{ emp.nationalId }}</td>
-              <td data-label="DateofBirth">{{ emp.dob }}</td>
-              <td data-label="ContractDate">{{ emp.contractDate }}</td>
+              <!-- <td data-label="Gender">{{ emp.gender }}</td> -->
+              <td data-label="ContractDate">
+                {{ emp.contractDate | date : "mediumDate" }}
+              </td>
+              <!-- <td data-label="StartTime">{{ emp.startTime }}</td> -->
+              <td>{{ emp.startTime | date : "HH:mm" }}</td>
+              <td data-label="EndTime">{{ emp.endTime | date : "HH:mm" }}</td>
               <td data-label="Actions">
                 <div>
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-eye fs-5 text-success me-2"
+                    title="View Details"
+                    (click)="viewEmployeeDetails(emp.id)"
+                  ></i>
                   <i
                     style="cursor: pointer"
                     class="bi bi-pencil-square fs-5 text-primary me-2"
@@ -93,28 +117,28 @@
           </tbody>
         </table>
       </div>
-      } @else if (isLoading) {
+
+      <!-- No matching results -->
       <div
-        class="loading-overlay d-flex flex-column align-items-center justify-content-center p-5"
+        *ngIf="!isLoading && !isEmpty && !hasResults"
+        class="empty-table-message text-center p-5 mb-3"
       >
-        <div
-          class="spinner-border text-primary mb-3"
-          style="width: 3rem; height: 3rem"
-          role="status"
-        >
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="fw-semibold text-primary fs-5">
-          Loading attendance records...
-        </div>
+        <i class="bi bi-people-fill fs-1 text-muted"></i>
+        <h4 class="mt-3">No matching records found.</h4>
+        <p class="text-muted">
+          There are currently no records matching your search.
+        </p>
       </div>
-      } @else {
-      <div class="empty-table-message text-center p-5 mb-3">
+
+      <!-- No records at all -->
+      <div
+        *ngIf="!isLoading && isEmpty"
+        class="empty-table-message text-center p-5 mb-3"
+      >
         <i class="bi bi-people-fill fs-1 text-muted"></i>
         <h4 class="mt-3">No Record Found</h4>
         <p class="text-muted">There are currently no records to display.</p>
       </div>
-      }
 
       <!-- Pagination -->
       <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
@@ -127,7 +151,7 @@
         </button>
 
         <button
-          *ngFor="let page of totalPages"
+          *ngFor="let page of totalPages; trackBy: trackByPage"
           (click)="goToPage(page)"
           [ngClass]="{ 'active-page': currentPage === page }"
           class="pagination-btn"

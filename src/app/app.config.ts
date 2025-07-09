@@ -13,5 +13,5 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(), // required animations providers for ngx-toastr
     provideToastr(),
-  ],
+  ]
 };

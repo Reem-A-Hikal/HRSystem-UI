@@ -52,10 +52,9 @@ body {
   background-color: #dce8f3;
   color: #101518;
   border-radius: 22px;
-  font-weight: bold;
   border: none;
   padding: 0.55rem 1.6rem;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
 }
 .btn-primary:hover {
@@ -71,7 +70,6 @@ body {
   border-radius: 14px;
   padding: 0 1.1rem;
   font-size: 1.05rem;
-  background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -79,6 +77,15 @@ body {
   border-color: #a7b8c7;
   box-shadow: 0 0 0 3px #dce8f3;
   outline: none;
+}
+.filter-btn {
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1.13rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 12px rgba(0, 123, 255, 0.1);
+  transition: all 0.18s;
 }
 .filter-btn i,
 .reset-btn i {
@@ -90,6 +97,15 @@ body {
   color: #fff !important;
   box-shadow: 0 6px 24px rgba(0, 123, 255, 0.18);
   transform: translateY(-2px) scale(1.03);
+}
+.reset-btn {
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1.13rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 12px rgba(108, 117, 125, 0.08);
+  transition: all 0.18s;
 }
 .reset-btn:hover,
 .reset-btn:focus {

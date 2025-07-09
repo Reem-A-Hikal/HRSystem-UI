@@ -5,27 +5,17 @@
         {{ isEditMode ? "Edit" : "Add" }} Attendance Record
       </h1>
       <form [formGroup]="attendanceForm" (ngSubmit)="onSubmit()">
-        <div class="mb-4">
-          <label class="form-label" for="employeeSelect">Employee Name</label>
-          <select
-            class="form-select"
-            id="employeeSelect"
-            formControlName="employeeId"
-          >
-            <option [value]="null" selected>Select Employee</option>
-            <option *ngFor="let employee of employees" [value]="employee.id">
-              {{ employee.name }}
-            </option>
-          </select>
-        </div>
+
+        <!-- Department -->
         <div class="mb-4">
           <label class="form-label" for="departmentSelect">Department</label>
           <select
             class="form-select"
             id="departmentSelect"
             formControlName="departmentId"
+            [class.is-invalid]="departmentId?.invalid && departmentId?.touched"
           >
-            <option [value]="null" selected>Select Department</option>
+            <option value="" disabled>Select Department</option>
             <option
               *ngFor="let department of departments"
               [value]="department.id"
@@ -33,39 +23,143 @@
               {{ department.name }}
             </option>
           </select>
+          <div
+            class="invalid-feedback"
+            *ngIf="departmentId?.invalid && departmentId?.touched"
+          >
+            <div *ngIf="departmentId?.errors?.['required']">
+              Department selection is required
+            </div>
+          </div>
         </div>
 
+        <!-- Emplyee Name -->
         <div class="mb-4">
-          <label class="form-label">Date</label>
+          <label class="form-label" for="employeeSelect">Employee Name</label>
+          <select
+            class="form-select"
+            id="employeeSelect"
+            formControlName="employeeId"
+            [class.is-invalid]="employeeId?.invalid && employeeId?.touched"
+          >
+            <option value="" disabled>Select Employee</option>
+            <option *ngFor="let employee of employees" [ngValue]="employee.id">
+              {{ employee.name }}
+            </option>
+          </select>
+          <div
+            class="invalid-feedback"
+            *ngIf="employeeId?.invalid && employeeId?.touched"
+          >
+            <div *ngIf="employeeId?.errors?.['required']">
+              Employee selection is required
+            </div>
+          </div>
+        </div>
+        
+
+        <!-- Date -->
+        <div class="mb-4 position-relative">
+          <label for="date" class="form-label">Date</label>
           <input
-            type="date"
-            class="form-control"
+            type="text"
+            class="form-control pe-5"
+            id="date"
             placeholder="Select date"
             title="Select date"
             formControlName="date"
+            bsDatepicker
+            [bsConfig]="{
+              dateInputFormat: 'YYYY-MM-DD',
+              containerClass: 'theme-dark-blue',
+              returnFocusToInput: true,
+              maxDate: maxDate
+            }"
+            autocomplete="off"
+            [class.is-invalid]="date?.invalid && date?.touched"
           />
+          <i
+            class="bi bi-calendar-date position-absolute"
+            style="right: 25px; top: 48px; pointer-events: none; color: #6c757d"
+          ></i>
+          <div class="invalid-feedback" *ngIf="date?.invalid && date?.touched">
+            <div *ngIf="date?.errors?.['required']">Date is required</div>
+            <div *ngIf="date?.errors?.['futureDate']">
+              Date cannot be in the future
+            </div>
+            <div *ngIf="date?.errors?.['tooOld']">
+              Date cannot be more than 30 days old
+            </div>
+          </div>
         </div>
 
+        <!-- Check-in Time -->
         <div class="mb-4">
-          <label class="form-label">Check-in Time</label>
+          <label for="checkInTime" class="form-label">Check-in Time</label>
           <input
-            type="time"
             class="form-control"
-            placeholder="Select check-in time"
+            type="time"
+            id="checkInTime"
             title="Select check-in time"
-            formControlName="checkInTime"
+            [formControlName]="'checkInTime'"
+            [class.is-invalid]="checkInTime?.invalid && checkInTime?.touched"
           />
+          <div
+            class="invalid-feedback"
+            *ngIf="checkInTime?.invalid && checkInTime?.touched"
+          >
+            <div *ngIf="checkInTime?.errors?.['required']">
+              Check-in time is required
+            </div>
+          </div>
         </div>
 
+        <!-- Check-out Time -->
         <div class="mb-4">
-          <label class="form-label">Check-out Time</label>
+          <label for="checkOutTime" class="form-label">Check-out Time</label>
           <input
-            type="time"
             class="form-control"
-            placeholder="Select check-out time"
-            title="Select check-out time"
-            formControlName="checkOutTime"
+            type="time"
+            id="checkOutTime"
+            title="Select check-in time"
+            [formControlName]="'checkOutTime'"
+            [class.is-invalid]="checkOutTime?.invalid && checkOutTime?.touched"
           />
+          <div
+            class="invalid-feedback"
+            *ngIf="checkOutTime?.invalid && checkOutTime?.touched"
+          >
+            <div *ngIf="checkOutTime?.errors?.['required']">
+              Check-out time is required
+            </div>
+          </div>
+        </div>
+
+        <!-- Form-level Validation Messages -->
+        <div
+          class="alert alert-danger"
+          *ngIf="attendanceForm.errors && formSubmitted"
+        >
+          <div *ngIf="attendanceForm.errors?.['invalidTimeRange']">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Check-out time must be after check-in time
+          </div>
+          <div *ngIf="attendanceForm.errors?.['minimumWorkingHours']">
+            <i class="bi bi-clock me-2"></i>
+            Minimum working hours is 4 hours
+          </div>
+          <div *ngIf="attendanceForm.errors?.['maximumWorkingHours']">
+            <i class="bi bi-clock me-2"></i>
+            Maximum working hours is 16 hours
+          </div>
+          <div *ngIf="attendanceForm.errors?.['tooEarly']">
+            <i class="bi bi-sun me-2"></i>
+            Check-in time cannot be before 6:00 AM
+          </div>
+          <div *ngIf="attendanceForm.errors?.['tooLate']">
+            <i class="bi bi-moon me-2"></i>
+            Check-out time cannot be after 11:00 PM
+          </div>
         </div>
 
         <div

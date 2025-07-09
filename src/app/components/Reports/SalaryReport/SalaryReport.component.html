@@ -142,7 +142,7 @@
                       </td>
                       <td data-label="Actions" class="fw-bold">
                         <div>
-                          <a [routerLink]="['/dashboard/EditRecord']">
+                          <a [routerLink]="['EditRecord']">
                             <i
                               style="cursor: pointer"
                               class="bi bi-pencil-square fs-3 text-primary"
@@ -151,7 +151,7 @@
                             ></i>
                           </a>
                           |
-                          <a [routerLink]="['/dashboard/PrintReport']">
+                          <a [routerLink]="['PrintReport']">
                             <i
                               style="cursor: pointer"
                               class="bi bi-printer fs-3 text-secondary"
@@ -208,7 +208,7 @@
                   (click)="onPageChange(pagination.currentPage - 1)"
                   aria-label="Previous"
                 >
-                  <span aria-hidden="true">Previous</span>
+                    <i class="bi bi-chevron-left fw-light"></i>
                 </a>
               </li>
               <li
@@ -229,7 +229,7 @@
                   (click)="onPageChange(pagination.currentPage + 1)"
                   aria-label="Next"
                 >
-                  <span aria-hidden="true">Next</span>
+                    <i class="bi bi-chevron-right fw-light"></i>
                 </a>
               </li>
             </ul>

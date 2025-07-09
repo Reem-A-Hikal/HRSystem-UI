@@ -1,9 +1,5 @@
 export const navbarData = [
-  {
-    routeLink: '/dashboard',
-    icon: 'bi bi-columns-gap',
-    label: 'Dashboard',
-  },
+  
   {
     routeLink: '/dashboard/Roles',
     icon: 'bi bi-shield',
@@ -30,7 +26,12 @@ export const navbarData = [
     label: 'Report',
   },
   {
-    routeLink: '/dashboard/Settings',
+    routeLink: '/dashboard/official-holiday',
+    icon: 'bi bi-calendar2-day',
+    label: 'Holidays',
+  },
+  {
+    routeLink: '/dashboard/general-setting',
     icon: 'bi bi-gear',
     label: 'Settings',
   },

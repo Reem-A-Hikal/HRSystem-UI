@@ -1,102 +1,92 @@
-<div class="container-fluid min-vh-100 d-flex flex-column">
-  <!-- Main Content -->
-  <main class="container py-4 flex-grow-1">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-10 col-lg-8">
-        <div class="mb-4">
-          <h1 class="fs-2 fw-bold mb-0">Official holidays</h1>
+<div class="d-flex flex-column">
+  <main class="main-content flex-grow-1 d-flex justify-content-center">
+    <div class="content-container">
+      <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
+        <h1 class="fw-bold">Official Holidays</h1>
+      </div>
+      <h3 class="fs-5 fw-bold pt-3 pb-2 text-center">Create a holiday</h3>
+      <form
+        class="d-flex flex-wrap gap-3 p-3 align-items-end mb-4"
+        (ngSubmit)="createHoliday()"
+      >
+        <div class="col-12 col-md-6">
+          <label for="holidayName" class="form-label">Holiday name</label>
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            id="holidayName"
+            placeholder="e.g. Independence Day"
+            [(ngModel)]="holidayName"
+            name="holidayName"
+            required
+          />
         </div>
-        <h3 class="fs-5 fw-bold pt-3 pb-2">Create a holiday</h3>
-        <form class="row g-3 align-items-end mb-4" (ngSubmit)="createHoliday()">
-          <div class="col-12 col-md-6">
-            <label for="holidayName" class="form-label">Holiday name</label>
+        <div class="flex-grow-1">
+          <label for="holidayDate" class="form-label">Date</label>
+          <div class="input-group">
             <input
               type="text"
               class="form-control form-control-lg"
-              id="holidayName"
-              placeholder="e.g. Independence Day"
-              [(ngModel)]="holidayName"
-              name="holidayName"
-              required
-            />
-          </div>
-          <div class="col-12 col-md-6">
-            <label for="holidayDate" class="form-label">Date</label>
-            <input
-              type="date"
-              class="form-control form-control-lg"
               id="holidayDate"
+              placeholder="Select date"
               [(ngModel)]="holidayDate"
               name="holidayDate"
+              [bsConfig]="{
+                dateInputFormat: 'YYYY-MM-DD',
+                containerClass: 'theme-dark-blue'
+              }"
+              bsDatepicker
+              autocomplete= off
               required
             />
+            <span class="input-group-text">
+              <i class="bi bi-calendar-event"></i>
+            </span>
           </div>
-          <div class="col-12 d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary fw-bold px-4">
-              Create holiday
-            </button>
-          </div>
-        </form>
-        <h3 class="fs-5 fw-bold pt-3 pb-2">All holidays</h3>
-        <div class="table-responsive">
-          <table
-            class="table table-bordered table-striped table-hover align-middle bg-white shadow-sm rounded"
-          >
-            <thead class="table-primary">
-              <tr>
-                <th>Holiday name</th>
-                <th>Date</th>
-                <th style="width: 140px">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let holiday of holidays">
-                <td>{{ holiday.name }}</td>
-                <td>{{ holiday.date | date:'longDate' }}</td>
-                <td>
-                  <button
-                    class="btn btn-outline-secondary btn-sm me-1"
-                    (click)="editHoliday(holiday.id)"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    class="btn btn-outline-danger btn-sm"
-                    (click)="deleteHoliday(holiday.id)"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
-      <button
-        class="pagination-btn"
-        [disabled]="currentPage === 1"
-        (click)="goToPage(currentPage - 1)"
-      >
-        ‹
-      </button>
-
-      <button
-        *ngFor="let page of totalPages"
-        (click)="goToPage(page)"
-        [ngClass]="{ 'active-page': currentPage === page }"
-        class="pagination-btn"
-      >
-        {{ page }}
-      </button>
-
-      <button
-        class="pagination-btn"
-        [disabled]="currentPage === totalPages.length"
-        (click)="goToPage(currentPage + 1)"
-      >
-        ›
-      </button>
-    </div>
         </div>
+
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary fw-bold px-4">
+            Create holiday
+          </button>
+        </div>
+      </form>
+      <h3 class="fs-5 fw-bold pt-3 pb-2 text-center">All Holidays</h3>
+      <div class="table-responsive tablecontainer p-0 mb-4" #tablecontainer>
+        <table class="table table-borderless m-0 align-middle p-3">
+          <thead class="d-md-table-header-group">
+            <tr>
+              <th>Holiday name</th>
+              <th>Date</th>
+              <th style="width: 140px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let holiday of holidays">
+              <td>{{ holiday.name }}</td>
+              <td>{{ holiday.date }}</td>
+              <td>
+                <div>
+                  <a>
+                    <i
+                      style="cursor: pointer"
+                      class="bi bi-pencil-square fs-3 text-primary p-0"
+                      title="Edit"
+                      (click)="editHoliday(holiday)"
+                    ></i>
+                  </a>
+                  |
+                  <i
+                    style="cursor: pointer"
+                    class="bi bi-trash fs-3 text-danger p-0"
+                    title="Delete"
+                    (click)="deleteHoliday(holiday.id)"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </main>

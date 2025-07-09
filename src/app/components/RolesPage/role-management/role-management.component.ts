@@ -15,6 +15,7 @@ export class RoleManagementComponent {
   searchTerm: string = '';
   currentPage: number = 1;
   pageSize: number = 5;
+  isLoading: boolean = false;
 
   roles: any[] = [];
 
@@ -23,7 +24,12 @@ export class RoleManagementComponent {
   ngOnInit() {
     this.roles = this.roleService.getRoles();
   }
-
+  get isEmpty(): boolean {
+    return this.roles.length === 0;
+  }
+  get hasResults(): boolean {
+    return this.paginatedRoles.length > 0;
+  }
   get filteredRoles() {
     return this.roles.filter((role) =>
       role.name.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -47,14 +53,14 @@ export class RoleManagementComponent {
   }
 
   goToAddPage() {
-    this.roleService.clearEditingRole(); // وضع الإضافة
-    this.router.navigate(['/dashboard/addRole']);
+    this.roleService.clearEditingRole();
+    this.router.navigate(['/dashboard/Roles/manageRole']);
   }
 
   editRole(index: number) {
     const role = this.paginatedRoles[index];
-    this.roleService.setEditingRole(role); // حفظ الدور للتعديل
-    this.router.navigate(['/dashboard/addRole']); // إعادة التوجيه إلى صفحة الإضافة
+    this.roleService.setEditingRole(role);
+    this.router.navigate(['/dashboard/Roles/manageRole']);
   }
 
   deleteRole(index: number) {

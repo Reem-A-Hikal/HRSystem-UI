@@ -1,3 +1,8 @@
+.logo-img {
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 .sidenav {
   background: #6c93c3;
   transition: all 0.5s ease;
@@ -43,6 +48,10 @@
   border-radius: 50%;
   background-color: transparent;
   border: none;
+}
+.sidenav .logo-container .btn-close:focus {
+  outline: none;
+  box-shadow: none;
 }
 .sidenav .logo-container .btn-close .fa-times {
   color: #fff;
@@ -93,4 +102,12 @@
 .active .sidenav-link-icon,
 .active .sidenav-link-text {
   color: #000;
+}
+
+.close {
+  color: white;
+  font-size: 36px;
+  position: absolute;
+  top: -9px;
+  left: 2px;
 }
