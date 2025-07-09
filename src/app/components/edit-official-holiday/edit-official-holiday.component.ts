@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HolidayService } from '../../services/holiday.service';
+import { IHolidayResponse } from '../../models/IHoliday';
 
 @Component({
   selector: 'app-edit-official-holiday',
@@ -8,17 +11,21 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './edit-official-holiday.component.css'
 })
 export class EditOfficialHolidayComponent {
-holiday = { id:1 , name: 'Eiad Adha', date: '2025-10-04' };
+holiday!:IHolidayResponse ;
+// test!:Date ;
 
-  // constructor(
-  //   private route: ActivatedRoute,
-  //   private http: HttpClient,
-  //   private router: Router
-  // ) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private service:HolidayService
+  ) {}
 
   ngOnInit() {
-    // const id = this.route.snapshot.paramMap.get('id');
-    // this.http.get<any>(`/api/holidays/${id}`).subscribe(data => this.holiday = data);
+    const id = this.route.snapshot.paramMap.get('id');
+    this.service.getHolidayById(+id!).subscribe(data => {
+      this.holiday = data;
+    });
+    // this.test= new Date(this.holiday.date);
   }
 
   saveChanges() {
