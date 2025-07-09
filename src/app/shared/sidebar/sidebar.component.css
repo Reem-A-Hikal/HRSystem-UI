@@ -1,3 +1,8 @@
+.logo-img {
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 .sidenav {
   background: #6c93c3;
   transition: all 0.5s ease;

@@ -154,7 +154,7 @@ export class ManageAttendanceComponent implements OnInit {
 
     this.empService.getAllEmployees().subscribe((employees) => {
       this.employees = employees;
-      console.log('Employees:', this.employees);
+      // console.log('Employees:', this.employees);
       
       if (this.isEditMode) {
         this.loadRecordForEditing();
@@ -189,7 +189,7 @@ export class ManageAttendanceComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Failed to load record', err);
+        // console.error('Failed to load record', err);
         this.errorMessage = 'Failed to load attendance record';
         this.toastr.onError(this.errorMessage, 'Error');
       },

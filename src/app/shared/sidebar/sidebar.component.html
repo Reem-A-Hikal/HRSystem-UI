@@ -3,8 +3,13 @@
   [ngClass]="isLeftSidebarCollapsed() ? 'sidenav-collapsed' : ''"
 >
   <div class="logo-container">
-    <button class="logo" (click)="toggleCollapse()">
-      <i class="bi bi-bars">HR</i>
+    <button
+      class="logo"
+      (click)="toggleCollapse()"
+      aria-label="Toggle sidebar"
+      style="background: none; border: none; padding: 0; cursor: pointer"
+    >
+      <img class="logo-img"  width="40" height="40" src="logo.jpg" alt="Pioneers Logo" />
     </button>
     @if (!isLeftSidebarCollapsed()) {
     <div class="logo-text" @fadeInOut>Pioneers</div>
