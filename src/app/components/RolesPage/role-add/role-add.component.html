@@ -54,9 +54,17 @@
       <!-- Save Button -->
       <div class="text-end mt-4">
        
-        <button  class="btn save-btn" (click)="saveRole()">
-        <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
-      </button>
+               
+        <button
+            class="btn save-btn"
+            (click)="saveRole()"
+            [disabled]="
+              (isEditing && !authService.hasPermission('Roles-Edit')) ||
+              (!isEditing && !authService.hasPermission('Roles-Add'))
+            "
+          >
+            <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
+        </button>
       </div>
     </div>
   </div>

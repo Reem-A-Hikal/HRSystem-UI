@@ -134,21 +134,22 @@ saveRole() {
     this.isEditing = true; // تعيين حالة التعديل
 
     // Reset default permissions first
-    this.modules.forEach(module => {
-      module.permissions = { view: false, edit: false, delete: false, add: false };
+    this.permissions.forEach(perm => {
+      perm.isView = false;
+      perm.isAdd = false;
+      perm.isEdit = false;
+      perm.isDelete = false;
     });
 
     // Apply saved permissions
     if (editingRole.permissions) {
       for (const perm of editingRole.permissions) {
-        const mod = this.modules.find(m => m.name === perm.module);
+        const mod = this.permissions.find(p => p.page === perm.page);
         if (mod) {
-          mod.permissions = {
-            view: perm.view || false,
-            edit: perm.edit || false,
-            delete: perm.delete || false,
-            add: perm.add || false,
-          };
+          mod.isView = perm.isView || false;
+          mod.isAdd = perm.isAdd || false;
+          mod.isEdit = perm.isEdit || false;
+          mod.isDelete = perm.isDelete || false;
         }
       }
     }
