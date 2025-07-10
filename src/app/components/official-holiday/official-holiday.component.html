@@ -33,10 +33,11 @@
               name="holidayDate"
               [bsConfig]="{
                 dateInputFormat: 'YYYY-MM-DD',
-                containerClass: 'theme-dark-blue'
+                containerClass: 'theme-dark-blue',
+                returnFocusToInput: true,
               }"
               bsDatepicker
-              autocomplete= off
+              autocomplete="off"
               required
             />
             <span class="input-group-text">
@@ -64,7 +65,7 @@
           <tbody>
             <tr *ngFor="let holiday of holidays">
               <td>{{ holiday.name }}</td>
-              <td>{{ holiday.date }}</td>
+              <td>{{ holiday.date | date : "MMM d, y" }}</td>
               <td>
                 <div>
                   <a>
@@ -72,7 +73,7 @@
                       style="cursor: pointer"
                       class="bi bi-pencil-square fs-3 text-primary p-0"
                       title="Edit"
-                      (click)="editHoliday(holiday)"
+                      (click)="editHoliday(holiday.id)"
                     ></i>
                   </a>
                   |
@@ -88,6 +89,14 @@
           </tbody>
         </table>
       </div>
+      <app-edit-official-holiday
+        *ngIf="showEditModal"
+        [holiday]="selectedHoliday"
+        [screenWidth]="screenWidth"
+        [isSidebarCollapsed]="isSidebarCollapsed"
+        (closeModal)="closeEditModal()"
+        (save)="handleSave($event)"
+      ></app-edit-official-holiday>
     </div>
   </main>
 </div>

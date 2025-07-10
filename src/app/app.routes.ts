@@ -119,13 +119,6 @@ export const routes: Routes = [
           ).then((m) => m.OfficialHolidayComponent),
       },
       {
-        path: 'official-holiday/edit/:id',
-        loadComponent: () =>
-          import(
-            './components/edit-official-holiday/edit-official-holiday.component'
-          ).then((m) => m.EditOfficialHolidayComponent),
-      },
-      {
         path: 'general-setting',
         loadComponent: () =>
           import('./components/general-setting/general-setting.component').then(

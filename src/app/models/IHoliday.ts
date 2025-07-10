@@ -1,10 +1,8 @@
 export interface IHoliday {
   name: string;
-  date:string;
+  date: string | Date;
 }
 
-export interface IHolidayResponse {
+export interface IHolidayResponse extends IHoliday {
   id: number;
-  name: string;
-  date: string;
 }

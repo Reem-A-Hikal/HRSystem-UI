@@ -14,12 +14,12 @@ import { ToastrService } from 'ngx-toastr';
 import { IUpdateEmployeeRequest, IEmployee } from '../../../models/IEmployee';
 import { countries } from 'countries-list';
 import { forkJoin } from 'rxjs';
-import id from '@angular/common/locales/id';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-edit-employee',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, BsDatepickerModule],
   templateUrl: './edit-employee.component.html',
   styleUrls: ['./edit-employee.component.css'],
 })
