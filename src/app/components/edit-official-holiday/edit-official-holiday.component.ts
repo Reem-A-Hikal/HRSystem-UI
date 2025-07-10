@@ -1,35 +1,40 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  computed,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HolidayService } from '../../services/holiday.service';
 import { IHolidayResponse } from '../../models/IHoliday';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-official-holiday',
-  imports: [FormsModule],
+  imports: [FormsModule, BsDatepickerModule, CommonModule],
   templateUrl: './edit-official-holiday.component.html',
-  styleUrl: './edit-official-holiday.component.css'
+  styleUrl: './edit-official-holiday.component.css',
 })
 export class EditOfficialHolidayComponent {
-holiday!:IHolidayResponse ;
-// test!:Date ;
+  @Input() holiday!: IHolidayResponse;
+  @Input() isSidebarCollapsed = false;
+  @Input() screenWidth = 0;
+  @Output() save = new EventEmitter<IHolidayResponse>();
+  @Output() closeModal = new EventEmitter<void>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private service:HolidayService
-  ) {}
-
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.service.getHolidayById(+id!).subscribe(data => {
-      this.holiday = data;
-    });
-    // this.test= new Date(this.holiday.date);
+  onSubmit() {
+    if (this.holiday.date instanceof Date) {
+      const dateObj = this.holiday.date;
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      this.holiday.date = `${year}-${month}-${day}`;
+    }
+    this.save.emit(this.holiday);
   }
 
-  saveChanges() {
-    // this.http.put(`/api/holidays/${this.holiday.id}`, this.holiday).subscribe(() => {
-    //   this.router.navigate(['/holidays']);
-    }
+  close() {
+    this.closeModal.emit();
+  }
 }
