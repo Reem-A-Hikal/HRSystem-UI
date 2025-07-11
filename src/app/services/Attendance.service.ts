@@ -74,6 +74,22 @@ export class AttendanceService {
     return this.http.post<AttendanceUpdateDto>(this.apiUrl, attendance);
   }
 
+  checkDuplicateAttendance(
+    employeeId: string,
+    date: string,
+    excludeId?: number | null
+  ): Observable<boolean> {
+    let params = new HttpParams()
+      .set('employeeId', employeeId)
+      .set('date', date);
+
+    if (excludeId !== undefined && excludeId !== null) {
+      params = params.set('excludeId', excludeId);
+    }
+
+    return this.http.get<boolean>(`${this.apiUrl}/CheckDuplicate`, { params });
+  }
+
   updateAttendance(
     attendance: AttendanceUpdateDto
   ): Observable<AttendanceUpdateDto> {
