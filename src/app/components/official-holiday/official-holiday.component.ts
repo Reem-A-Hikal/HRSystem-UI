@@ -28,11 +28,15 @@ export class OfficialHolidayComponent implements OnInit {
   selectedHoliday!: IHolidayResponse;
   screenWidth = window.innerWidth;
   isSidebarCollapsed = false;
+  formSubmitted = false;
 
   constructor(private service: HolidayService, private toastr: ToastrService) {}
 
   ngOnInit() {
     this.loadHolidays();
+  }
+  get isEmpty(): boolean {
+    return this.holidays.length === 0;
   }
 
   loadHolidays() {
@@ -40,18 +44,54 @@ export class OfficialHolidayComponent implements OnInit {
   }
 
   createHoliday() {
+    this.formSubmitted = true;
+
+    if (!this.holidayName || !this.holidayDate) return;
+
+    if (this.isDateInPast(this.holidayDate)) {
+      this.toastr.error('Holiday date must be today or in the future');
+      return;
+    }
+
+    if (this.isDuplicateHoliday(this.holidayName, this.holidayDate)) {
+      this.toastr.error('A holiday with the same name and date already exists');
+      return;
+    }
+
     const newHoliday: IHoliday = {
-      name: this.holidayName,
+      name: this.holidayName.trim(),
       date: this.holidayDate,
     };
 
-    this.service.createHoliday(newHoliday).subscribe(() => {
-      this.loadHolidays();
-      this.toastr.success('Created successful', 'Success');
-      // Reset the form fields
-      this.holidayName = '';
-      this.holidayDate = '';
-    });
+    this.service.createHoliday(newHoliday).subscribe(
+      () => {
+        this.loadHolidays();
+        this.toastr.success('Created successful', 'Success');
+        // Reset the form fields
+        this.holidayName = '';
+        this.holidayDate = '';
+        this.formSubmitted = false;
+      },
+      (error) => {
+        this.toastr.error('Error creating holiday', 'Error');
+        console.error('Error creating holiday:', error);
+      }
+    );
+  }
+
+  private isDateInPast(date: string): boolean {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selectedDate < today;
+  }
+
+  private isDuplicateHoliday(name: string, date: string): boolean {
+    return this.holidays.some(
+      (holiday) =>
+        holiday.name.toLowerCase() === name.toLowerCase() &&
+        new Date(holiday.date).toDateString() === new Date(date).toDateString()
+    );
   }
 
   openEditModal(holiday: IHolidayResponse) {
@@ -95,16 +135,40 @@ export class OfficialHolidayComponent implements OnInit {
     this.showEditModal = false;
   }
 
-  deleteHoliday(id: number) {
-    this.service.deleteHoliday(id).subscribe(
-      (response) => {
-        this.toastr.success('Deleted successful', 'Success');
-        this.loadHolidays();
-      },
-      (error) => {
-        this.toastr.error('Error', 'Error');
-        console.log(error);
-      }
-    );
+  async deleteHoliday(id: number) {
+    const Swal = await import('sweetalert2');
+
+    const result = await Swal.default.fire({
+      title: `Are you sure?`,
+      text: `You are about to delete this holiday.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+    });
+    if (result.isConfirmed) {
+      this.service.deleteHoliday(id).subscribe({
+        next: () => {
+          Swal.default.fire({
+            title: 'Deleted!',
+            text: 'The holiday has been deleted.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          this.loadHolidays();
+        },
+        error: (err) => {
+          console.error('Delete failed', err);
+          Swal.default.fire({
+            title: 'Error!',
+            text: 'Failed to delete holiday.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        },
+      });
+    }
   }
 }
