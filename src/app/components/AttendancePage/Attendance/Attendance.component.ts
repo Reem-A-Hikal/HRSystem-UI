@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AttendanceService } from '../../../services/Attendance.service';
-import {
-  AttendanceRecord,
-} from '../../../models/IAttendance';
+import { AttendanceRecord } from '../../../models/IAttendance';
 import { Pagination } from '../../../models/Pagination';
 import { ToastrService } from '../../../services/Toastr.service';
 import Swal from 'sweetalert2';
+
+import { ExportService } from '../../../services/Export.service';
 import { AuthService } from '../../../services/Auth.service';
 
 @Component({
@@ -39,12 +39,21 @@ export class AttendanceComponent implements OnInit {
   constructor(
     private attendanceService: AttendanceService,
     private toastr: ToastrService,
+    private exportService: ExportService,
     public authService: AuthService
 
   ) {}
 
   ngOnInit() {
     this.loadAttendances();
+  }
+
+  trackByRecordId(index: number, record: AttendanceRecord): number | null {
+    return record.id ?? null;
+  }
+
+  trackByPage(index: number, page: number): number {
+    return page;
   }
 
   loadAttendances() {
@@ -86,30 +95,28 @@ export class AttendanceComponent implements OnInit {
     return this.filteredList.length === 0;
   }
 
-  applyFilters() {
-    // Rule 3: Check if either search term or date range is provided
-    this.isLoading = true;
-    // if (!this.searchTerm || !this.startDate || !this.endDate) 
+  private isValidFilters(): boolean {
     if (!this.searchTerm && (!this.startDate || !this.endDate)) {
       this.toastr.onError('Please enter employee name or select a date range');
-      this.isLoading = false;
-      return;
+      return false;
     }
-    
-
     if (this.searchTerm && this.searchTerm.trim().length < 3) {
       this.toastr.onError('Please enter a valid name (at least 3 characters)');
-      this.isLoading = false;
-      return;
+      return false;
     }
-
-    // Rule 2: Check if start date is after end date
     if (this.startDate && this.endDate && this.startDate > this.endDate) {
       this.toastr.onError('Start date cannot be after end date');
+      return false;
+    }
+    return true;
+  }
+
+  applyFilters() {
+    this.isLoading = true;
+    if (!this.isValidFilters()) {
       this.isLoading = false;
       return;
     }
-
     this.load();
   }
 
@@ -178,8 +185,10 @@ export class AttendanceComponent implements OnInit {
   }
 
   // Function to handle delete action
-  onDelete(id: number | null) {
-    Swal.fire({
+  async onDelete(id: number | null) {
+    const Swal = await import('sweetalert2');
+
+    const result = await Swal.default.fire({
       title: `Are you sure?`,
       text: `You are about to delete this attendance record.`,
       icon: 'warning',
@@ -187,40 +196,60 @@ export class AttendanceComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.attendanceService.deleteAttendance(id).subscribe({
-          next: (res) => {
-            Swal.fire({
-              title: 'Deleted!',
-              text: 'The attendance record has been deleted.',
-              icon: 'success',
-              timer: 2000,
-              showConfirmButton: false,
-            });
-            this.loadAttendances();
-          },
-          error: (err) => {
-            console.error('Delete failed', err);
-            Swal.fire({
-              title: 'Error!',
-              text: 'Failed to delete attendance record.',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            });
-          },
-        });
-      }
     });
+    if (result.isConfirmed) {
+      this.attendanceService.deleteAttendance(id).subscribe({
+        next: () => {
+          Swal.default.fire({
+            title: 'Deleted!',
+            text: 'The attendance record has been deleted.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          this.loadAttendances();
+        },
+        error: (err) => {
+          console.error('Delete failed', err);
+          Swal.default.fire({
+            title: 'Error!',
+            text: 'Failed to delete attendance record.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        },
+      });
+    }
   }
-
-  exportToExcel() {
-    console.log('Exporting to Excel');
-    // Implement Excel export
+  exportAllAttendanceToExcel(): void {
+    this.attendanceService
+      .getAllFilteredAttendances(this.searchTerm, this.startDate, this.endDate)
+      .subscribe({
+        next: (response) => {
+          // console.log('Exporting all attendance records', response);
+          this.exportService.exportToExcel(
+            response,
+            `Attendance Records - ${new Date().toLocaleDateString('en-US')}`
+          );
+          this.toastr.onSuccess('Attendance records exported successfully');
+        },
+        error: (error) => {
+          // console.error('Failed to load all attendance records', error);
+          this.toastr.onError('An error occurred while loading all records');
+        },
+      });
   }
-
-  exportToPDF() {
-    console.log('Exporting to PDF');
-    // Implement PDF export
+  exportAllAttendanceToPDF(): void {
+    this.attendanceService
+      .getAllFilteredAttendances(this.searchTerm, this.startDate, this.endDate)
+      .subscribe({
+        next: (response) => {
+          this.exportService.exportToPDF(response);
+          this.toastr.onSuccess('Exported to PDF successfully');
+        },
+        error: () => {
+          this.toastr.onError('Failed to export to PDF');
+        },
+      });
   }
 }

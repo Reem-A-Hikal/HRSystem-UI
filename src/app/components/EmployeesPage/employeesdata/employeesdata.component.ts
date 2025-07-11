@@ -34,6 +34,10 @@ export class EmployeesdataComponent implements OnInit {
     this.loadEmployees();
   }
 
+  trackByPage(index: number, page: number): number {
+    return page;
+  }
+
   loadEmployees() {
     this.isLoading = true;
     this.employeeService.getAllEmployees().subscribe({

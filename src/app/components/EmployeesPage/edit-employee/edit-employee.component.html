@@ -240,11 +240,23 @@
 
         <div class="form-group">
           <label>Contract Date</label>
+
           <input
-            type="date"
-            formControlName="contractDate"
+            type="text"
+            class="form-control form-control-lg"
+            id="holidayDate"
             placeholder="Select contract date"
+            formControlName="contractDate"
+            name="holidayDate"
             title="Contract Date"
+            [bsConfig]="{
+                dateInputFormat: 'YYYY-MM-DD',
+                containerClass: 'theme-dark-blue',
+                returnFocusToInput: true,
+              }"
+            bsDatepicker
+            autocomplete="off"
+            required
           />
           <div
             class="error"

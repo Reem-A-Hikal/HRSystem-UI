@@ -6,6 +6,17 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './topbar.component.html',
-  styleUrls: ['./topbar.component.css']
+  styleUrls: ['./topbar.component.css'],
 })
-export class TopbarComponent {}
+export class TopbarComponent {
+  userName: string = '';
+
+  ngOnInit() {
+    const userData = localStorage.getItem('auth_user');
+
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.userName = user.fullName || '';
+    }
+  }
+}

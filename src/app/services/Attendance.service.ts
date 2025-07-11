@@ -42,12 +42,52 @@ export class AttendanceService {
     );
   }
 
+  getAllFilteredAttendances(
+    searchTerm?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Observable<AttendanceRecord[]> {
+    let params = new HttpParams();
+
+    if (searchTerm) params = params.set('searchTerm', searchTerm);
+    if (startDate) {
+      const startDateCopy = new Date(startDate);
+      startDateCopy.setHours(0, 0, 0, 0); // Set time to midnight
+      params = params.set('startDate', startDateCopy.toISOString());
+    }
+    if (endDate) {
+      const endDateCopy = new Date(endDate);
+      endDateCopy.setHours(23, 59, 59, 999); // Set time to end of day
+      params = params.set('endDate', endDateCopy.toISOString());
+    }
+
+    return this.http.get<AttendanceRecord[]>(`${this.apiUrl}/allFiltered`, {
+      params,
+    });
+  }
+
   getById(id: number | null): Observable<AttendanceRecord> {
     return this.http.get<AttendanceRecord>(`${this.apiUrl}/${id}`);
   }
 
   add(attendance: AttendanceDto): Observable<AttendanceUpdateDto> {
     return this.http.post<AttendanceUpdateDto>(this.apiUrl, attendance);
+  }
+
+  checkDuplicateAttendance(
+    employeeId: string,
+    date: string,
+    excludeId?: number | null
+  ): Observable<boolean> {
+    let params = new HttpParams()
+      .set('employeeId', employeeId)
+      .set('date', date);
+
+    if (excludeId !== undefined && excludeId !== null) {
+      params = params.set('excludeId', excludeId);
+    }
+
+    return this.http.get<boolean>(`${this.apiUrl}/CheckDuplicate`, { params });
   }
 
   updateAttendance(
