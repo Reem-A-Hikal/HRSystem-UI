@@ -125,34 +125,34 @@ saveRole() {
     permissions: permissionPayload
   };
 
-  console.log('Sending Role:', roleData);
-
   const editingRole = this.roleService.getEditingRole();
 
   if (editingRole) {
-    this.roleName = editingRole.name;
-    this.isEditing = true; // تعيين حالة التعديل
+    // التعديل
+  (roleData as any).id = editingRole.id;
 
-    // Reset default permissions first
-    this.permissions.forEach(perm => {
-      perm.isView = false;
-      perm.isAdd = false;
-      perm.isEdit = false;
-      perm.isDelete = false;
+    this.roleService.updateRole(roleData).subscribe({
+      next: () => {
+        console.log('Role updated successfully');
+        this.roleService.clearEditingRole();
+       this.router.navigate(['/dashboard/Roles']);
+      },
+      error: (err) => {
+        console.error('Error updating role:', err);
+      }
     });
 
-    // Apply saved permissions
-    if (editingRole.permissions) {
-      for (const perm of editingRole.permissions) {
-        const mod = this.permissions.find(p => p.page === perm.page);
-        if (mod) {
-          mod.isView = perm.isView || false;
-          mod.isAdd = perm.isAdd || false;
-          mod.isEdit = perm.isEdit || false;
-          mod.isDelete = perm.isDelete || false;
-        }
+  } else {
+    this.roleService.addRole(roleData).subscribe({
+      next: () => {
+        console.log('Role added successfully');
+        this.router.navigate(['/dashboard/Roles']);
+      },
+      error: (err) => {
+        console.error('Error adding role:', err);
       }
-    }
+    });
   }
 }
+
 }

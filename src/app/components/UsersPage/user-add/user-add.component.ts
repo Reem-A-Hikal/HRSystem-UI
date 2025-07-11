@@ -142,8 +142,15 @@ export class AddUserComponent implements OnInit {
 get filteredRoles() {
   return this.roles.filter(r => r.name !== 'HR' && r.name !== 'User');
 }
+passwordVisible: boolean = false;
+
+togglePasswordVisibility() {
+  this.passwordVisible = !this.passwordVisible;
+}
+
 
   onCancel() {
     this.router.navigate(['/dashboard/Users']);
+
   }
 }

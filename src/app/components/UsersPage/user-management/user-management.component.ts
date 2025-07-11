@@ -62,7 +62,7 @@ export class UserManagementComponent implements OnInit {
   
   this.userService.setEditingUser(userForEdit);
   
-  this.router.navigate(['/dashboard/add-user']);
+  this.router.navigate(['/dashboard/Users/add-user']);
 }
   deleteUser(user: User) { 
     if (!user.id) {
@@ -92,7 +92,7 @@ export class UserManagementComponent implements OnInit {
 
   addUser() { 
     this.userService.clearEditingUser(); 
-    this.router.navigate(['/dashboard/add-user']);
+    this.router.navigate(['/dashboard/Users/add-user']);
   } 
 
  get filteredUsers(): User[] {

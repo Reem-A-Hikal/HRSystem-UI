@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/Auth.service';
 
 @Component({
   selector: 'app-PrintReport',
@@ -56,7 +57,7 @@ export class PrintReportComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit() {}
 }

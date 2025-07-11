@@ -1,4 +1,5 @@
-<div class="d-flex flex-column overflow-auto">
+<div *ngIf="authService.hasPermission('SalaryReport-View')"
+ class="d-flex flex-column overflow-auto">
   <div main-content flex-grow-1>
     <div class="PageContainer">
       <div class="container py-4">
@@ -144,6 +145,7 @@
                         <div>
                           <a [routerLink]="['EditRecord']">
                             <i
+                              *ngIf="authService.hasPermission('SalaryReport-Edit')"
                               style="cursor: pointer"
                               class="bi bi-pencil-square fs-3 text-primary"
                               title="Edit"
@@ -153,6 +155,7 @@
                           |
                           <a [routerLink]="['PrintReport']">
                             <i
+                              *ngIf="authService.hasPermission('SalaryReport-View')"
                               style="cursor: pointer"
                               class="bi bi-printer fs-3 text-secondary"
                               title="Print"

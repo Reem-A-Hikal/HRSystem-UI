@@ -15,6 +15,7 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { EmployeeService } from '../../../services/Employee.service';
 import { IEmployee } from '../../../models/IEmployee';
 import { ToastrService } from '../../../services/Toastr.service';
+import { AuthService } from '../../../services/Auth.service';
 import {
   AttendanceDto,
   AttendanceUpdateDto,
@@ -55,7 +56,8 @@ export class ManageAttendanceComponent implements OnInit {
     private router: Router,
     private attendanceService: AttendanceService,
     private empService: EmployeeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public authService: AuthService
   ) {
     this.attendanceForm = this.fb.group(
       {

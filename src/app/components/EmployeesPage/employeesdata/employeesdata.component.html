@@ -1,4 +1,5 @@
-<div class="d-flex flex-column" >
+<div class="d-flex flex-column" *ngIf="employees && authService.hasPermission('Employees-View')">
+  
   <main
     style="min-height: 90vh"
     class="main-content flex-grow-1 d-flex justify-content-center"

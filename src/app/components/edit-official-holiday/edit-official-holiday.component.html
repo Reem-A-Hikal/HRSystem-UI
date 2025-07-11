@@ -1,4 +1,4 @@
-<div class="container-fluid min-vh-100 d-flex flex-column">
+<div *ngIf="authService.hasPermission('OfficialHoliday-Edit')" class="container-fluid min-vh-100 d-flex flex-column">
       <!-- Main Content -->
       <main class="container py-4 flex-grow-1">
         <div class="row justify-content-center">

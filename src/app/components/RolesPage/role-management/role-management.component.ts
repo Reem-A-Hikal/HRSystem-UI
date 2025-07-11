@@ -55,7 +55,7 @@ get filteredRoles() {
 
   goToAddPage() {
     this.roleService.clearEditingRole(); 
-    this.router.navigate(['/dashboard/addRole']);
+    this.router.navigate(['/dashboard/Roles/manageRole']);
   }
 
 editRole(index: number) {
@@ -63,7 +63,8 @@ editRole(index: number) {
 
   this.roleService.getRoleById(role.id).subscribe((fullRoleData) => {
     this.roleService.setEditingRole(fullRoleData);
-    this.router.navigate(['/dashboard/addRole']);
+    this.router.navigate(['/dashboard/Roles/manageRole']);
+
   });
 }
 

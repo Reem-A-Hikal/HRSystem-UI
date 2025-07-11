@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/Auth.service';
 
 export interface Employee {
   name: string;
@@ -153,7 +154,7 @@ export class SalaryReportComponent implements OnInit {
   SelectedMonth: string = '';
   SelectedYear: string = '';
   isLoading: boolean = true;
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit() {
     this.paginateEmployees();

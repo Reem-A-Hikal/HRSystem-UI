@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/Auth.service';
 
 @Component({
   selector: 'app-editRecord',
@@ -9,7 +10,7 @@ import { RouterLink } from '@angular/router';
 })
 export class EditRecordComponent implements OnInit {
 
-  constructor() { }
+  constructor( public authService: AuthService) { }
 
   ngOnInit() {
   }

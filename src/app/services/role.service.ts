@@ -28,7 +28,7 @@ updateRole(role: any): Observable<any> {
   private editingRole: any = null;
 
   setEditingRole(role: any) {
-    this.editingRole = role;
+  this.editingRole = JSON.parse(JSON.stringify(role));
   }
 
   getEditingRole() {

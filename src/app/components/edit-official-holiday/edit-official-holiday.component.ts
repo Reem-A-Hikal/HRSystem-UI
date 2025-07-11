@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/Auth.service';
+
 
 @Component({
   selector: 'app-edit-official-holiday',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
+
   templateUrl: './edit-official-holiday.component.html',
   styleUrl: './edit-official-holiday.component.css'
 })
 export class EditOfficialHolidayComponent {
+   constructor(public authService: AuthService) {} 
 holiday = { id:1 , name: 'Eiad Adha', date: '2025-10-04' };
 
   // constructor(
