@@ -60,7 +60,7 @@ export class ManageAttendanceComponent implements OnInit {
     this.attendanceForm = this.fb.group(
       {
         employeeId: ['', Validators.required],
-        departmentId: ['', Validators.required],
+        departmentId: [''],
         date: ['', [Validators.required, this.dateValidator]],
         checkInTime: ['', Validators.required],
         checkOutTime: ['', Validators.required],
@@ -152,18 +152,11 @@ export class ManageAttendanceComponent implements OnInit {
     this.recordId = Number(this.route.snapshot.paramMap.get('id'));
     this.isEditMode = !!this.recordId;
 
-    this.empService.getAllEmployees().subscribe((employees) => {
-      this.employees = employees;
-      // console.log('Employees:', this.employees);
-      
-      if (this.isEditMode) {
-        this.loadRecordForEditing();
-        // console.log('Employees:', this.employees);
-      }
-    });
-
     this.empService.getDepartments().subscribe((departments) => {
       this.departments = departments;
+    });
+    this.empService.getAllEmployees().subscribe((employees) => {
+      this.employees = employees;
     });
 
     this.attendanceForm.statusChanges.subscribe(() => {
@@ -171,6 +164,24 @@ export class ManageAttendanceComponent implements OnInit {
         this.attendanceForm.updateValueAndValidity({ onlySelf: false });
       }
     });
+  }
+
+  ngAfterViewInit() {
+    if (this.isEditMode) {
+      this.loadRecordForEditing();
+    }
+  }
+
+  onDepartmentChange(departmentId: number) {
+    if (departmentId) {
+      this.empService
+        .getEmployeesByDepartment(departmentId)
+        .subscribe((employees) => {
+          this.employees = employees;
+        });
+    } else {
+      this.employees = [];
+    }
   }
 
   loadRecordForEditing() {
@@ -189,7 +200,7 @@ export class ManageAttendanceComponent implements OnInit {
         }
       },
       error: (err) => {
-        // console.error('Failed to load record', err);
+        console.error('Failed to load record', err);
         this.errorMessage = 'Failed to load attendance record';
         this.toastr.onError(this.errorMessage, 'Error');
       },
@@ -200,7 +211,7 @@ export class ManageAttendanceComponent implements OnInit {
     const date = new Date(dateTime);
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`; // أو `${hours}:${minutes}:00` لو بتستخدمي صيغة seconds كمان
+    return `${hours}:${minutes}`;
   }
 
   onSubmit() {
@@ -208,52 +219,69 @@ export class ManageAttendanceComponent implements OnInit {
     if (this.attendanceForm.valid && !this.attendanceForm.errors) {
       const formData = this.attendanceForm.getRawValue();
 
-      const newAtt: AttendanceDto = {
-        date: this.formatDateToISO(formData.date),
-        arrivalTime: this.formatTimeToISO(formData.date, formData.checkInTime),
-        departureTime: this.formatTimeToISO(
-          formData.date,
-          formData.checkOutTime
-        ),
-        employeeId: formData.employeeId,
-      };
+      const date = this.formatDateToISO(formData.date);
+      const arrivalTime = this.formatTimeToISO(
+        formData.date,
+        formData.checkInTime
+      );
+      const departureTime = this.formatTimeToISO(
+        formData.date,
+        formData.checkOutTime
+      );
+      const employeeId = formData.employeeId;
+      const excludeId = this.isEditMode ? this.recordId : undefined;
 
-      const updatedAtt: AttendanceUpdateDto = {
-        id: this.recordId,
-        date: this.formatDateToISO(formData.date),
-        arrivalTime: this.formatTimeToISO(formData.date, formData.checkInTime),
-        departureTime: this.formatTimeToISO(
-          formData.date,
-          formData.checkOutTime
-        ),
-        employeeId: formData.employeeId,
-      };
-      // console.log('Form Data', formData);
-      // console.log('Update Payload', updatedAtt);
-      // console.log('recordId', this.recordId);
-      // console.log('formData.employeeId', formData.employeeId);
-      const operation = this.isEditMode
-        ? this.attendanceService.updateAttendance(updatedAtt)
-        : this.attendanceService.add(newAtt);
+      this.attendanceService
+        .checkDuplicateAttendance(employeeId, date, excludeId)
+        .subscribe({
+          next: (isDuplicate) => {
+            if (isDuplicate) {
+              this.toastr.onError(
+                'Attendance for this employee on this date already exists.',
+                'Error'
+              );
+              return;
+            }
+            const payload: AttendanceUpdateDto | AttendanceDto = {
+              date,
+              arrivalTime,
+              departureTime,
+              employeeId,
+              ...(this.isEditMode ? { id: this.recordId } : {}),
+            };
+            const operation = this.isEditMode
+              ? this.attendanceService.updateAttendance(
+                  payload as AttendanceUpdateDto
+                )
+              : this.attendanceService.add(payload as AttendanceDto);
 
-      operation.subscribe({
-        next: (Response) => {
-          // console.log('Attendance added successfully', Response);
-          const message = this.isEditMode
-            ? 'Attendance updated successfully'
-            : 'Attendance added successfully';
+            operation.subscribe({
+              next: (Response) => {
+                const message = this.isEditMode
+                  ? 'Attendance updated successfully'
+                  : 'Attendance added successfully';
 
-          this.toastr.onSuccess(message, 'Success');
-          this.router.navigate(['/dashboard/Attendance']);
-        },
-        error: (err) => {
-          if (err.status === 400) {
-            this.toastr.onError(err.error.message, 'Error');
-            return;
-          }
-          this.toastr.onError('Error adding attendance', 'Error');
-        },
-      });
+                this.toastr.onSuccess(message, 'Success');
+                this.router.navigate(['/dashboard/Attendance']);
+              },
+              error: (err) => {
+                if (err.status === 400) {
+                  const msg =
+                    err?.error?.message || 'Error submitting attendance';
+                  this.toastr.onError(msg, 'Error');
+                  return;
+                }
+                this.toastr.onError('Error adding attendance', 'Error');
+              },
+            });
+          },
+          error: () => {
+            this.toastr.onError(
+              'Failed to validate duplicate attendance.',
+              'Error'
+            );
+          },
+        });
     } else {
       // Mark all fields as touched to show validation errors
       this.markFormGroupTouched(this.attendanceForm);

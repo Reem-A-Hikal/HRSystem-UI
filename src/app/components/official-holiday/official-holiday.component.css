@@ -188,3 +188,7 @@ body {
   margin-bottom: 0.6rem;
   display: block;
 }
+.text-danger {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
