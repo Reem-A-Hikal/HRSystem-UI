@@ -1,0 +1,254 @@
+<div class="min-vh-100 d-flex flex-column">
+  <main class="main-content flex-grow-1 d-flex justify-content-center">
+    <div class="content-container">
+       <!-- else loading -->
+      <div *ngIf="!editMode && setting;">
+        <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
+          <h2 class="fw-bold mb-0">General Settings Overview</h2>
+        </div>
+        <div class="card shadow-sm mb-4 border-0 rounded-4">
+          <div class="card-body p-4">
+            <div class="row mb-4">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Overtime
+                </div>
+                <div class="fs-5 fw-bold">
+                  <ng-container *ngIf="setting.overTime; else noValue">
+                    {{ setting.overTime }}
+                  </ng-container>
+                  <ng-template #noValue>
+                    <span class="text-muted fst-italic">No value added</span>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Deduction
+                </div>
+                <div class="fs-5 fw-bold">
+                  <ng-container *ngIf="setting.deduction; else noValue">
+                    {{ setting.deduction }}
+                  </ng-container>
+                  <ng-template #noValue>
+                    <span class="text-muted fst-italic">No value added</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Type
+                </div>
+                <span class="badge-1 text-dark me-2 px-3 py-2 rounded-pill shadow-sm">
+                  {{ setting.type | titlecase }}
+                </span>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Weekly Holidays
+                </div>
+                <div>
+                  <span class="badge-1 text-dark me-2 px-3 py-2 rounded-pill shadow-sm">
+                    1: {{ getHolidayName(setting.firstHoliday) }}
+                  </span>
+                <br>
+                <br>
+                  <span class="badge-1 text-dark px-3 py-2 rounded-pill shadow-sm">
+                    2: {{ getHolidayName(setting.secondHoliday) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button
+                class="btn btn-primary fw-bold px-5 py-2 rounded-pill shadow-sm"
+                (click)="editMode = true"
+              >
+                <i class="bi bi-pencil me-2"></i>Edit
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Form -->
+      <form
+        *ngIf="editMode"
+        #settingsForm="ngForm"
+        class="p-4 bg-white rounded-4 shadow-sm"
+        (ngSubmit)="saveSettings(settingsForm)"
+      >
+        <div class="mb-4 border-bottom pb-2 d-flex align-items-center gap-2">
+          <i class="bi bi-gear-fill fs-3 icon"></i>
+          <h2 class="fw-bold mb-0">Edit General Settings</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-md-6">
+            <label
+              class="form-label fw-semibold text-secondary text-uppercase small mb-1"
+              for="type"
+            >
+              Type
+            </label>
+            <select
+              id="type"
+              [(ngModel)]="type"
+              name="type"
+              class="form-select form-select-lg"
+              required
+              #typeInput="ngModel"
+            >
+              <option value="" disabled>Select Type</option>
+              <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+            </select>
+            <div
+              *ngIf="typeInput.touched && typeInput.invalid"
+              class="text-danger small mt-1"
+            >
+              Please select a type
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label
+              class="form-label fw-semibold text-secondary text-uppercase small mb-1"
+              for="firstHoliday"
+            >
+              First Holiday
+            </label>
+            <select
+              id="firstHoliday"
+              [(ngModel)]="firstHoliday"
+              name="firstHoliday"
+              class="form-select form-select-lg"
+              required
+              #firstHolidayInput="ngModel"
+            >
+              <option value="" disabled>Select First Holiday</option>
+              <option *ngFor="let day of daysOfWeek" [value]="day.name">{{ day.name }}</option>
+            </select>
+            <div
+              *ngIf="firstHolidayInput.touched && firstHolidayInput.invalid"
+              class="text-danger small mt-1"
+            >
+              Please select a day
+            </div>
+            <div
+              *ngIf="firstHoliday === secondHoliday && firstHoliday !== ''"
+              class="text-danger small mt-1"
+            >
+              First and second holidays must be different
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label
+              class="form-label fw-semibold text-secondary text-uppercase small mb-1"
+              for="secondHoliday"
+            >
+              Second Holiday
+            </label>
+            <select
+              id="secondHoliday"
+              [(ngModel)]="secondHoliday"
+              name="secondHoliday"
+              class="form-select form-select-lg"
+              required
+              #secondHolidayInput="ngModel"
+            >
+              <option value="" disabled>Select Second Holiday</option>
+              <option *ngFor="let day of daysOfWeek" [value]="day.name">{{ day.name }}</option>
+            </select>
+            <div
+              *ngIf="secondHolidayInput.touched && secondHolidayInput.invalid"
+              class="text-danger small mt-1"
+            >
+              Please select a day
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label
+              class="form-label fw-semibold text-secondary text-uppercase small mb-1"
+              for="overTime"
+            >
+              Overtime
+            </label>
+            <input
+              type="number"
+              id="overTime"
+              [(ngModel)]="overTime"
+              name="overTime"
+              class="form-control form-control-lg"
+              step="0.01"
+              min="0"
+              required
+              #overTimeInput="ngModel"
+            />
+            <div
+              *ngIf="overTimeInput.touched && overTimeInput.invalid"
+              class="text-danger small mt-1"
+            >
+              Please enter a valid number (e.g., 2.00)
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label
+              class="form-label fw-semibold text-secondary text-uppercase small mb-1"
+              for="deduction"
+            >
+              Deduction
+            </label>
+            <input
+              type="number"
+              id="deduction"
+              [(ngModel)]="deduction"
+              name="deduction"
+              class="form-control form-control-lg"
+              step="0.01"
+              min="0"
+              required
+              #deductionInput="ngModel"
+            />
+            <div
+              *ngIf="deductionInput.touched && deductionInput.invalid"
+              class="text-danger small mt-1"
+            >
+              Please enter a valid number (e.g., 1.00)
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-cancel fw-bold px-4 rounded-pill"
+            (click)="editMode = false"
+          >
+            <i class="bi bi-x-lg me-1"></i>Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-save fw-bold px-4 rounded-pill"
+            [disabled]="settingsForm.invalid"
+          >
+            <i class="bi bi-save me-1"></i>Save
+          </button>
+          <button
+            class="btn btn-secondary fw-bold px-4 rounded-pill"
+            [routerLink]="['/settings']"
+          >
+            <i class="bi bi-arrow-left me-1"></i>Back to Settings
+          </button>
+        </div>
+      </form>
+
+      <!-- <ng-template #loading>
+        <div class="text-center p-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </ng-template> -->
+    </div>
+  </main>
+</div>

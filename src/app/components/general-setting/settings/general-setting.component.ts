@@ -1,75 +1,52 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { ISetting } from '../../../models/ISetting';
 import { IsettingService } from '../../../services/isetting.service';
 
 
 @Component({
-  selector: 'app-general-setting',
+  selector: 'app-settings-display',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './general-setting.component.html',
   styleUrl: './general-setting.component.css',
 })
-export class GeneralSettingComponent implements OnInit {
-  editMode = false;
-  settingData!: ISetting;
+export class SettingsDisplayComponent implements OnInit {
+  setting: ISetting | null = null;
+  daysOfWeek = [
+      { name: 'Monday', value: 1 },
+    { name: 'Tuesday', value: 2 },
+    { name: 'Wednesday', value: 3 },
+    { name: 'Thursday', value: 4 },
+    { name: 'Friday', value: 5 },
+    { name: 'Saturday', value: 6 },
+    { name: 'Sunday', value: 7 },
+  ];
 
-  additional = '';
-  deduction = '';
-  paymentType = '';
-  holiday1 = '';
-  holiday2 = '';
+  constructor(
+    private settingService: IsettingService,
+    private toastr: ToastrService
+  ) {}
 
-  constructor(private settingService: IsettingService) {}
+  ngOnInit() {
+    this.loadSettings();
+  }
 
-  ngOnInit(): void {
-    this.settingService.getSettingById(1).subscribe({
-      next: (res) => {
-        this.settingData = res;
-        this.additional = res.overTime.toString();
-        this.deduction = res.deduction.toString();
-        this.paymentType = res.type.toLowerCase();
-        this.holiday1 = this.getDayName(res.firstHoliday);
-        this.holiday2 = this.getDayName(res.secondHoliday);
+  loadSettings() {
+    this.settingService.getSettingById().subscribe({
+      next: (data: ISetting) => {
+        this.setting = data;
+          this.toastr.success('Settings loaded successfully');
       },
-      error: (err: any) => {
-        console.error('Failed to load settings', err);
+      error: (err) => {
+        console.error('Error loading settings:', err);
+        this.toastr.error('Failed to load settings');
       },
     });
   }
 
-  saveSettings() {
-    this.editMode = false;
-
-    const payload: ISetting = {
-      id: 1,
-      type: this.paymentType.toLowerCase(),
-      overTime: +this.additional,
-      deduction: +this.deduction,
-      firstHoliday: this.getDayIndex(this.holiday1),
-      secondHoliday: this.getDayIndex(this.holiday2),
-    };
-
-    this.settingService.updateSetting(payload).subscribe({
-      next: () => {
-        console.log('Settings updated');
-      },
-      error: (err: any) => {
-        console.error('Failed to update settings', err);
-      },
-    });
-  }
-
-  // Helpers to convert between day name and index
-  getDayName(index: number): string {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[index] ?? '';
-  }
-
-  getDayIndex(name: string): number {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days.indexOf(name);
+  getHolidayName(value: number): string {
+    return this.daysOfWeek.find(d => d.value === value)?.name || 'Not specified';
   }
 }

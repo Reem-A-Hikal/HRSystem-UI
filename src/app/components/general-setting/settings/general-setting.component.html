@@ -1,272 +1,74 @@
 <div class="min-vh-100 d-flex flex-column">
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
-      <div>
-        <!-- Display View -->
-        <div *ngIf="!editMode">
-          <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
-            <h2 class="fw-bold mb-0">General Settings Overview</h2>
-          </div>
-          <div class="card shadow-sm mb-4 border-0 rounded-4">
-            <div class="card-body p-4">
-              <div class="row mb-4">
-                <div class="col-12 col-md-6 mb-3 mb-md-0">
-                  <div
-                    class="text-uppercase text-secondary small mb-2 fw-semibold"
-                  >
-                    Additional
-                  </div>
-                  <div class="fs-5 fw-bold">
-                    <ng-container
-                      *ngIf="additional && additional.trim(); else noAdditional"
-                    >
-                      {{ additional }}
-                    </ng-container>
-                    <ng-template #noAdditional>
-                      <span class="text-muted fst-italic">No value added</span>
-                    </ng-template>
-                  </div>
+      <div *ngIf="setting; else loading">
+        <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
+          <h2 class="fw-bold mb-0">General Settings Overview</h2>
+        </div>
+        <div class="card shadow-sm mb-4 border-0 rounded-4">
+          <div class="card-body p-4">
+            <div class="row mb-4">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Overtime
                 </div>
-                <div class="col-12 col-md-6">
-                  <div
-                    class="text-uppercase text-secondary small mb-2 fw-semibold"
-                  >
-                    Deduction
-                  </div>
-                  <div class="fs-5 fw-bold">
-                    <ng-container
-                      *ngIf="deduction && deduction.trim(); else noDeduction"
-                    >
-                      {{ deduction }}
-                    </ng-container>
-                    <ng-template #noDeduction>
-                      <span class="text-muted fst-italic">No value added</span>
-                    </ng-template>
-                  </div>
+                <div class="fs-5 fw-bold">
+                  <ng-container *ngIf="setting.overTime; else noValue">
+                    {{ setting.overTime }}
+                  </ng-container>
+                  <ng-template #noValue>
+                    <span class="text-muted fst-italic">No value added</span>
+                  </ng-template>
                 </div>
               </div>
-              <div class="row mb-4">
-                <div class="col-12 col-md-6 mb-3 mb-md-0">
-                  <div
-                    class="text-uppercase text-secondary small mb-2 fw-semibold"
-                  >
-                    Type
-                  </div>
-                  <span
-                    class="badge bg-gradient fs-6 px-3 py-2 rounded-pill shadow-sm"
-                  >
-                    {{ paymentType | titlecase }}
+              <div class="col-12 col-md-6">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Deduction
+                </div>
+                <div class="fs-5 fw-bold">
+                  <ng-container *ngIf="setting.deduction; else noValue">
+                    {{ setting.deduction }}
+                  </ng-container>
+                  <ng-template #noValue>
+                    <span class="text-muted fst-italic">No value added</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Type
+                </div>
+                <span class="badge bg-gradient fs-6 px-3 py-2 rounded-pill shadow-sm">
+                  {{ setting.type | titlecase }}
+                </span>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="text-uppercase text-secondary small mb-2 fw-semibold">
+                  Weekly Holidays
+                </div>
+                <div>
+                  <span class="badge-1 text-dark me-2 px-3 py-2 rounded-pill shadow-sm">
+                    1: {{ getHolidayName(setting.firstHoliday) }}
+                  </span>
+                  <span class="badge-1 text-dark px-3 py-2 rounded-pill shadow-sm">
+                    2: {{ getHolidayName(setting.secondHoliday) }}
                   </span>
                 </div>
-                <div class="col-12 col-md-6">
-                  <div
-                    class="text-uppercase text-secondary small mb-2 fw-semibold"
-                  >
-                    Weekly Holidays
-                  </div>
-                  <div>
-                    <span
-                      class="badge-1 text-dark me-2 px-3 py-2 rounded-pill shadow-sm"
-                    >
-                      1: {{ holiday1 }}
-                    </span>
-                    <span
-                      class="badge-1 text-dark px-3 py-2 rounded-pill shadow-sm"
-                    >
-                      2: {{ holiday2 }}
-                    </span>
-                  </div>
-                </div>
               </div>
-              <div class="d-flex justify-content-end">
-                <button
-                  class="btn btn-primary fw-bold px-5 py-2 rounded-pill shadow-sm"
-                  (click)="editMode = true"
-                >
-                  <i class="bi bi-pencil me-2"></i>Edit
-                </button>
-              </div>
+
             </div>
           </div>
         </div>
-
-        <!-- Edit/Create View -->
-        <form
-          *ngIf="editMode"
-          #generalForm="ngForm"
-          class="p-4 bg-white rounded-4 shadow-sm"
-        >
-          <div class="mb-4 border-bottom pb-2 d-flex align-items-center gap-2">
-            <i class="bi bi-gear-fill fs-3 icon"></i>
-            <h2 class="fw-bold mb-0">Edit General Settings</h2>
-          </div>
-          <div class="row g-4">
-            <div class="col-12 col-md-6">
-              <label
-                class="form-label fw-semibold text-secondary text-uppercase small mb-1"
-                for="additional"
-              >
-                Additional
-              </label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="additional"
-                placeholder="Enter bonus"
-                [(ngModel)]="additional"
-                name="additional"
-                [pattern]="
-                  paymentType === 'hour' ? '^[1-4]$' : '^\\d+(\\.\\d{1,2})?$'
-                "
-                [attr.inputmode]="
-                  paymentType === 'hour' ? 'numeric' : 'decimal'
-                "
-                required
-                #inputVal1="ngModel"
-              />
-              <div
-                *ngIf="!inputVal1.valid && inputVal1.touched"
-                class="text-danger small mt-1"
-              >
-                {{
-                  paymentType === "hour"
-                    ? "Please enter a valid hour: 1, 2, 3, or 4"
-                    : "Enter a valid amount"
-                }}
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
-              <label
-                class="form-label fw-semibold text-secondary text-uppercase small mb-1"
-                for="deduction"
-              >
-                Deduction
-              </label>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="deduction"
-                placeholder="Enter deduction"
-                [(ngModel)]="deduction"
-                name="deduction"
-                [pattern]="
-                  paymentType === 'hour' ? '^[1-4]$' : '^\\d+(\\.\\d{1,2})?$'
-                "
-                [attr.inputmode]="
-                  paymentType === 'hour' ? 'numeric' : 'decimal'
-                "
-                required
-                #inputVal2="ngModel"
-              />
-              <div
-                *ngIf="!inputVal2.valid && inputVal2.touched"
-                class="text-danger small mt-1"
-              >
-                {{
-                  paymentType === "hour"
-                    ? "Please enter a valid hour: 1, 2, 3, or 4"
-                    : "Enter a valid amount"
-                }}
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
-              <label
-                class="form-label fw-semibold text-secondary text-uppercase small mb-1 d-block"
-              >
-                Payment Type
-              </label>
-              <div
-                class="btn-group w-100"
-                role="group"
-                aria-label="Payment Type"
-              >
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="paymentType"
-                  id="hour"
-                  [(ngModel)]="paymentType"
-                  value="hour"
-                />
-                <label class="btn btn-outline-secondary" for="hour">Hour</label>
-                <input
-                  type="radio"
-                  class="btn-check"
-                  name="paymentType"
-                  id="pound"
-                  [(ngModel)]="paymentType"
-                  value="pound"
-                />
-                <label class="btn btn-outline-secondary" for="pound"
-                  >Pound</label
-                >
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
-              <label
-                class="form-label fw-semibold text-secondary text-uppercase small mb-1 d-block"
-              >
-                Weekly Holidays
-              </label>
-              <div class="row g-2">
-                <div class="col-6">
-                  <select
-                    class="form-select form-select-lg"
-                    id="holiday1"
-                    [(ngModel)]="holiday1"
-                    name="holiday1"
-                    title="Select Holiday 1"
-                  >
-                    <option disabled selected value="">Select Holiday 1</option>
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                    <option>Sunday</option>
-                  </select>
-                </div>
-                <div class="col-6">
-                  <select
-                    class="form-select form-select-lg"
-                    id="holiday2"
-                    [(ngModel)]="holiday2"
-                    name="holiday2"
-                    title="Select Holiday 2"
-                  >
-                    <option disabled selected value="">Select Holiday 2</option>
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                    <option>Sunday</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex justify-content-end gap-2 mt-4">
-            <button
-              type="button"
-              class="btn btn-cancel fw-bold px-4 rounded-pill"
-              (click)="editMode = false"
-            >
-              <i class="bi bi-x-lg me-1"></i>Cancel
-            </button>
-            <button
-              type="submit"
-              [disabled]="!generalForm.valid"
-              class="btn btn-save fw-bold px-4 rounded-pill"
-              (click)="saveSettings()"
-            >
-              <i class="bi bi-save me-1"></i>Save
-            </button>
-          </div>
-        </form>
       </div>
+      <ng-template #loading>
+        <div class="text-center p-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </main>
 </div>
