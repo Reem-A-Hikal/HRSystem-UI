@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { IHolidayResponse } from '../../models/IHoliday';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/Auth.service';
+
 
 @Component({
   selector: 'app-edit-official-holiday',
@@ -17,6 +19,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './edit-official-holiday.component.css',
 })
 export class EditOfficialHolidayComponent {
+     constructor(public authService: AuthService) {} 
+
   @Input() holiday!: IHolidayResponse;
   @Input() isSidebarCollapsed = false;
   @Input() screenWidth = 0;

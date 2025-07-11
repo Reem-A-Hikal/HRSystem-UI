@@ -1,4 +1,4 @@
-<div class="main-container">
+<div *ngIf="authService.hasPermission('Roles-Add') || authService.hasPermission('Roles-Edit')" class="main-container">
   <!-- Page Header -->
   <div class="page-header">
     <h1 class="page-title">Role Management</h1>
@@ -10,6 +10,7 @@
     <!-- Form Header -->
     <div class="form-header">
       <h4 class="text-center" id="formTitle">{{ isEditing ? "Edit Role" : "Add New Role" }}</h4>
+
     </div>
 
     <!-- Form Body -->
@@ -26,76 +27,68 @@
         />
       </div>
 
-      <!-- Permissions Section -->
-      <div class="permissions-section">
-        <h5 class="section-title">
-          <i class="bi bi-shield-lock icon-spacing"></i>
-          Module Permissions
-        </h5>
-
-        <div class="table-container">
-          <table class="table permissions-table text-center align-middle">
-            <thead>
-              <tr>
-                <th class="text-start">Module Name</th>
-                <th>View</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Add</th>
-              </tr>
-            </thead>
-            <tbody id="permissionsTableBody">
-              <tr *ngFor="let module of modules">
-              <td class="text-start">{{ module.name }}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  [(ngModel)]="module.permissions.view"
-                  title="View permission for {{ module.name }}"
-                  [attr.aria-label]="'View permission for ' + module.name"
-                  placeholder="View"
-                />
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  [(ngModel)]="module.permissions.edit"
-                  title="Edit permission for {{ module.name }}"
-                  [attr.aria-label]="'Edit permission for ' + module.name"
-                  placeholder="Edit"
-                />
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  [(ngModel)]="module.permissions.delete"
-                  title="Delete permission for {{ module.name }}"
-                  [attr.aria-label]="'Delete permission for ' + module.name"
-                  placeholder="Delete"
-                />
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  [(ngModel)]="module.permissions.add"
-                  title="Add permission for {{ module.name }}"
-                  [attr.aria-label]="'Add permission for ' + module.name"
-                  placeholder="Add"
-                />
-              </td>
+      <!-- Permissions Table -->
+      <div class="table-responsive">
+        <table class="table text-center align-middle table-wrapper">
+          <thead class="table-light ">
+            <tr>
+              <th class="text-start">Module Name</th>
+              <th>View</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Add</th>
             </tr>
-            </tbody>
-          </table>
-        </div>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let page of getModules()">
+              <td class="text-start">{{ page }}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="isPermissionSelected(page, 'View')"
+                  (change)="togglePermission(page, 'View', $event)"
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="isPermissionSelected(page, 'Edit')"
+                  (change)="togglePermission(page, 'Edit', $event)"
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="isPermissionSelected(page, 'Delete')"
+                  (change)="togglePermission(page, 'Delete', $event)"
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="isPermissionSelected(page, 'Add')"
+                  (change)="togglePermission(page, 'Add', $event)"
+                />
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="btn-container text-end">
-        <button class="btn cancel-btn" (click)="cancelForm()">
-          <i class="bi bi-x-circle icon-spacing"></i>Cancel
-        </button>
-        <button class="btn save-btn" (click)="saveRole()">
-          <i class="bi bi-save me-2"></i>{{ isEditing ? "Update" : "Save" }}
+      <!-- Save Button -->
+      <div class="text-end mt-4">
+       
+               
+        <button
+            class="btn save-btn"
+            (click)="saveRole()"
+            [disabled]="
+              (isEditing && !authService.hasPermission('Roles-Edit')) ||
+              (!isEditing && !authService.hasPermission('Roles-Add'))
+            "
+          >
+            <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
         </button>
       </div>
     </div>

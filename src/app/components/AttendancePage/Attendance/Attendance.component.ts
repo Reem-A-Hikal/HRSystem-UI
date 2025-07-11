@@ -7,7 +7,10 @@ import { AttendanceService } from '../../../services/Attendance.service';
 import { AttendanceRecord } from '../../../models/IAttendance';
 import { Pagination } from '../../../models/Pagination';
 import { ToastrService } from '../../../services/Toastr.service';
+import Swal from 'sweetalert2';
+
 import { ExportService } from '../../../services/Export.service';
+import { AuthService } from '../../../services/Auth.service';
 
 @Component({
   selector: 'app-Attendance',
@@ -36,7 +39,9 @@ export class AttendanceComponent implements OnInit {
   constructor(
     private attendanceService: AttendanceService,
     private toastr: ToastrService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    public authService: AuthService
+
   ) {}
 
   ngOnInit() {

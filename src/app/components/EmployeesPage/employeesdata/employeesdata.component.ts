@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { IEmployee } from '../../../models/IEmployee';
 import { EmployeeService } from '../../../services/Employee.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../services/Auth.service';
+
+
 
 @Component({
   selector: 'app-employeesdata',
@@ -23,7 +26,8 @@ export class EmployeesdataComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

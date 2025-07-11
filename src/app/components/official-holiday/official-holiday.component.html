@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column" *ngIf="holidays && authService.hasPermission('OfficialHoliday-View')">
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
       <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
@@ -73,8 +73,9 @@
             </div>
           </div>
         </div>
-        <div class="col-12 d-flex justify-content-center">
-          <button type="submit" class="btn btn-primary fw-bold px-4">
+
+       <div class="col-12 d-flex justify-content-center">
+          <button *ngIf="authService.hasPermission('OfficialHoliday-Add')" type="submit" class="btn btn-primary fw-bold px-4">
             Create holiday
           </button>
         </div>
@@ -104,6 +105,7 @@
                 <div>
                   <a>
                     <i
+                      *ngIf="authService.hasPermission('OfficialHoliday-Edit')"
                       style="cursor: pointer"
                       class="bi bi-pencil-square fs-3 text-primary p-0"
                       title="Edit"
@@ -112,6 +114,7 @@
                   </a>
                   |
                   <i
+                    *ngIf="authService.hasPermission('OfficialHoliday-Delete')"
                     style="cursor: pointer"
                     class="bi bi-trash fs-3 text-danger p-0"
                     title="Delete"

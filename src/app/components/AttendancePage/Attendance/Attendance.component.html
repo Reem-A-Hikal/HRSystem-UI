@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column" *ngIf="authService.hasPermission('Attendance-View')">
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
       <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
@@ -138,6 +138,7 @@
                 <div>
                   <a [routerLink]="['ManageAttendance', record.id]">
                     <i
+                      *ngIf="authService.hasPermission('Attendance-Edit')"
                       style="cursor: pointer"
                       class="bi bi-pencil-square fs-3 text-primary p-0"
                       title="Edit"
@@ -145,6 +146,7 @@
                   </a>
                   |
                   <i
+                    *ngIf="authService.hasPermission('Attendance-Delete')"
                     style="cursor: pointer"
                     class="bi bi-trash fs-3 text-danger p-0"
                     title="Delete"

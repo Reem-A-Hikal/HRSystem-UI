@@ -1,6 +1,6 @@
-<div class="modal-overlay" (click)="close()">
-  <!-- Main Content -->
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div *ngIf="authService.hasPermission('OfficialHoliday-Edit')" class="modal-overlay" (click)="close()">
+      <!-- Main Content -->
+      <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="mb-4">
       <h1 class="fs-2 fw-bold mb-0">Edit Official Holiday</h1>
     </div>

@@ -1,4 +1,5 @@
 <div
+  *ngIf="authService.hasPermission('SalaryReport-View')"
   class="container py-5 bg-gradient rounded-4 shadow-lg"
   style="background: linear-gradient(135deg, #f8fafc 0%, #e3e9f7 100%)"
 >

@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column" *ngIf="authService.hasPermission('Users-View')">
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
       <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
@@ -22,12 +22,14 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-        <a
-          [routerLink]="['add-user']"
-          class="btn btn-primary fw-bold"
-          >+ Add User</a
-        >
+        <a 
+          *ngIf="authService.hasPermission('Users-Add')" 
+          [routerLink]="['/dashboard/Users/add-user']" 
+          class="btn btn-primary fw-bold">
+          + Add User
+        </a>
       </div>
+
 
       <!-- Table -->
       <div class="table-responsive tablecontainer p-0 mb-4">
@@ -44,21 +46,23 @@
           <tbody class="text-center">
             <tr *ngFor="let user of paginatedUsers">
               <td>{{ user.fullName }}</td>
-              <td>{{ user.username }}</td>
+              <td>{{ user.userName }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ user.role }}</td>
+              <td>{{ user.roles?.[0] }}</td> 
               <td data-label="Actions" class="actions-col">
                 <div>
-                  <a>
-                    <i
-                      style="cursor: pointer"
-                      class="bi bi-pencil-square fs-3 text-primary p-0"
-                      title="Edit"
-                      (click)="editUser(user)"
-                    ></i>
-                  </a>
-                  |
                   <i
+                    *ngIf="authService.hasPermission('Users-Edit')"
+                    style="cursor: pointer"
+                    class="bi bi-pencil-square fs-3 text-primary p-0"
+                    title="Edit"
+                    (click)="editUser(user)"
+                  ></i>
+
+                  <span *ngIf="authService.hasPermission('Users-Edit') && authService.hasPermission('Users-Delete')">|</span>
+
+                  <i
+                    *ngIf="authService.hasPermission('Users-Delete')"
                     style="cursor: pointer"
                     class="bi bi-trash fs-3 text-danger p-0"
                     title="Delete"
@@ -66,6 +70,7 @@
                   ></i>
                 </div>
               </td>
+
             </tr>
           </tbody>
         </table>

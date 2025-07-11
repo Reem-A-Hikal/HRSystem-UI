@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div *ngIf="authService.hasPermission('Attendance-Edit') || authService.hasPermission('Attendance-Add') " class="d-flex flex-column">
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
       <h1 class="page-title mb-4">

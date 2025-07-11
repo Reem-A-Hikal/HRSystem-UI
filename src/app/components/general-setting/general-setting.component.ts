@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/Auth.service';
+
 
 @Component({
   selector: 'app-general-setting',
@@ -15,6 +17,7 @@ export class GeneralSettingComponent {
   paymentType = 'hour';
   holiday1 = 'Friday';
   holiday2 = 'Saturday';
+  constructor(public authService: AuthService) {}
 
   saveSettings() {
     this.editMode = false;

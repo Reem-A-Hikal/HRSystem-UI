@@ -34,16 +34,45 @@ export class AuthService {
       );
   }
 
-  saveAuthData(auth: IAuthResponse) {
-    localStorage.setItem(this.TOKEN_KEY, auth.token);
-    localStorage.setItem(this.EXPIRATION_KEY, auth.expiresOn);
+saveAuthData(auth: IAuthResponse) {
+  localStorage.setItem(this.TOKEN_KEY, auth.token);
+  localStorage.setItem(this.EXPIRATION_KEY, auth.expiresOn);
 
-    const data: IUser = {
-      fullName: auth.fullName,
-      roles: auth.roles,
-    };
+  const data: IUser = {
+    fullName: auth.fullName,
+    roles: auth.roles,
+  };
 
-    localStorage.setItem(this.USER_KEY, JSON.stringify(data));
+  localStorage.setItem(this.USER_KEY, JSON.stringify(data));
+
+  localStorage.setItem('permissions', JSON.stringify(auth.permissions));
+}
+hasPermission(permission: string): boolean {
+  const permissionsJson = localStorage.getItem('permissions');
+  if (!permissionsJson) return false;
+
+  let permissions: string[] = [];
+
+  try {
+    permissions = JSON.parse(permissionsJson);
+  } catch (e) {
+    console.error("Invalid permissions JSON", e);
+    return false;
+  }
+
+  return permissions.includes(permission);
+}
+
+
+  private decodeToken(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(decodedPayload);
+    } catch (e) {
+      console.error('Failed to decode token', e);
+      return null;
+    }
   }
 
   private getAuthHeaders() {

@@ -1,136 +1,148 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../../services/user.service';
+import { Component, OnInit } from '@angular/core'; 
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms'; 
+import { Router, RouterModule } from '@angular/router'; 
+import { UserService, User } from '../../../services/user.service'; 
+import { AuthService } from '../../../services/Auth.service';
 
-@Component({
-  selector: 'app-user-management',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css'],
-})
-export class UserManagementComponent {
-  isEditing: boolean = false;
-  constructor(private router: Router, private userService: UserService) {}
+@Component({ 
+  selector: 'app-user-management', 
+  standalone: true, 
+  imports: [CommonModule, FormsModule, RouterModule], 
+  templateUrl: './user-management.component.html', 
+  styleUrls: ['./user-management.component.css'], 
+}) 
+export class UserManagementComponent implements OnInit { 
+  searchTerm: string = ''; 
+  currentPage: number = 1; 
+  pageSize: number = 5; 
+  users: User[] = []; 
+  isLoading: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
 
-  editUser(user: any) {
-    this.isEditing;
-    this.userService.setEditingUser(user);
-    this.router.navigate(['/dashboard/Users/add-user']);
-  }
-  searchTerm: string = '';
-  currentPage: number = 1;
-  pageSize: number = 5;
+  constructor(
+    private router: Router, 
+    private userService: UserService,
+    public authService: AuthService
+  ) {} 
 
-  users = [
-    {
-      fullName: 'Sophia Clark',
-      username: 'sophia.clark',
-      email: 'sophia.clark@example.com',
-      role: 'Manager',
-    },
-    {
-      fullName: 'Liam Walker',
-      username: 'liam.walker',
-      email: 'liam.walker@example.com',
-      role: 'Developer',
-    },
-    {
-      fullName: 'Olivia Carter',
-      username: 'olivia.carter',
-      email: 'olivia.carter@example.com',
-      role: 'Designer',
-    },
-    {
-      fullName: 'Noah Hayes',
-      username: 'noah.hayes',
-      email: 'noah.hayes@example.com',
-      role: 'Analyst',
-    },
-    {
-      fullName: 'Ava Bennett',
-      username: 'ava.bennett',
-      email: 'ava.bennett@example.com',
-      role: 'HR Specialist',
-    },
-    {
-      fullName: 'Ethan Reed',
-      username: 'ethan.reed',
-      email: 'ethan.reed@example.com',
-      role: 'Sales Rep',
-    },
-    {
-      fullName: 'Isabella Morgan',
-      username: 'isabella.morgan',
-      email: 'isabella.morgan@example.com',
-      role: 'Marketing Coordinator',
-    },
-    {
-      fullName: 'Jackson Cooper',
-      username: 'jackson.cooper',
-      email: 'jackson.cooper@example.com',
-      role: 'IT Support',
-    },
-    {
-      fullName: 'Mia Foster',
-      username: 'mia.foster',
-      email: 'mia.foster@example.com',
-      role: 'Project Manager',
-    },
-    {
-      fullName: 'Aiden Hughes',
-      username: 'aiden.hughes',
-      email: 'aiden.hughes@example.com',
-      role: 'Customer Service',
-    },
-  ];
+  ngOnInit(): void { 
+    this.loadUsers();
+  } 
 
-  get filteredUsers() {
-    const term = this.searchTerm.toLowerCase();
-    return this.users.filter(
-      (user) =>
-        user.fullName.toLowerCase().includes(term) ||
-        user.username.toLowerCase().includes(term) ||
-        user.email.toLowerCase().includes(term) ||
-        user.role.toLowerCase().includes(term)
-    );
-  }
-
-  get paginatedUsers() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredUsers.slice(start, start + this.pageSize);
-  }
-
-  get totalPages(): number[] {
-    const total = Math.ceil(this.filteredUsers.length / this.pageSize);
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages.length) {
-      this.currentPage = page;
-    }
-  }
-
-  // Removed duplicate editUser method to fix duplicate implementation error
-
-  deleteUser(user: any) {
-    const confirmed = confirm(
-      `Are you sure you want to delete ${user.fullName}?`
-    );
-    if (confirmed) {
-      this.users = this.users.filter((u) => u !== user);
-      const maxPage = Math.ceil(this.filteredUsers.length / this.pageSize);
-      if (this.currentPage > maxPage) {
-        this.currentPage = maxPage;
+  private loadUsers() {
+    this.isLoading = true;
+    this.errorMessage = '';
+    
+    this.userService.getUsers().subscribe({
+      next: (data) => {
+        this.users = data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+        this.errorMessage = 'Failed to load users';
+        this.isLoading = false;
       }
-    }
+    });
   }
 
-  addUser() {
-    console.log('Add new user clicked');
-    // يمكنك التنقل لصفحة الإضافة هنا
+ editUser(user: any) {
+  const userForEdit = {
+    id: user.id,
+    fullName: user.fullName,
+    userName: user.userName,
+    email: user.email,
+    role: user.roles && user.roles.length > 0 ? user.roles[0] : '', 
+    password: '' 
+  };
+  
+  console.log('User data for editing:', userForEdit); 
+  
+  this.userService.setEditingUser(userForEdit);
+  
+  this.router.navigate(['/dashboard/Users/add-user']);
+}
+  deleteUser(user: User) { 
+    if (!user.id) {
+      this.errorMessage = 'Invalid user ID';
+      return;
+    }
+
+    const confirmed = confirm(`Are you sure you want to delete ${user.fullName}؟`); 
+    if (confirmed) { 
+      this.userService.deleteUser(user.id).subscribe({
+        next: (response) => {
+          console.log('User deleted successfully:', response);
+          this.successMessage = 'User deleted successfully';
+          this.loadUsers(); 
+          
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        },
+        error: (error) => {
+          console.error('Error deleting user:', error);
+          this.errorMessage = error.error?.message || 'Failed to delete user';
+        }
+      });
+    } 
+  } 
+
+  addUser() { 
+    this.userService.clearEditingUser(); 
+    this.router.navigate(['/dashboard/Users/add-user']);
+  } 
+
+ get filteredUsers(): User[] {
+  if (!this.searchTerm) {
+    return this.users.filter(user => 
+      !user.roles?.includes('HR') && !user.roles?.includes('User')
+    );
+  }
+
+  const term = this.searchTerm.toLowerCase();
+  return this.users.filter(user =>
+    (
+      user.fullName.toLowerCase().includes(term) ||
+      user.userName.toLowerCase().includes(term) ||
+      user.email.toLowerCase().includes(term) ||
+      (user.roles && user.roles.some(role => role.toLowerCase().includes(term)))
+    ) &&
+    !user.roles?.includes('HR') &&
+    !user.roles?.includes('User')
+  );
+}
+
+
+  get paginatedUsers(): User[] { 
+    const start = (this.currentPage - 1) * this.pageSize; 
+    return this.filteredUsers.slice(start, start + this.pageSize); 
+  } 
+
+  get totalPages(): number[] { 
+    const total = Math.ceil(this.filteredUsers.length / this.pageSize); 
+    return Array.from({ length: total }, (_, i) => i + 1); 
+  } 
+
+  goToPage(page: number) { 
+    if (page >= 1 && page <= this.totalPages.length) { 
+      this.currentPage = page; 
+    } 
+  } 
+
+  onSearchChange() {
+    this.currentPage = 1; 
+  }
+
+  clearMessages() {
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  refreshUsers() {
+    this.clearMessages();
+    this.loadUsers();
   }
 }

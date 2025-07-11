@@ -6,6 +6,7 @@ import { HolidayService } from '../../services/holiday.service';
 import { IHoliday, IHolidayResponse } from '../../models/IHoliday';
 import { ToastrService } from 'ngx-toastr';
 import { EditOfficialHolidayComponent } from '../edit-official-holiday/edit-official-holiday.component';
+import { AuthService } from '../../services/Auth.service';
 
 @Component({
   selector: 'app-official-holiday',
@@ -30,7 +31,7 @@ export class OfficialHolidayComponent implements OnInit {
   isSidebarCollapsed = false;
   formSubmitted = false;
 
-  constructor(private service: HolidayService, private toastr: ToastrService) {}
+  constructor(private service: HolidayService, private toastr: ToastrService, public authService: AuthService) {}
 
   ngOnInit() {
     this.loadHolidays();
