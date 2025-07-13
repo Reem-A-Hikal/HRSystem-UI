@@ -4,6 +4,7 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { CommonModule } from '@angular/common';
 import { BodyComponent } from '../body/body.component';
 import { TopbarComponent } from '../../shared/topbar/topbar.component';
+import { ChatbotComponent } from '../../components/chatbot/chatbot.component';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -21,6 +22,7 @@ interface SideNavToggle {
     CommonModule,
     BodyComponent,
     TopbarComponent,
+    ChatbotComponent
   ],
 })
 export class DashboardComponent implements OnInit {

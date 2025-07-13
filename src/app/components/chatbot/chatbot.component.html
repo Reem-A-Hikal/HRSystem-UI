@@ -1,0 +1,60 @@
+<div class="chat-toggle" (click)="toggleChat()">💬</div>
+
+<div class="chat-popup" *ngIf="isChatOpen">
+  <div class="chat-header">
+    <span>HR Assistant</span>
+    <button class="close-btn" (click)="toggleChat()">×</button>
+  </div>
+
+  <div class="chat-body" #scrollMe>
+    <div *ngFor="let msg of messages">
+      <div
+        class="d-flex mb-2"
+        [class]="msg.sender === 'You' ? 'msg user' : 'msg bot'"
+      >
+        <div
+          [ngStyle]="
+            msg.sender === 'You'
+              ? {
+                  background: '#e1f5fe',
+                  color: '#0078d4',
+                  'align-self': 'flex-end',
+                  'margin-left': 'auto'
+                }
+              : {
+                  background: '#e8eaf6',
+                  color: '#333',
+                  'align-self': 'flex-start',
+                  'margin-right': 'auto'
+                }
+          "
+          class="msg-content"
+        >
+          <strong>{{ msg.sender }}:</strong> {{ msg.text }}
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isLoading" class="d-flex mb-2">
+      <div
+        class="msg-content typing-loader"
+        style="align-self: flex-start; margin-right: auto"
+      >
+        <strong>Bot:</strong>
+        <span class="typing-dots">
+          <span></span><span></span><span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="userMessage"
+      placeholder="Ask something..."
+      (keydown.enter)="sendMessage()"
+    />
+    <button (click)="sendMessage()" class="btn btn-send">Send</button>
+  </div>
+</div>
