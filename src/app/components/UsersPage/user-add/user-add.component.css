@@ -7,6 +7,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.content-container {
+  max-width: 550px;
+  width: 100%;
+  margin: 2.5rem 0.7rem;
+  border-radius: 20px;
+  transition: box-shadow 0.3s;
+}
+
+.content-container:hover {
+  box-shadow: 0 12px 40px rgba(44, 62, 80, 0.15);
+}
+
 .form-label {
   color: #2d3a4a;
   font-weight: 600;
@@ -82,14 +94,4 @@ body {
   color: #4a739c;
   margin-bottom: 1.5rem;
   letter-spacing: -0.01em;
-}
-
-.content-container {
-  max-width: 540px;
-  width: 100%;
-  padding: 2rem 2.5rem;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.07);
 }

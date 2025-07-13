@@ -14,7 +14,6 @@ import { ToastrService } from 'ngx-toastr';
 import { IUpdateEmployeeRequest, IEmployee } from '../../../models/IEmployee';
 import { countries } from 'countries-list';
 import { forkJoin } from 'rxjs';
-import id from '@angular/common/locales/id';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AuthService } from '../../../services/Auth.service';
 

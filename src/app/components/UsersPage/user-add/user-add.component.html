@@ -11,7 +11,6 @@
   >
     <div
       class="content-container shadow p-4 bg-white"
-      style="min-width: 450px; max-width: 550px; width: 100%"
     >
       <h1 class="page-title mb-4 text-center">
         {{ isEditing ? "Edit User" : "Add User" }}
@@ -111,7 +110,7 @@
             class="bi"
             [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"
             (click)="togglePasswordVisibility()"
-            style="position: absolute; top: 38px; right: 15px; cursor: pointer"
+            style="position: absolute; top: 48px; right: 25px; cursor: pointer"
             title="Toggle Password Visibility"
           ></i>
 
