@@ -31,7 +31,11 @@ export class OfficialHolidayComponent implements OnInit {
   isSidebarCollapsed = false;
   formSubmitted = false;
 
-  constructor(private service: HolidayService, private toastr: ToastrService, public authService: AuthService) {}
+  constructor(
+    private service: HolidayService,
+    private toastr: ToastrService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadHolidays();

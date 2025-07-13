@@ -1,0 +1,96 @@
+<div class="dashboard-container container">
+  <!-- Header -->
+  <div class="dashboard-header text-center mb-5">
+    <h1 class="dashboard-title">
+      <i class="bi bi-bar-chart-fill"></i> Employee Dashboard
+    </h1>
+    <p class="dashboard-subtitle">Workforce insights and trends</p>
+  </div>
+
+  <!-- Metric Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-md-4">
+      <div class="metric-card solid-card h-100">
+        <h6 class="metric-label">
+          <i class="bi bi-people-fill"></i> Total Employees
+        </h6>
+        <div class="metric-value">{{ totalEmployees }}</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="metric-card solid-card h-100">
+        <h6 class="metric-label">
+          <i class="bi bi-cash-stack"></i> Average Salary
+        </h6>
+
+        <div class="metric-value">{{ averageSalary | number : "0.0-0" }}</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="metric-card solid-card h-100">
+        <h6 class="metric-label">
+          <i class="bi bi-calendar-check"></i> Avg Daily Attendance
+        </h6>
+        <div class="metric-value">{{ averageDailyAttendance }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Sections -->
+  <div class="row g-4">
+    <div class="col-12 col-lg-6">
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="bi bi-hourglass-split"></i> Age Groups
+        </h3>
+        <div class="section-content">
+          <div *ngFor="let group of ageGroups" class="section-item">
+            <span class="section-label">{{ group.ageGroup }}</span>
+            <span class="section-value">{{ group.count }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="bi bi-gender-ambiguous"></i> Gender Distribution
+        </h3>
+        <div class="section-content">
+          <div *ngFor="let gender of genderDistribution" class="section-item">
+            <span class="section-label">{{ gender.gender }}</span>
+            <span class="section-value">{{ gender.count }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="bi bi-building"></i> Employees by Department
+        </h3>
+        <div class="section-content">
+          <div *ngFor="let dep of employeesByDepartment" class="section-item">
+            <span class="section-label">{{ dep.departmentName }}</span>
+            <span class="section-value">{{ dep.employeeCount }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="bi bi-globe2"></i> Nationalities
+        </h3>
+        <div class="section-content">
+          <div *ngFor="let nat of nationalityDistribution" class="section-item">
+            <span class="section-label">{{ nat.nationality }}</span>
+            <span class="section-value">{{ nat.count }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

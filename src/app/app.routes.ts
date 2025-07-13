@@ -9,6 +9,15 @@ export const routes: Routes = [
     component: DashboardComponent,
     children: [
       {
+        path: '',
+
+        loadComponent() {
+          return import(
+            './components/dashboard-view/dashboard-view.component'
+          ).then((m) => m.DashboardViewComponent);
+        },
+      },
+      {
         path: 'Employees',
         loadComponent: () =>
           import(
@@ -125,6 +134,14 @@ export const routes: Routes = [
             (m) => m.GeneralSettingComponent
           ),
       },
+
+      // {
+      //   path: 'dashboard-view',
+      //   loadComponent: () =>
+      //     import('./components/dashboard-view/dashboard-view.component').then(
+      //       (m) => m.DashboardViewComponent
+      //     ),
+      // },
     ],
   },
 ];

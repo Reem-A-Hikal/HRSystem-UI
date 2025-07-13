@@ -1,5 +1,12 @@
+import { RouterLink } from '@angular/router';
+
 export const navbarData = [
-  
+  // {
+  //   RouterLink: '/dashboard/dashboard-view',
+  //   icon: 'bi bi-house',
+  //   label: 'Dashboard',
+  // },
+
   {
     routeLink: '/dashboard/Roles',
     icon: 'bi bi-shield',
