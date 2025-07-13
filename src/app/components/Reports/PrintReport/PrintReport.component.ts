@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/Auth.service';
+import { Router } from '@angular/router';
+import { ToastrService } from '../../../services/Toastr.service';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-PrintReport',
@@ -57,7 +63,81 @@ export class PrintReportComponent implements OnInit {
     },
   ];
 
-  constructor(public authService: AuthService) {}
+  employee: any;
 
-  ngOnInit() {}
+  @ViewChild('pdfContent', { static: false }) pdfContent!: ElementRef;
+
+  constructor(private router: Router,
+    public authService:AuthService,
+    private toastr: ToastrService,
+  ) {}
+
+  ngOnInit(): void {
+    const nav = this.router.getCurrentNavigation();
+    this.employee = nav?.extras?.state?.['employee'] || history.state['employee'];
+
+    console.log('Employee data:', this.employee);
+    if (!this.employee) {
+      console.warn('No employee data found. Redirecting...');
+    }
+  }
+
+  // exportAsPDF() {
+  //   // Implement PDF export logic here
+  //   console.log('Exporting as PDF...');
+  //   this.toastr.onSuccess('Exported to PDF successfully');
+  // }
+  exportAsPDF() {
+  const DATA = this.pdfContent.nativeElement;
+
+  html2canvas(DATA).then(canvas => {
+    const imgWidth = 208;
+    const pageHeight = 295;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+    const heightLeft = imgHeight;
+
+    const contentDataURL = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const position = 10;
+
+    pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    pdf.save(`${this.employeeName}_Payslip.pdf`);
+
+    this.toastr.onSuccess('Exported to PDF successfully!');
+  });
 }
+
+  Print(): void {
+  const printContents = this.pdfContent.nativeElement.innerHTML;
+  const originalContents = document.body.innerHTML;
+
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+  location.reload(); // Reload to restore event bindings and state
+}
+  
+  // Print() {
+  //   const DATA = this.pdfContent.nativeElement;
+
+  //   html2canvas(DATA).then(canvas => {
+  //     const imgWidth = 208;
+  //     const pageHeight = 295;
+  //     const imgHeight = canvas.height * imgWidth / canvas.width;
+  //     const heightLeft = imgHeight;
+
+  //     const contentDataURL = canvas.toDataURL('image/png');
+
+  //     const pdf = new jsPDF('p', 'mm', 'a4');
+  //     const position = 10;
+
+  //     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+  //     pdf.autoPrint();
+  //     window.open(pdf.output('bloburl'), '_blank');
+  //   });
+  // }
+  
+
+}
+
