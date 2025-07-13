@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editRecord',
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './editRecord.component.html',
   styleUrls: ['./editRecord.component.css'],
 })
