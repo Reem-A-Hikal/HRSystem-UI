@@ -1,5 +1,7 @@
-<div class="d-flex flex-column" *ngIf="employees && authService.hasPermission('Employees-View')">
-  
+<div
+  class="d-flex flex-column"
+  *ngIf="employees && authService.hasPermission('Employees-View')"
+>
   <main
     style="min-height: 90vh"
     class="main-content flex-grow-1 d-flex justify-content-center"
@@ -26,10 +28,13 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-        <a *ngIf="authService.hasPermission('Employees-Add')" (click)="goToAddPage()" class="btn btn-primary fw-bold">
+        <a
+          *ngIf="authService.hasPermission('Employees-Add')"
+          (click)="goToAddPage()"
+          class="btn btn-primary fw-bold"
+        >
           + Add Employee
         </a>
-
       </div>
 
       <!-- isLoading -->
@@ -63,10 +68,10 @@
               <th style="min-width: 131px">Base Salary</th>
               <th>Phone</th>
               <!-- <th>Gender</th> -->
-              <th style="min-width: 122px">Contract</th>
-              <th style="min-width: 122px">Start Time</th>
+              <th style="min-width: 140px">Contract</th>
+              <th style="min-width: 123px">Start Time</th>
               <th style="min-width: 122px">End Time</th>
-              <th>Actions</th>
+              <th style="min-width: 112px">Actions</th>
             </tr>
           </thead>
           <tbody style="text-align: center">
@@ -84,41 +89,39 @@
               </td>
               <td style="min-width: 106px" data-label="Phone">
                 {{ emp.phoneNumber }}
-                <!-- {{ emp["phoneNumber"] }} -->
               </td>
-              <!-- <td data-label="Gender">{{ emp.gender }}</td> -->
               <td data-label="ContractDate">
                 {{ emp.contractDate | date : "mediumDate" }}
               </td>
-              <!-- <td data-label="StartTime">{{ emp.startTime }}</td> -->
-              <td>{{ emp.startTime | date : "HH:mm" }}</td>
+              <td data-label="StartTime">
+                {{ emp.startTime | date : "HH:mm" }}
+              </td>
               <td data-label="EndTime">{{ emp.endTime | date : "HH:mm" }}</td>
               <td data-label="Actions">
                 <div>
-                    <i
-                      *ngIf="authService.hasPermission('Employees-View')"
-                      style="cursor: pointer"
-                      class="bi bi-eye fs-5 text-success me-2"
-                      title="View Details"
-                      (click)="viewEmployeeDetails(emp.id)"
-                    ></i>
+                  <i
+                    *ngIf="authService.hasPermission('Employees-View')"
+                    style="cursor: pointer"
+                    class="bi bi-eye fs-5 text-secondary me-2"
+                    title="View Details"
+                    (click)="viewEmployeeDetails(emp.id)"
+                  ></i>
 
-                    <i
-                      *ngIf="authService.hasPermission('Employees-Edit')"
-                      style="cursor: pointer"
-                      class="bi bi-pencil-square fs-5 text-primary me-2"
-                      title="Edit"
-                      (click)="editEmployee(emp.id)"
-                    ></i>
+                  <i
+                    *ngIf="authService.hasPermission('Employees-Edit')"
+                    style="cursor: pointer"
+                    class="bi bi-pencil-square fs-5 text-primary me-2"
+                    title="Edit"
+                    (click)="editEmployee(emp.id)"
+                  ></i>
 
-                    <i
-                      *ngIf="authService.hasPermission('Employees-Delete')"
-                      style="cursor: pointer"
-                      class="bi bi-trash fs-5 text-danger"
-                      title="Delete"
-                      (click)="deleteEmployee(emp.id)"
-                    ></i>
-
+                  <i
+                    *ngIf="authService.hasPermission('Employees-Delete')"
+                    style="cursor: pointer"
+                    class="bi bi-trash fs-5 text-danger"
+                    title="Delete"
+                    (click)="deleteEmployee(emp.id)"
+                  ></i>
                 </div>
               </td>
             </tr>
@@ -149,7 +152,10 @@
       </div>
 
       <!-- Pagination -->
-      <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
+      <div
+        *ngIf="pagedEmployees.length > 0"
+        class="d-flex justify-content-center mt-4 flex-wrap gap-2"
+      >
         <button
           class="pagination-btn"
           [disabled]="currentPage === 1"

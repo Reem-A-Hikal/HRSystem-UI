@@ -1,4 +1,4 @@
-<div class="d-flex flex-column" *ngIf="authService.hasPermission('Users-View')">
+<div class="first" *ngIf="authService.hasPermission('Users-View')">
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
       <div class="d-flex flex-wrap justify-content-between gap-3 p-3">
@@ -14,7 +14,7 @@
             <input
               type="text"
               class="form-control search-box"
-              placeholder="Search by employee name"
+              placeholder="Search by User name"
               [(ngModel)]="searchTerm"
             />
           </div>
@@ -22,16 +22,17 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-        <a 
-          *ngIf="authService.hasPermission('Users-Add')" 
-          [routerLink]="['/dashboard/Users/add-user']" 
-          class="btn btn-primary fw-bold">
+        <a
+          *ngIf="authService.hasPermission('Users-Add')"
+          [routerLink]="['/dashboard/Users/add-user']"
+          class="btn btn-primary fw-bold"
+        >
           + Add User
         </a>
       </div>
 
-
       <!-- Table -->
+      @if (!isEmpty && !isLoading) {
       <div class="table-responsive tablecontainer p-0 mb-4">
         <table class="table table-borderless m-0 align-middle">
           <thead class="d-md-table-header-group text-center">
@@ -45,10 +46,10 @@
           </thead>
           <tbody class="text-center">
             <tr *ngFor="let user of paginatedUsers">
-              <td>{{ user.fullName }}</td>
-              <td>{{ user.userName }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.roles?.[0] }}</td> 
+              <td data-label="Full Name">{{ user.fullName }}</td>
+              <td data-label="Username">{{ user.userName }}</td>
+              <td data-label="E-mail">{{ user.email }}</td>
+              <td data-label="Roles">{{ user.roles?.[0] }}</td>
               <td data-label="Actions" class="actions-col">
                 <div>
                   <i
@@ -59,7 +60,13 @@
                     (click)="editUser(user)"
                   ></i>
 
-                  <span *ngIf="authService.hasPermission('Users-Edit') && authService.hasPermission('Users-Delete')">|</span>
+                  <span
+                    *ngIf="
+                      authService.hasPermission('Users-Edit') &&
+                      authService.hasPermission('Users-Delete')
+                    "
+                    >|</span
+                  >
 
                   <i
                     *ngIf="authService.hasPermission('Users-Delete')"
@@ -70,15 +77,39 @@
                   ></i>
                 </div>
               </td>
-
             </tr>
           </tbody>
         </table>
       </div>
+      }
+      <!-- isLoading -->
+      <div
+        *ngIf="isLoading"
+        class="loading-overlay d-flex flex-column align-items-center justify-content-center p-5"
+      >
+        <div
+          class="spinner-border text-primary mb-3"
+          style="width: 3rem; height: 3rem"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="fw-semibold text-primary fs-5">
+          Loading employee records...
+        </div>
+      </div>
+      <div
+        *ngIf="!isLoading && isEmpty"
+        class="empty-table-message text-center p-5 mb-3"
+      >
+        <i class="bi bi-people-fill fs-1 text-muted"></i>
+        <h4 class="mt-3">No Record Found</h4>
+        <p class="text-muted">There are currently no records to display.</p>
+      </div>
 
       <!-- Pagination -->
 
-      <div class="d-flex justify-content-center mt-4 flex-wrap gap-2">
+      <div *ngIf="!isEmpty" class="d-flex justify-content-center mt-4 flex-wrap gap-2">
         <button
           class="pagination-btn"
           [disabled]="currentPage === 1"
