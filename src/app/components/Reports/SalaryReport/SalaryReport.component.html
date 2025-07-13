@@ -1,243 +1,148 @@
-<div *ngIf="authService.hasPermission('SalaryReport-View')"
- class="d-flex flex-column overflow-auto">
+<div *ngIf="authService.hasPermission('SalaryReport-View')" class="d-flex flex-column overflow-auto">
   <div main-content flex-grow-1>
     <div class="PageContainer">
       <div class="container py-4">
+        <!-- Page Header -->
         <div class="row mb-4">
           <div class="col-12">
             <h1 class="fw-bold">Employee Salary Report</h1>
           </div>
         </div>
 
+        <!-- Filters -->
         <div class="row mb-4">
           <div class="col-md-6">
             <div class="input-group">
               <span class="input-group-text search-icon">
                 <i class="bi bi-search"></i>
               </span>
-              <input
-                type="text"
-                class="form-control search-box"
-                placeholder="Search by employee name"
-                [(ngModel)]="SearchTerm"
-                (keyup.enter)="applyFilters()"
-              />
+              <input type="text" class="form-control search-box" placeholder="Search by employee name" [(ngModel)]="SearchTerm" (keyup.enter)="applyFilters()" />
             </div>
           </div>
         </div>
 
         <div class="row mb-4 gap-3">
-          <div class="d-flex flex-wrap gap-4 p-3" style="max-width: 100%">
+          <div class="d-flex flex-wrap gap-4 p-3 w-100">
             <div class="col-md-3">
               <label for="monthSelect" class="form-label fw-semibold">
                 <i class="bi bi-calendar3 me-1"></i> Select Month
               </label>
-              <select
-                id="monthSelect"
-                class="form-select select-box"
-                aria-label="Select Month"
-                [(ngModel)]="SelectedMonth"
-              >
-                <option disabled selected value="">-- Choose Month --</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
+              <select id="monthSelect" class="form-select select-box" [(ngModel)]="SelectedMonth">
+                <option *ngIf="SelectedMonth === null" disabled [value]="null" selected>-- Choose Month --</option>
+                <option *ngFor="let m of months" [value]="m.value">
+                  {{ m.name }}
+                </option>
               </select>
             </div>
+
             <div class="col-md-3">
               <label for="yearSelect" class="form-label fw-semibold">
                 <i class="bi bi-clock-history me-1"></i> Select Year
               </label>
-              <select
-                id="yearSelect"
-                class="form-select select-box"
-                aria-label="Select Year"
-                [(ngModel)]="SelectedYear"
-              >
-                <option disabled selected value="">-- Choose Year --</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
+              <select id="yearSelect" class="form-select select-box" [(ngModel)]="SelectedYear">
+                <option *ngIf="SelectedYear === null" disabled [value]="null" selected>-- Choose Year --</option>
+                <option *ngFor="let y of [2025, 2024, 2023, 2022, 2021, 2020]" [value]="y">
+                  {{ y }}
+                </option>
               </select>
             </div>
-            <div
-              class="flex-grow-1 flex-wrap flex-md-nowrap flex d-flex align-items-end gap-3"
-            >
-              <button
-                class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 shadow filter-btn"
-                (click)="applyFilters()"
-              >
+
+            <div class="d-flex flex-grow-1 align-items-end gap-3">
+              <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 shadow filter-btn" (click)="applyFilters()">
                 <i class="bi bi-funnel-fill fs-5"></i>
                 <span>Filter</span>
               </button>
-              <button
-                class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 shadow reset-btn"
-                (click)="resetFilters()"
-              >
+              <button class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 shadow reset-btn" (click)="resetFilters()">
                 <i class="bi bi-arrow-clockwise fs-5"></i>
                 <span>Reset</span>
               </button>
             </div>
           </div>
+        </div>
 
-          <div>
-            @if (!isEmpty) {
-            <div class="table-container" #tableContainer>
-              <div class="table-responsive">
-                <table class="table table-hover mb-0 align-middle">
-                  <thead>
-                    <tr>
-                      <th>Employee</th>
-                      <th>Department</th>
-                      <th>Basic Salary</th>
-                      <th>Attendance Days</th>
-                      <th>Absence Days</th>
-                      <th>Overtime (hrs)</th>
-                      <th>Deduction (hrs)</th>
-                      <th>Total Overtime</th>
-                      <th>Total Deduction</th>
-                      <th>Net Salary</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let employee of pagedEmployees">
-                      <td data-label="Employee">{{ employee.name }}</td>
-                      <td data-label="Department">
-                        {{ employee.department }}
-                      </td>
-                      <td data-label="Basic Salary">
-                        {{ employee.basicSalary }}
-                      </td>
-                      <td data-label="Attendance Days">
-                        {{ employee.attendanceDays }}
-                      </td>
-                      <td data-label="Absence Days">
-                        {{ employee.absenceDays }}
-                      </td>
-                      <td data-label="Overtime (hrs)">
-                        {{ employee.overtimeHours }}
-                      </td>
-                      <td data-label="Deduction (hrs)">
-                        {{ employee.deductionHours }}
-                      </td>
-                      <td data-label="Total Overtime">
-                        {{ employee.totalOvertime }}
-                      </td>
-                      <td data-label="Total Deduction">
-                        {{ employee.totalDeduction }}
-                      </td>
-                      <td data-label="Net Salary">
-                        {{ employee.netSalary }}
-                      </td>
-                      <td data-label="Actions" class="fw-bold">
-                        <div>
-                          <a [routerLink]="['EditRecord']">
-                            <i
-                              *ngIf="authService.hasPermission('SalaryReport-Edit')"
-                              style="cursor: pointer"
-                              class="bi bi-pencil-square fs-3 text-primary"
-                              title="Edit"
-                              (click)="editEmployee(employee)"
-                            ></i>
-                          </a>
-                          |
-                          <a [routerLink]="['PrintReport']">
-                            <i
-                              *ngIf="authService.hasPermission('SalaryReport-View')"
-                              style="cursor: pointer"
-                              class="bi bi-printer fs-3 text-secondary"
-                              title="Print"
-                              (click)="printEmployee(employee)"
-                            ></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            } @else if (isLoading) {
-            <div
-              class="loading-overlay d-flex flex-column align-items-center justify-content-center p-5"
-              aria-live="polite"
-            >
-              <div
-                class="spinner-border text-primary mb-3 loading-spinner"
-                role="status"
-              >
+        <!-- Data Table -->
+        <div>
+          <ng-container *ngIf="isLoading; else showData">
+            <div class="loading-overlay d-flex flex-column align-items-center justify-content-center p-5">
+              <div class="spinner-border text-primary mb-3" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
-              <div class="fw-semibold text-primary fs-5">
-                Loading attendance records...
-              </div>
+              <div class="fw-semibold text-primary fs-5">Loading salary records...</div>
             </div>
-            }@else {
-            <div class="empty-table-message text-center p-5">
-              <i class="bi bi-people-fill fs-1 text-muted"></i>
-              <h4 class="mt-3">No Record Found</h4>
-              <p class="text-muted">
-                There are currently no records to display.
-              </p>
-            </div>
-            }
-          </div>
+          </ng-container>
 
-          <!-- Page navigation -->
-          <nav
-            *ngIf="!isEmpty"
-            aria-label="Page navigation"
-            class="d-flex justify-content-center"
-          >
-            <ul class="pagination">
-              <li
-                class="page-item"
-                [class.disabled]="pagination.currentPage === 1"
-              >
-                <a
-                  class="page-link"
-                  (click)="onPageChange(pagination.currentPage - 1)"
-                  aria-label="Previous"
-                >
-                    <i class="bi bi-chevron-left fw-light"></i>
-                </a>
-              </li>
-              <li
-                *ngFor="let page of getPages()"
-                class="page-item"
-                [class.active]="page === pagination.currentPage"
-              >
-                <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
-              </li>
-              <li
-                class="page-item"
-                [class.disabled]="
-                  pagination.currentPage === pagination.totalPages
-                "
-              >
-                <a
-                  class="page-link"
-                  (click)="onPageChange(pagination.currentPage + 1)"
-                  aria-label="Next"
-                >
-                    <i class="bi bi-chevron-right fw-light"></i>
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <ng-template #showData>
+            <ng-container *ngIf="!isEmpty; else noData">
+              <div class="table-container" #tableContainer>
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0 align-middle">
+                    <thead>
+                      <tr>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Basic Salary</th>
+                        <th>Attendance Days</th>
+                        <th>Absence Days</th>
+                        <th>Overtime (hrs)</th>
+                        <th>Deduction (hrs)</th>
+                        <th>Total Overtime</th>
+                        <th>Total Deduction</th>
+                        <th>Net Salary</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let employee of pagedEmployees">
+                        <td>{{ employee.employeeName }}</td>
+                        <td>{{ employee.departmentName || '—' }}</td>
+                        <td>{{ employee.basicSalary }}</td>
+                        <td>{{ employee.presentDays }}</td>
+                        <td>{{ employee.absentDays }}</td>
+                        <td>{{ employee.extraHours }}</td>
+                        <td>{{ employee.deductionInHours }}</td>
+                        <td>{{ employee.totalAddition }}</td>
+                        <td>{{ employee.totalDeduction }}</td>
+                        <td>{{ employee.netSalary }}</td>
+                        <td>
+                            <a *ngIf="authService.hasPermission('SalaryReport-View')" [routerLink]="['PrintReport']" [state]="{ employee: employee }">
+                              <i class="bi bi-printer text-secondary fs-5" title="Print" (click)="printEmployee(employee)"></i>
+                            </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noData>
+              <div class="empty-table-message text-center p-5">
+                <i class="bi bi-people-fill fs-1 text-muted"></i>
+                <h4 class="mt-3">No Record Found</h4>
+                <p class="text-muted">There are currently no records to display.</p>
+              </div>
+            </ng-template>
+          </ng-template>
         </div>
+
+        <!-- Pagination -->
+        <nav *ngIf="!isEmpty" aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="pagination.pageIndex === 1">
+              <a class="page-link" (click)="onPageChange(pagination.pageIndex - 1)" aria-label="Previous">
+                <i class="bi bi-chevron-left fw-light"></i>
+              </a>
+            </li>
+            <li *ngFor="let page of getPages()" class="page-item" [class.active]="page === pagination.pageIndex">
+              <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="pagination.pageIndex === pagination.totalPages">
+              <a class="page-link" (click)="onPageChange(pagination.pageIndex + 1)" aria-label="Next">
+                <i class="bi bi-chevron-right fw-light"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
