@@ -9,7 +9,13 @@
       aria-label="Toggle sidebar"
       style="background: none; border: none; padding: 0; cursor: pointer"
     >
-      <img class="logo-img"  width="40" height="40" src="logo.jpg" alt="Pioneers Logo" />
+      <img
+        class="logo-img"
+        width="40"
+        height="40"
+        src="logo.jpg"
+        alt="Pioneers Logo"
+      />
     </button>
     @if (!isLeftSidebarCollapsed()) {
     <div class="logo-text" @fadeInOut>Pioneers</div>
@@ -33,7 +39,7 @@
       >
         <i class="sidenav-link-icon bi bi-speedometer2"></i>
         @if (!isLeftSidebarCollapsed()) {
-        <span @fadeInOut class="sidenav-link-text">Dashboard</span>
+        <span @fadeInOut class="sidenav-link-text">Home</span>
         }
       </a>
     </li>
