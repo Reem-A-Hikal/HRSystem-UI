@@ -247,7 +247,8 @@
             [disabled]="!generalForm.valid ||
                         additionalInvalid ||
                         deductionInvalid ||
-                        isHolidayConflict()"
+                        isHolidayConflict()||
+                        !authService.hasPermission('GeneralSettings-Edit')"
             class="btn btn-save fw-bold px-4 rounded-pill"
             (click)="saveSettings()"
           >
