@@ -41,6 +41,7 @@ saveAuthData(auth: IAuthResponse) {
   const data: IUser = {
     fullName: auth.fullName,
     roles: auth.roles,
+    userId:auth.userId
   };
 
   localStorage.setItem(this.USER_KEY, JSON.stringify(data));
@@ -90,4 +91,43 @@ hasPermission(permission: string): boolean {
     localStorage.removeItem(this.USER_KEY);
     this.router.navigate(['/']);
   }
+  getCurrentUserId(): string | null {
+  const userJson = localStorage.getItem(this.USER_KEY);
+  if (!userJson) return null;
+
+  try {
+    const user: IUser = JSON.parse(userJson);
+    return user.userId || null;
+  } catch {
+    return null;
+  }
 }
+
+
+getCurrentUserFullName(): string | undefined {
+  const userJson = localStorage.getItem(this.USER_KEY);
+  if (!userJson) return undefined;
+
+  try {
+    const user: IUser = JSON.parse(userJson);
+    return user.fullName || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+getCurrentUserRoles(): string[] {
+  const userJson = localStorage.getItem(this.USER_KEY);
+  if (!userJson) return [];
+
+  try {
+    const user: IUser = JSON.parse(userJson);
+    return user.roles || [];
+  } catch (e) {
+    console.error('Error parsing user roles from localStorage', e);
+    return [];
+  }
+}
+
+}
+

@@ -135,6 +135,13 @@ export const routes: Routes = [
           ),
       },
 
+      {
+        path: 'employee-dashboard',
+        loadComponent: () =>
+          import(
+            './components/EmployeesPage/employee-dashboard/employee-dashboard.component'
+          ).then((m) => m.EmployeeDashboardComponent),
+      }
       // {
       //   path: 'dashboard-view',
       //   loadComponent: () =>

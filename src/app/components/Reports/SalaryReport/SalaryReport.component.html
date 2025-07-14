@@ -92,7 +92,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let employee of pagedEmployees">
+                      <tr *ngFor="let employee of employees">
                         <td>{{ employee.employeeName }}</td>
                         <td>{{ employee.departmentName || '—' }}</td>
                         <td>{{ employee.basicSalary }}</td>
@@ -105,7 +105,7 @@
                         <td>{{ employee.netSalary }}</td>
                         <td>
                             <a *ngIf="authService.hasPermission('SalaryReport-View')" [routerLink]="['PrintReport']" [state]="{ employee: employee }">
-                              <i class="bi bi-printer text-secondary fs-5" title="Print" (click)="printEmployee(employee)"></i>
+                              <i class="bi bi-printer text-secondary fs-5" title="Print"></i>
                             </a>
                         </td>
                       </tr>
