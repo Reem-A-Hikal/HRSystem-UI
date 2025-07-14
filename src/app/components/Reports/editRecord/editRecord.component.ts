@@ -5,15 +5,12 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editRecord',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './editRecord.component.html',
-  styleUrls: ['./editRecord.component.css']
+  styleUrls: ['./editRecord.component.css'],
 })
 export class EditRecordComponent implements OnInit {
+  constructor(public authService: AuthService) {}
 
-  constructor( public authService: AuthService) { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

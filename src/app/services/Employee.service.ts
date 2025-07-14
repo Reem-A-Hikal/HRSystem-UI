@@ -7,6 +7,15 @@ import {
 } from '../models/IEmployee';
 import { Observable } from 'rxjs';
 import { ICreateEmployeeResponse } from '../models/IAuthResponse';
+import {
+  ITotalEmployees,
+  IEmployeesByDepartment,
+  IGenderDistribution,
+  IAgeGroup,
+  INationalityDistribution,
+  IAverageDailyAttendance,
+  IAverageSalary,
+} from '../models/IDashboard';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({

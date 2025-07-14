@@ -6,109 +6,231 @@
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8fafc;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
+  position: relative;
+}
+
+/* Background decorative elements */
+.bg-decoration {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.bg-decoration::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: #3b82f6;
+  opacity: 0.05;
+  border-radius: 50%;
+  animation: float 20s ease-in-out infinite;
+}
+
+.bg-decoration::after {
+  content: "";
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: #6366f1;
+  opacity: 0.05;
+  border-radius: 50%;
+  animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+/* HR Icons decoration */
+.hr-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hr-icon {
+  position: absolute;
+  color: #cbd5e1;
+  opacity: 0.3;
+  animation: fadeInOut 8s ease-in-out infinite;
+}
+
+.hr-icon:nth-child(1) {
+  top: 15%;
+  left: 10%;
+  font-size: 2rem;
+  animation-delay: 0s;
+}
+.hr-icon:nth-child(2) {
+  top: 20%;
+  right: 15%;
+  font-size: 1.5rem;
+  animation-delay: 2s;
+}
+.hr-icon:nth-child(3) {
+  bottom: 25%;
+  left: 8%;
+  font-size: 1.8rem;
+  animation-delay: 4s;
+}
+.hr-icon:nth-child(4) {
+  bottom: 30%;
+  right: 12%;
+  font-size: 1.3rem;
+  animation-delay: 6s;
+}
+.hr-icon:nth-child(5) {
+  top: 50%;
+  left: 5%;
+  font-size: 1.6rem;
+  animation-delay: 1s;
+}
+.hr-icon:nth-child(6) {
+  top: 60%;
+  right: 8%;
+  font-size: 1.4rem;
+  animation-delay: 3s;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
 }
 
 .loginContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  position: relative;
+  z-index: 10;
   width: 100%;
+  max-width: 545px;
 }
 
 .login-card {
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  margin: 10px;
-  width: 100%;
-  max-width: 450px;
-  animation: fadeInUp 0.6s ease-out;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #2457a6;
+}
+
+.company-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.company-logo i {
+  font-size: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.company-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.company-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
 }
 
 .welcome-title {
-  font-size: 28px;
+  font-size: 2rem;
   font-weight: 700;
-  color: #333;
+  color: #1e293b;
   text-align: center;
-  margin-bottom: 35px;
+  margin-bottom: 2rem;
 }
 
 .form-group {
-  margin-bottom: 20px;
-  position: relative;
+  margin-bottom: 1.5rem;
 }
 
 .form-label {
+  display: block;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
-  font-size: 14px;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .input-wrapper {
   position: relative;
 }
 
-.form-control {
-  border: 2px solid #e1e5e9;
-  border-radius: 10px;
-  padding: 15px 15px 15px 45px;
-  font-size: 16px;
-  width: 100%;
-  transition: all 0.3s ease;
-  background-color: #f8f9fa;
-}
-
 .input-icon {
   position: absolute;
-  left: 15px;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #6c757d;
-  font-size: 16px;
+  color: #9ca3af;
+  font-size: 1.1rem;
   z-index: 2;
 }
 
+.form-control {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fafbfc;
+}
+
 .form-control:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
-  background-color: white;
   outline: none;
+  border-color: #3b82f6;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-control:focus + .input-icon,
-.input-wrapper:focus-within .input-icon {
-  color: #667eea;
-}
-
-.form-control::placeholder {
-  color: #adb5bd;
-  font-size: 15px;
-}
-
-.form-control:valid:not(:placeholder-shown) {
+.form-control:not(:placeholder-shown):valid {
   border-color: rgb(41, 166, 70);
 }
-.form-control:invalid:not(:placeholder-shown) {
-  border-color: #dc3545;
+.form-control:not(:placeholder-shown):invalid {
+  border-color: rgb(239, 68, 68);
 }
 
 .password-wrapper {
@@ -117,95 +239,122 @@ body {
 
 .password-toggle {
   position: absolute;
-  right: 15px;
+  right: 1rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #6c757d;
+  color: #9ca3af;
   cursor: pointer;
-  padding: 5px;
-  font-size: 16px;
-  z-index: 3;
+  font-size: 1.1rem;
+  z-index: 2;
+  transition: color 0.3s ease;
 }
 
 .password-toggle:hover {
-  color: #667eea;
+  color: #3b82f6;
 }
 
 .forgot-password {
-  text-align: left;
-  margin: 15px 0 25px 0;
+  text-align: right;
+  margin-bottom: 2rem;
 }
 
 .forgot-password a {
-  color: #667eea;
+  color: #3b82f6;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .forgot-password a:hover {
+  color: #2563eb;
   text-decoration: underline;
-  color: #5a67d8;
 }
 
 .btn-login {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 15px;
   width: 100%;
+  padding: 1rem;
+  background-color: #2457a6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 25px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .btn-login:hover {
+  background-color: #2563eb;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .btn-login:active {
   transform: translateY(0);
 }
 
-.btn-login:disabled {
+/* Responsive Design */
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: 15px;
+  }
+
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .welcome-title {
+    font-size: 1.25rem;
+  }
+  .company-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 0.6rem;
+  }
+
+  .company-logo i {
+    font-size: 2.5rem;
+  }
+  .company-name {
+    font-size: 1.2rem;
+  }
+  .company-subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+/* Loading animation */
+.loading {
   opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
+  pointer-events: none;
 }
 
-.signup-text {
-  text-align: center;
-  color: #6c757d;
-  font-size: 14px;
+.loading .btn-login {
+  background-color: #9ca3af;
 }
 
-.signup-text a {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 600;
+.loading .btn-login::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-left: 10px;
 }
 
-.signup-text a:hover {
-  text-decoration: underline;
-  color: #5a67d8;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
-/* Change the icon color when the input is valid
-.input-wrapper:has(.form-control:valid) .input-icon {
-  color: #28a745;
-}
-.input-wrapper:has(.form-control:invalid) .input-icon {
-  color: #dc3545;
-}
-.password-wrapper:has(.form-control:valid) .input-icon {
-  color: #28a745;
-}
-.password-wrapper:has(.form-control:invalid) .input-icon {
-  color: #dc3545;
-} */
