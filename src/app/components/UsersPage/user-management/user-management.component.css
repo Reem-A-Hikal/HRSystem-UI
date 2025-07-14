@@ -8,6 +8,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.first {
+  min-height: 90vh;
+}
 
 .content-container {
   width: 96%;
@@ -187,4 +190,21 @@ body {
   cursor: not-allowed;
   border-color: #ccc;
   opacity: 0.7;
+}
+
+.empty-table-message {
+  background-color: #f8f9fa;
+  border-radius: 14px;
+  border: 1px dashed #cedce8;
+  padding: 2.2rem;
+  text-align: center;
+  color: #5c748a;
+  font-size: 1.15rem;
+}
+
+.empty-table-message i {
+  opacity: 0.5;
+  font-size: 2.2rem;
+  margin-bottom: 0.6rem;
+  display: block;
 }
