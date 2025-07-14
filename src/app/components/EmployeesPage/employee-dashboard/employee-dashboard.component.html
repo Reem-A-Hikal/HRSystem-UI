@@ -1,0 +1,208 @@
+<!-- Employee Dashboard Component -->
+<!-- <div class="employee-dashboard" *ngIf="employee && authService.hasPermission('Employee-Dashboard')"> -->
+<div class="employee-dashboard">
+  <div class="container-fluid py-4">
+    <!-- Welcome Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="welcome-header p-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #6c7ae0 0%, #4dabf7 100%);">
+          <div class="d-flex align-items-center text-white">
+            <div class="profile-avatar me-3">
+              <i class="bi bi-person-circle fs-1"></i>
+            </div>
+            <div>
+              <h2 class="mb-1 fw-bold">Welcome, {{ employee?.name }}</h2>
+              <p class="mb-0 opacity-75">{{ employee?.department }} Department</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row">
+      <!-- Employee Information Card -->
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">
+              <i class="bi bi-person-badge me-2"></i>My Information
+            </h5>
+          </div>
+          <div class="card-body">
+            <!-- Personal Information -->
+            <div class="info-section mb-4">
+              <h6 class="section-title text-primary fw-semibold mb-3">
+                <i class="bi bi-person-lines-fill me-2"></i>Personal Details
+              </h6>
+              <div class="info-grid">
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-gender-ambiguous me-2 text-muted"></i>Gender
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.gender }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-globe me-2 text-muted"></i>Nationality
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.nationality }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-calendar-event me-2 text-muted"></i>Birth Date
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.birthDate | date }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2">
+                  <span class="info-label">
+                    <i class="bi bi-credit-card me-2 text-muted"></i>National ID
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.nationalId }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="info-section mb-4">
+              <h6 class="section-title text-primary fw-semibold mb-3">
+                <i class="bi bi-envelope-paper me-2"></i>Contact Details
+              </h6>
+              <div class="info-grid">
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-envelope me-2 text-muted"></i>Email
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.email }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-telephone me-2 text-muted"></i>Phone
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.phoneNumber }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2">
+                  <span class="info-label">
+                    <i class="bi bi-geo-alt me-2 text-muted"></i>Address
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.address }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Employment & Schedule -->
+            <div class="info-section">
+              <h6 class="section-title text-primary fw-semibold mb-3">
+                <i class="bi bi-briefcase me-2"></i>Employment & Schedule
+              </h6>
+              <div class="info-grid">
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-cash-coin me-2 text-muted"></i>Base Salary
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.baseSalary | currency }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2 border-bottom">
+                  <span class="info-label">
+                    <i class="bi bi-file-earmark-text me-2 text-muted"></i>Contract Date
+                  </span>
+                  <span class="info-value fw-medium">{{ employee?.contractDate | date : "mediumDate" }}</span>
+                </div>
+                <div class="info-item d-flex justify-content-between align-items-center py-2">
+                  <span class="info-label">
+                    <i class="bi bi-clock me-2 text-muted"></i>Work Hours
+                  </span>
+                  <span class="info-value fw-medium">
+                    {{ employee?.startTime | date : "HH:mm" }} - {{ employee?.endTime | date : "HH:mm" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div class="col-lg-8 mb-4">
+          <!-- Salary Breakdown Card -->
+          <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body">
+              <h3 class="section-title mb-3 text-primary">
+                <i class="bi bi-graph-up me-2"></i>Salary Breakdown
+              </h3>
+
+              <ng-container *ngIf="isLoadingSalary; else showSalaryData">
+                <div class="text-center py-5">
+                  <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <div class="fw-semibold text-primary">Loading salary records...</div>
+                </div>
+              </ng-container>
+          
+              <ng-template #showSalaryData>
+                <ng-container *ngIf="employees && employees.length > 0; else noSalaryData">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-borderless align-middle mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th class="px-4 py-3 w-50">Item</th>
+                          <th class="px-4 py-3 w-50">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="px-4 py-2">Basic Salary</td>
+                          <td class="px-4 py-2 amount-value fw-bold text-success">
+                            {{ employees[0].basicSalary | currency: 'USD': 'symbol' }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2">Attendance Days</td>
+                          <td class="px-4 py-2 amount-value">{{ employees[0].presentDays }}</td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2">Absence Days</td>
+                          <td class="px-4 py-2 amount-value text-danger">{{ employees[0].absentDays }}</td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2">Overtime (Hours)</td>
+                          <td class="px-4 py-2 amount-value text-info">{{ employees[0].extraHours }}</td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2">Deduction (Hours)</td>
+                          <td class="px-4 py-2 amount-value text-warning">{{ employees[0].deductionInHours }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </ng-container>
+            
+                <ng-template #noSalaryData>
+                  <div class="text-center py-5">
+                    <i class="bi bi-file-earmark-text fs-1 text-muted mb-3"></i>
+                    <h5>No Salary Records Found</h5>
+                    <p class="text-muted">No salary records available.</p>
+                  </div>
+                </ng-template>
+              </ng-template>
+            </div>
+          </div>
+      
+          <!-- Net Salary Card -->
+          <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body">
+              <h3 class="section-title mb-3 text-primary">Net Salary</h3>
+              <div class="row align-items-center" *ngIf="employees && employees.length > 0">
+                <div class="col-md-3">
+                  <p class="info-label mb-1 text-muted">Net Salary</p>
+                </div>
+                <div class="col-md-9">
+                  <p class="info-value mb-0 fs-3 fw-bold text-success">{{ employees[0].netSalary | currency }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

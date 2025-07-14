@@ -168,6 +168,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         data: { permission: 'Settings-View' },
       },
+      {
+        path: 'employee-dashboard',
+        loadComponent: () =>
+          import(
+            './components/EmployeesPage/employee-dashboard/employee-dashboard.component'
+          ).then((m) => m.EmployeeDashboardComponent),
+      }
     ],
   },
   {

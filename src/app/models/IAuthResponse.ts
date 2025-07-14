@@ -6,6 +6,7 @@ export interface IAuthResponse {
   token: string;
   expiresOn: string;
   fullName: string;
+  userId:string;
 }
 
 
