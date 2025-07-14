@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router'; 
 import { UserService, User } from '../../../services/user.service'; 
 import { AuthService } from '../../../services/Auth.service';
+import Swal from 'sweetalert2';
 
 @Component({ 
   selector: 'app-user-management', 
@@ -64,31 +65,60 @@ export class UserManagementComponent implements OnInit {
   
   this.router.navigate(['/dashboard/Users/add-user']);
 }
-  deleteUser(user: User) { 
-    if (!user.id) {
-      this.errorMessage = 'Invalid user ID';
-      return;
-    }
+  deleteUser(user: User) {
+  if (!user.id) {
+    this.errorMessage = 'Invalid user ID';
+    return;
+  }
 
-    const confirmed = confirm(`Are you sure you want to delete ${user.fullName}؟`); 
-    if (confirmed) { 
-      this.userService.deleteUser(user.id).subscribe({
+  Swal.fire({
+    title: `Are you sure?`,
+    text: `You are about to delete ${user.fullName}. This action cannot be undone!`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#4a739c',
+    cancelButtonColor: '#e74c3c',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    background: '#ffffff',
+    color: '#101518',
+    customClass: {
+      popup: 'custom-swal-popup',
+      confirmButton: 'custom-swal-confirm',
+      cancelButton: 'custom-swal-cancel',
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.userService.deleteUser(user.id!).subscribe({
         next: (response) => {
-          console.log('User deleted successfully:', response);
-          this.successMessage = 'User deleted successfully';
-          this.loadUsers(); 
-          
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'The user has been deleted.',
+            icon: 'success',
+            confirmButtonColor: '#4a739c',
+            customClass: {
+              popup: 'custom-swal-popup',
+              confirmButton: 'custom-swal-confirm',
+            },
+          });
+          this.loadUsers();
         },
         error: (error) => {
-          console.error('Error deleting user:', error);
-          this.errorMessage = error.error?.message || 'Failed to delete user';
-        }
+          Swal.fire({
+            title: 'Error!',
+            text: error.error?.message || 'Failed to delete user.',
+            icon: 'error',
+            confirmButtonColor: '#4a739c',
+            customClass: {
+              popup: 'custom-swal-popup',
+              confirmButton: 'custom-swal-confirm',
+            },
+          });
+        },
       });
-    } 
-  } 
+    }
+  });
+}
 
   addUser() { 
     this.userService.clearEditingUser(); 
@@ -125,12 +155,16 @@ export class UserManagementComponent implements OnInit {
     const total = Math.ceil(this.filteredUsers.length / this.pageSize); 
     return Array.from({ length: total }, (_, i) => i + 1); 
   } 
+  get canShowActionsColumn(): boolean {
+  return this.authService.canShowActionsColumn('Users-Edit', 'Users-Delete');
+}
 
   goToPage(page: number) { 
     if (page >= 1 && page <= this.totalPages.length) { 
       this.currentPage = page; 
     } 
   } 
+
 
   onSearchChange() {
     this.currentPage = 1; 

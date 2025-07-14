@@ -17,11 +17,11 @@ export class AddUserComponent implements OnInit {
   isEditing: boolean = false; 
   roles: any[] = []; 
   user: User = { 
-    fullName: '', 
-    userName: '', 
-    role: '', 
-    email: '', 
-    password: '', 
+  fullName: '', 
+  userName: '', 
+  role: '', 
+  email: '', 
+  password: '', 
   }; 
   isSubmitting: boolean = false;
   errorMessage: string = '';
@@ -116,29 +116,62 @@ export class AddUserComponent implements OnInit {
       }
     });
   }
+  hasUpperCase(value: string): boolean {
+  return /[A-Z]/.test(value);
+}
 
-  private updateUser() {
-    if (!this.user.id) {
-      this.errorMessage = 'User ID required for update';
-      this.isSubmitting = false;
-      return;
-    }
+hasLowerCase(value: string): boolean {
+  return /[a-z]/.test(value);
+}
 
-    this.userService.updateUser(this.user.id, this.user).subscribe({
-      next: (response) => {
-        console.log('User updated successfully:', response);
-        this.successMessage = 'User updated successfully';
-        setTimeout(() => {
-          this.router.navigate(['/dashboard/Users']);
-        }, 1500);
-      },
-      error: (error) => {
-        console.error('Error updating user:', error);
-        this.errorMessage = error.error?.message || 'Failed to update user';
-        this.isSubmitting = false;
-      }
-    });
+hasNumber(value: string): boolean {
+  return /\d/.test(value);
+}
+
+hasSpecialChar(value: string): boolean {
+  return /[!@#\$%\^&\*]/.test(value);
+}
+
+isPasswordValid(value: string): boolean {
+  return (
+    value.length >= 6 &&
+    this.hasUpperCase(value) &&
+    this.hasLowerCase(value) &&
+    this.hasNumber(value) &&
+    this.hasSpecialChar(value)
+  );
+}
+
+
+private updateUser() {
+  if (!this.user.id) {
+    this.errorMessage = 'User ID required for update';
+    this.isSubmitting = false;
+    return;
   }
+
+  const payload = { ...this.user };
+  if (!payload.password || payload.password.trim() === '') {
+    delete payload.password;
+  }
+
+  this.userService.updateUser(payload.id!, payload).subscribe({
+    next: (response) => {
+      console.log('User updated successfully:', response);
+      this.successMessage = 'User updated successfully';
+      setTimeout(() => {
+        this.router.navigate(['/dashboard/Users']);
+      }, 1500);
+    },
+    error: (error) => {
+      console.error('Error updating user:', error);
+      this.errorMessage = error.error?.message || 'Failed to update user';
+      this.isSubmitting = false;
+    }
+  });
+}
+
+
 get filteredRoles() {
   return this.roles.filter(r => r.name !== 'HR' && r.name !== 'User');
 }

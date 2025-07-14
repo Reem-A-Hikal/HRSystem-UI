@@ -40,7 +40,7 @@
               <th>Username</th>
               <th>Email</th>
               <th>Role Name</th>
-              <th>Actions</th>
+              <th *ngIf="canShowActionsColumn">Actions</th>
             </tr>
           </thead>
           <tbody class="text-center">
@@ -49,25 +49,10 @@
               <td>{{ user.userName }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.roles?.[0] }}</td> 
-              <td data-label="Actions" class="actions-col">
+               <td *ngIf="canShowActionsColumn" data-label="Actions">
                 <div>
-                  <i
-                    *ngIf="authService.hasPermission('Users-Edit')"
-                    style="cursor: pointer"
-                    class="bi bi-pencil-square fs-3 text-primary p-0"
-                    title="Edit"
-                    (click)="editUser(user)"
-                  ></i>
-
-                  <span *ngIf="authService.hasPermission('Users-Edit') && authService.hasPermission('Users-Delete')">|</span>
-
-                  <i
-                    *ngIf="authService.hasPermission('Users-Delete')"
-                    style="cursor: pointer"
-                    class="bi bi-trash fs-3 text-danger p-0"
-                    title="Delete"
-                    (click)="deleteUser(user)"
-                  ></i>
+                  <i *ngIf="authService.hasPermission('Users-Edit')" class="bi bi-pencil-square fs-3 text-primary p-0" title="Edit" (click)="editUser(user)"></i>
+                  <i *ngIf="authService.hasPermission('Users-Delete')" class="bi bi-trash fs-3 text-danger p-0" title="Delete" (click)="deleteUser(user)"></i>
                 </div>
               </td>
 

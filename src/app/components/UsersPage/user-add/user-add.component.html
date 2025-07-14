@@ -49,18 +49,27 @@
 
   <!-- Role -->
   <div class="mb-3">
-    <label for="role" class="form-label">Role</label>
-    <select class="form-select" id="role" [(ngModel)]="user.role" name="role">
-      <option *ngFor="let role of filteredRoles" [value]="role.name">
+  <label for="role" class="form-label">Role</label>
+  <select
+    class="form-select"
+    id="role"
+    required
+    name="role"
+    [(ngModel)]="user.role"
+    #roleSelect="ngModel"
+    [ngClass]="{ 'is-invalid': roleSelect.invalid && roleSelect.touched }"
+  >
+    <option value="">-- Select Role --</option>
+    <option *ngFor="let role of filteredRoles" [value]="role.name">
       {{ role.name }}
     </option>
+  </select>
 
-
-    </select>
-
-
-    <div class="invalid-feedback">Role is required.</div>
+  <div class="invalid-feedback" *ngIf="roleSelect.invalid && roleSelect.touched">
+    Role is required.
   </div>
+</div>
+
 
   <!-- Email -->
   <div class="mb-3">
@@ -79,8 +88,8 @@
     <div class="invalid-feedback">Valid email is required.</div>
   </div>
 
-  <!-- Password -->
- <div class="mb-3 position-relative">
+ <!-- Password -->
+<div class="mb-3 position-relative">
   <label class="form-label fw-semibold" for="password">Password</label>
   <input
     id="password"
@@ -88,15 +97,20 @@
     class="form-control pe-5"
     [(ngModel)]="user.password"
     name="password"
+    #passwordModel="ngModel"
     [required]="!isEditing"
     placeholder="Enter password"
     title="Password"
     [ngClass]="{
-      'is-invalid': userForm.submitted && !user.password && !isEditing
+      'is-invalid':
+        userForm.submitted &&
+        (!user.password ||
+          !isPasswordValid(user.password)) &&
+        !isEditing
     }"
     autocomplete="new-password"
   />
-  
+
   <i
     class="bi"
     [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"
@@ -104,10 +118,24 @@
     style="position: absolute; top: 38px; right: 15px; cursor: pointer"
     title="Toggle Password Visibility"
   ></i>
-  
 
-  <div class="invalid-feedback" *ngIf="!isEditing">
-    Password is required.
+  <div class="invalid-feedback" *ngIf="!isEditing && userForm.submitted">
+    <div *ngIf="!user.password">Password is required.</div>
+    <div *ngIf="user.password && user.password.length < 6">
+      Must be at least 6 characters long.
+    </div>
+    <div *ngIf="user.password && !hasUpperCase(user.password)">
+      Must contain at least one uppercase letter.
+    </div>
+    <div *ngIf="user.password && !hasLowerCase(user.password)">
+      Must contain at least one lowercase letter.
+    </div>
+    <div *ngIf="user.password && !hasNumber(user.password)">
+      Must contain at least one number.
+    </div>
+    <div *ngIf="user.password && !hasSpecialChar(user.password)">
+      Must contain at least one special character.
+    </div>
   </div>
 </div>
 

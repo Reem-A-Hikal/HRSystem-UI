@@ -14,18 +14,32 @@
     </div>
 
     <!-- Form Body -->
-    <div class="form-body">
+<div class="form-body">
       <!-- Role Name Input -->
-      <div class="mb-4">
-        <label for="roleName" class="form-label">Role Name</label>
-        <input
-          type="text"
-          id="roleName"
-          class="form-control"
-          [(ngModel)]="roleName"
-          placeholder="Enter role name"
-        />
-      </div>
+<form #roleForm="ngForm" (ngSubmit)="onSubmit(roleForm)">
+  <div class="mb-4">
+    <label for="roleName" class="form-label">Role Name</label>
+    <input
+      type="text"
+      id="roleName"
+      class="form-control"
+      [(ngModel)]="roleName"
+      name="roleName"
+      required
+      #roleNameModel="ngModel"
+      [ngClass]="{ 'is-invalid': roleForm.submitted && roleNameModel.invalid }"
+      placeholder="Enter role name"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="roleForm.submitted && roleNameModel.invalid"
+    >
+      Role name is required.
+    </div>
+  </div>
+
+
+
 
       <!-- Permissions Table -->
       <div class="table-responsive">
@@ -81,6 +95,7 @@
        
                
         <button
+            type="submit"
             class="btn save-btn"
             (click)="saveRole()"
             [disabled]="
@@ -91,6 +106,8 @@
             <i class="bi bi-save me-2"></i>{{ isEditing ? 'Update' : 'Save' }}
         </button>
       </div>
+      </form>
     </div>
   </div>
 </div>
+

@@ -16,23 +16,47 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(formData: {
-    email: string;
-    password: string;
-  }): Observable<IAuthResponse> {
-    return this.http
-      .post<IAuthResponse>(
-        `${environment.apiBaseUrl}/Accounts/login`,
-        formData,
-        this.getAuthHeaders()
-      )
-      .pipe(
-        tap((response) => {
-          this.saveAuthData(response);
-          this.router.navigate(['/dashboard/Users']);
-        })
-      );
+login(formData: { email: string; password: string }): Observable<IAuthResponse> {
+  return this.http
+    .post<IAuthResponse>(`${environment.apiBaseUrl}/Accounts/login`, formData, this.getAuthHeaders())
+    .pipe(
+      tap((response) => {
+        this.saveAuthData(response);
+        this.redirectToFirstAccessiblePage(response.permissions);
+      })
+    );
+}
+redirectToFirstAccessiblePage(permissions: string[]) {
+  const routesMap = [
+    { permission: 'Users-View', path: '/dashboard/Users' },
+    { permission: 'Roles-View', path: '/dashboard/Roles' },
+    { permission: 'Employees-View', path: '/dashboard/Employees' },
+    { permission: 'Attendance-View', path: '/dashboard/Attendance' },
+    { permission: 'SalaryReport-View', path: '/dashboard/SalaryReport' },
+    { permission: 'OfficialHoliday-View', path: '/dashboard/official-holiday' },
+    { permission: 'Settings-View', path: '/dashboard/general-setting' },
+  ];
+
+  for (const route of routesMap) {
+    if (permissions.includes(route.permission)) {
+      this.router.navigate([route.path]);
+      return;
+    }
   }
+
+  this.router.navigate(['/access-denied']);
+}
+
+
+isLoggedIn(): boolean {
+  const token = localStorage.getItem(this.TOKEN_KEY);
+  const expiration = localStorage.getItem(this.EXPIRATION_KEY);
+
+  if (!token || !expiration) return false;
+
+  return new Date(expiration) > new Date();
+}
+
 
 saveAuthData(auth: IAuthResponse) {
   localStorage.setItem(this.TOKEN_KEY, auth.token);
@@ -44,9 +68,9 @@ saveAuthData(auth: IAuthResponse) {
   };
 
   localStorage.setItem(this.USER_KEY, JSON.stringify(data));
-
   localStorage.setItem('permissions', JSON.stringify(auth.permissions));
 }
+
 hasPermission(permission: string): boolean {
   const permissionsJson = localStorage.getItem('permissions');
   if (!permissionsJson) return false;
@@ -83,11 +107,16 @@ hasPermission(permission: string): boolean {
       }),
     };
   }
+  canShowActionsColumn(editPermission: string, deletePermission: string): boolean {
+  return this.hasPermission(editPermission) || this.hasPermission(deletePermission);
+}
 
-  logout() {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.EXPIRATION_KEY);
-    localStorage.removeItem(this.USER_KEY);
-    this.router.navigate(['/']);
-  }
+logout() {
+  localStorage.removeItem(this.TOKEN_KEY);
+  localStorage.removeItem(this.EXPIRATION_KEY);
+  localStorage.removeItem(this.USER_KEY);
+  localStorage.removeItem('permissions');
+  this.router.navigate(['/']);
+}
+
 }
