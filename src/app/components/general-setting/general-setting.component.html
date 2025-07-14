@@ -18,7 +18,7 @@
                   </div>
                   <div class="fs-5 fw-bold">
                     <ng-container
-                      *ngIf="additional && additional.trim(); else noAdditional"
+                      *ngIf="additional && additional; else noAdditional"
                     >
                       {{ additional }}
                     </ng-container>
@@ -35,7 +35,7 @@
                   </div>
                   <div class="fs-5 fw-bold">
                     <ng-container
-                      *ngIf="deduction && deduction.trim(); else noDeduction"
+                      *ngIf="deduction && deduction; else noDeduction"
                     >
                       {{ deduction }}
                     </ng-container>
@@ -55,7 +55,7 @@
                   <span
                     class="badge bg-gradient fs-6 px-3 py-2 rounded-pill shadow-sm"
                   >
-                    {{ paymentType | titlecase }}
+                    {{ paymentType === SettingType.Hour ? 'Hour' : 'Pound' }}
                   </span>
                 </div>
                 <div class="col-12 col-md-6">
@@ -111,31 +111,25 @@
                 Additional
               </label>
               <input
-                type="text"
+                type="number"
                 class="form-control form-control-lg"
                 id="additional"
                 placeholder="Enter bonus"
                 [(ngModel)]="additional"
                 name="additional"
-                [pattern]="
-                  paymentType === 'hour' ? '^[1-4]$' : '^\\d+(\\.\\d{1,2})?$'
-                "
-                [attr.inputmode]="
-                  paymentType === 'hour' ? 'numeric' : 'decimal'
-                "
                 required
-                #inputVal1="ngModel"
               />
               <div
-                *ngIf="!inputVal1.valid && inputVal1.touched"
+                *ngIf="additionalInvalid"
                 class="text-danger small mt-1"
               >
                 {{
-                  paymentType === "hour"
-                    ? "Please enter a valid hour: 1, 2, 3, or 4"
-                    : "Enter a valid amount"
+                  paymentType === SettingType.Hour
+                    ? 'Hour must be 1–10 (including 0.5 steps)'
+                    : 'Pound must be between 50 and 20000'
                 }}
               </div>
+
             </div>
             <div class="col-12 col-md-6">
               <label
@@ -145,29 +139,22 @@
                 Deduction
               </label>
               <input
-                type="text"
+                type="number"
                 class="form-control form-control-lg"
                 id="deduction"
                 placeholder="Enter deduction"
                 [(ngModel)]="deduction"
                 name="deduction"
-                [pattern]="
-                  paymentType === 'hour' ? '^[1-4]$' : '^\\d+(\\.\\d{1,2})?$'
-                "
-                [attr.inputmode]="
-                  paymentType === 'hour' ? 'numeric' : 'decimal'
-                "
                 required
-                #inputVal2="ngModel"
               />
               <div
-                *ngIf="!inputVal2.valid && inputVal2.touched"
+                *ngIf="deductionInvalid"
                 class="text-danger small mt-1"
               >
                 {{
-                  paymentType === "hour"
-                    ? "Please enter a valid hour: 1, 2, 3, or 4"
-                    : "Enter a valid amount"
+                  paymentType === SettingType.Hour
+                    ? 'Hour must be 1–10 (including 0.5 steps)'
+                    : 'Pound must be between 50 and 20000'
                 }}
               </div>
             </div>
@@ -188,20 +175,19 @@
                   name="paymentType"
                   id="hour"
                   [(ngModel)]="paymentType"
-                  value="hour"
+                  [value]="SettingType.Hour"
                 />
                 <label class="btn btn-outline-secondary" for="hour">Hour</label>
+                            
                 <input
                   type="radio"
                   class="btn-check"
                   name="paymentType"
                   id="pound"
                   [(ngModel)]="paymentType"
-                  value="pound"
+                  [value]="SettingType.Pound"
                 />
-                <label class="btn btn-outline-secondary" for="pound"
-                  >Pound</label
-                >
+                <label class="btn btn-outline-secondary" for="pound">Pound</label>
               </div>
             </div>
             <div class="col-12 col-md-6">
@@ -213,20 +199,15 @@
               <div class="row g-2">
                 <div class="col-6">
                   <select
-                    class="form-select form-select-lg"
-                    id="holiday1"
                     [(ngModel)]="holiday1"
                     name="holiday1"
-                    title="Select Holiday 1"
+                    class="form-select form-select-lg"
+                    required
                   >
-                    <option disabled selected value="">Select Holiday 1</option>
-                    <option>Monday</option>
-                    <option>Tuesday</option>
-                    <option>Wednesday</option>
-                    <option>Thursday</option>
-                    <option>Friday</option>
-                    <option>Saturday</option>
-                    <option>Sunday</option>
+                    <option disabled value="">Select Holiday 1</option>
+                    <option *ngFor="let day of ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']">
+                      {{ day }}
+                    </option>
                   </select>
                 </div>
                 <div class="col-6">
@@ -247,6 +228,9 @@
                     <option>Sunday</option>
                   </select>
                 </div>
+                <div *ngIf="isHolidayConflict()" class="text-danger small mt-2">
+                  Holidays must be different.
+                </div>
               </div>
             </div>
           </div>
@@ -254,19 +238,22 @@
             <button
               type="button"
               class="btn btn-cancel fw-bold px-4 rounded-pill"
-              (click)="editMode = false"
+              (click)="cancelEdit()"
             >
               <i class="bi bi-x-lg me-1"></i>Cancel
             </button>
            <button
             type="submit"
-            [disabled]="!generalForm.valid || !authService.hasPermission('GeneralSettings-Edit')"
+            [disabled]="!generalForm.valid ||
+                        additionalInvalid ||
+                        deductionInvalid ||
+                        isHolidayConflict()||
+                        !authService.hasPermission('GeneralSettings-Edit')"
             class="btn btn-save fw-bold px-4 rounded-pill"
             (click)="saveSettings()"
           >
             <i class="bi bi-save me-1"></i>Save
           </button>
-
           </div>
         </form>
       </div>
