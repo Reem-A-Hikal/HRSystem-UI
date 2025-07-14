@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+  Router,
+} from '@angular/router';
 import { AuthService } from '../services/Auth.service';
 
 @Injectable({
@@ -9,36 +15,35 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
-): boolean | UrlTree {
-  const isLoggedIn = this.authService.isLoggedIn();
-  const requiredPermissions = route.data['permission'];
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean | UrlTree {
+    const isLoggedIn = this.authService.isLoggedIn();
+    const requiredPermissions = route.data['permission'];
 
-  if (!isLoggedIn) {
-    return this.router.createUrlTree(['/'], {
-      queryParams: { returnUrl: state.url },
-    });
-  }
+    if (!isLoggedIn) {
+      return this.router.createUrlTree(['/login'], {
+        queryParams: { returnUrl: state.url },
+      });
+    }
 
-  if (requiredPermissions) {
-    if (typeof requiredPermissions === 'string') {
-      if (!this.authService.hasPermission(requiredPermissions)) {
-        return this.router.parseUrl('/access-denied');
+    if (requiredPermissions) {
+      if (typeof requiredPermissions === 'string') {
+        if (!this.authService.hasPermission(requiredPermissions)) {
+          return this.router.parseUrl('/access-denied');
+        }
+      }
+
+      if (Array.isArray(requiredPermissions)) {
+        const hasAnyPermission = requiredPermissions.some((perm) =>
+          this.authService.hasPermission(perm)
+        );
+        if (!hasAnyPermission) {
+          return this.router.parseUrl('/access-denied');
+        }
       }
     }
 
-    if (Array.isArray(requiredPermissions)) {
-      const hasAnyPermission = requiredPermissions.some((perm) =>
-        this.authService.hasPermission(perm)
-      );
-      if (!hasAnyPermission) {
-        return this.router.parseUrl('/access-denied');
-      }
-    }
+    return true;
   }
-
-  return true;
-}
-
 }

@@ -4,17 +4,19 @@ import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'dashboard',
     component: DashboardComponent,
     children: [
       {
         path: '',
-        loadComponent() {
-          return import(
+        async loadComponent() {
+          const m = await import(
             './components/dashboard-view/dashboard-view.component'
-          ).then((m) => m.DashboardViewComponent);
+          );
+          return m.DashboardViewComponent;
         },
       },
       {
@@ -175,5 +177,6 @@ export const routes: Routes = [
         (m) => m.AccessDeniedComponent
       ),
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '' }, //????
+  // { path: '**', loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent) }
 ];
