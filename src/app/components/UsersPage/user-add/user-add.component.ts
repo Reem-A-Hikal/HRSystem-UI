@@ -31,7 +31,7 @@ export class AddUserComponent implements OnInit {
     private router: Router, 
     private roleService: RoleService, 
     private userService: UserService ,
-    public authService: AuthService
+    public authService: AuthService,
   ) {} 
 
   ngOnInit() { 

@@ -1,171 +1,202 @@
-<div div class="d-flex flex-column min-vh-100"
-     *ngIf="authService.hasPermission('Users-Add') || authService.hasPermission('Users-Edit')">
-
+<div
+  div
+  class="d-flex flex-column min-vh-100"
+  *ngIf="
+    authService.hasPermission('Users-Add') ||
+    authService.hasPermission('Users-Edit')
+  "
+>
   <div
     class="main-content flex-grow-1 d-flex justify-content-center align-items-center"
   >
-    <div
-      class="content-container shadow p-4 bg-white"
-      style="min-width: 450px; max-width: 550px; width: 100%"
-    >
+    <div class="content-container shadow p-4 bg-white">
       <h1 class="page-title mb-4 text-center">
         {{ isEditing ? "Edit User" : "Add User" }}
       </h1>
 
-     <form (ngSubmit)="onSubmit()" #userForm="ngForm">
-  <!-- Full Name -->
-  <div class="mb-3">
-    <label class="form-label fw-semibold" for="fullName">Full Name</label>
-    <input
-      id="fullName"
-      type="text"
-      class="form-control"
-      [(ngModel)]="user.fullName"
-      name="fullName"
-      required
-      placeholder="Enter full name"
-      title="Full Name"
-      [ngClass]="{ 'is-invalid': userForm.submitted && !user.fullName }"
-    />
-    <div class="invalid-feedback">Full name is required.</div>
-  </div>
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+        <!-- Full Name -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="fullName">Full Name</label>
+          <input
+            id="fullName"
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.fullName"
+            name="fullName"
+            required
+            placeholder="Enter full name"
+            title="Full Name"
+            [ngClass]="{ 'is-invalid': userForm.submitted && !user.fullName }"
+          />
+          <div class="invalid-feedback">Full name is required.</div>
+        </div>
 
-  <!-- Username -->
-  <div class="mb-3">
-    <label class="form-label fw-semibold" for="userName">Username</label>
-    <input
-      id="username"
-      type="text"
-      class="form-control"
-      [(ngModel)]="user.userName"
-      name="userName"
-      required
-      placeholder="Enter username"
-      title="Username"
-      [ngClass]="{ 'is-invalid': userForm.submitted && !user.userName }"
-    />
-    <div class="invalid-feedback">Username is required.</div>
-  </div>
+        <!-- Username -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="userName">Username</label>
+          <input
+            id="username"
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.userName"
+            name="userName"
+            required
+            placeholder="Enter username"
+            title="Username"
+            [ngClass]="{ 'is-invalid': userForm.submitted && !user.userName }"
+          />
+          <div class="invalid-feedback">Username is required.</div>
+        </div>
 
-  <!-- Role -->
-  <div class="mb-3">
-  <label for="role" class="form-label">Role</label>
-  <select
-    class="form-select"
-    id="role"
-    required
-    name="role"
-    [(ngModel)]="user.role"
-    #roleSelect="ngModel"
-    [ngClass]="{ 'is-invalid': roleSelect.invalid && roleSelect.touched }"
-  >
-    <option value="">-- Select Role --</option>
-    <option *ngFor="let role of filteredRoles" [value]="role.name">
-      {{ role.name }}
-    </option>
-  </select>
+        <!-- Role -->
+        <div class="mb-3">
+          <label for="role" class="form-label">Role</label>
+          <select
+            class="form-select"
+            id="role"
+            required
+            name="role"
+            [(ngModel)]="user.role"
+            #roleSelect="ngModel"
+            [ngClass]="{
+              'is-invalid': roleSelect.invalid && roleSelect.touched
+            }"
+          >
+            <option value="">-- Select Role --</option>
+            <option *ngFor="let role of filteredRoles" [value]="role.name">
+              {{ role.name }}
+            </option>
+          </select>
 
-  <div class="invalid-feedback" *ngIf="roleSelect.invalid && roleSelect.touched">
-    Role is required.
-  </div>
-</div>
+          <div
+            class="invalid-feedback"
+            *ngIf="roleSelect.invalid && roleSelect.touched"
+          >
+            Role is required.
+          </div>
+        </div>
 
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="email"
+            >Email Address</label
+          >
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+            placeholder="Enter email address"
+            title="Email Address"
+            [ngClass]="{ 'is-invalid': userForm.submitted && !user.email }"
+          />
+          <div class="invalid-feedback">Valid email is required.</div>
+        </div>
 
-  <!-- Email -->
-  <div class="mb-3">
-    <label class="form-label fw-semibold" for="email">Email Address</label>
-    <input
-      id="email"
-      type="email"
-      class="form-control"
-      [(ngModel)]="user.email"
-      name="email"
-      required
-      placeholder="Enter email address"
-      title="Email Address"
-      [ngClass]="{ 'is-invalid': userForm.submitted && !user.email }"
-    />
-    <div class="invalid-feedback">Valid email is required.</div>
-  </div>
+        <!-- Password -->
+        <div class="mb-3 position-relative">
+          <label class="form-label fw-semibold" for="password">Password</label>
+          <input
+            id="password"
+            [type]="passwordVisible ? 'text' : 'password'"
+            class="form-control pe-5"
+            [(ngModel)]="user.password"
+            name="password"
+            #passwordModel="ngModel"
+            [required]="!isEditing"
+            placeholder="Enter password"
+            title="Password"
+            [ngClass]="{
+              'is-invalid':
+                userForm.submitted &&
+                (!user.password || !isPasswordValid(user.password)) &&
+                !isEditing
+            }"
+            autocomplete="new-password"
+          />
 
- <!-- Password -->
-<div class="mb-3 position-relative">
-  <label class="form-label fw-semibold" for="password">Password</label>
-  <input
-    id="password"
-    [type]="passwordVisible ? 'text' : 'password'"
-    class="form-control pe-5"
-    [(ngModel)]="user.password"
-    name="password"
-    #passwordModel="ngModel"
-    [required]="!isEditing"
-    placeholder="Enter password"
-    title="Password"
-    [ngClass]="{
-      'is-invalid':
-        userForm.submitted &&
-        (!user.password ||
-          !isPasswordValid(user.password)) &&
-        !isEditing
-    }"
-    autocomplete="new-password"
-  />
+          <i
+            class="bi"
+            [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"
+            (click)="togglePasswordVisibility()"
+            style="position: absolute; top: 38px; right: 15px; cursor: pointer"
+            title="Toggle Password Visibility"
+          ></i>
 
-  <i
-    class="bi"
-    [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"
-    (click)="togglePasswordVisibility()"
-    style="position: absolute; top: 38px; right: 15px; cursor: pointer"
-    title="Toggle Password Visibility"
-  ></i>
+          <div
+            class="invalid-feedback"
+            *ngIf="!isEditing && userForm.submitted"
+          >
+            <div *ngIf="!user.password">Password is required.</div>
+            <div *ngIf="user.password && user.password.length < 6">
+              Must be at least 6 characters long.
+            </div>
+            <div *ngIf="user.password && !hasUpperCase(user.password)">
+              Must contain at least one uppercase letter.
+            </div>
+            <div *ngIf="user.password && !hasLowerCase(user.password)">
+              Must contain at least one lowercase letter.
+            </div>
+            <div *ngIf="user.password && !hasNumber(user.password)">
+              Must contain at least one number.
+            </div>
+            <div *ngIf="user.password && !hasSpecialChar(user.password)">
+              Must contain at least one special character.
+            </div>
+          </div>
+        </div>
 
-  <div class="invalid-feedback" *ngIf="!isEditing && userForm.submitted">
-    <div *ngIf="!user.password">Password is required.</div>
-    <div *ngIf="user.password && user.password.length < 6">
-      Must be at least 6 characters long.
-    </div>
-    <div *ngIf="user.password && !hasUpperCase(user.password)">
-      Must contain at least one uppercase letter.
-    </div>
-    <div *ngIf="user.password && !hasLowerCase(user.password)">
-      Must contain at least one lowercase letter.
-    </div>
-    <div *ngIf="user.password && !hasNumber(user.password)">
-      Must contain at least one number.
-    </div>
-    <div *ngIf="user.password && !hasSpecialChar(user.password)">
-      Must contain at least one special character.
-    </div>
-  </div>
-</div>
+        <div
+          class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4"
+        >
+          <a
+            class="btn btn-cancel flex-fill flex-sm-unset text-center d-flex justify-content-center align-items-center"
+            type="button"
+            [routerLink]="['/dashboard/Users']"
+          >
+            <i class="bi bi-x-circle me-2"></i><span>Cancel</span>
+          </a>
+          <button
+            class="btn btn-save flex-fill flex-sm-unset text-center"
+            type="submit"
+            [disabled]="
+              (userForm.invalid && userForm.submitted) ||
+              (isEditing && !authService.hasPermission('Users-Edit')) ||
+              (!isEditing && !authService.hasPermission('Users-Add'))
+            "
+          >
+            <i class="bi bi-save me-2"></i>
+            <span>{{ isEditing ? "Update" : "Save" }}</span>
+          </button>
+        </div>
+      </form>
 
-
-  <div
-    class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4"
-  >
-    <a
-      class="btn btn-cancel flex-fill flex-sm-unset text-center d-flex justify-content-center align-items-center"
-      type="button"
-      [routerLink]="['/dashboard/Users']"
-    >
-      <i class="bi bi-x-circle me-2"></i><span>Cancel</span>
-    </a>
-        <button
-        class="btn btn-save flex-fill flex-sm-unset text-center"
-        type="submit"
-        [disabled]="
-          (userForm.invalid && userForm.submitted) ||
-          (isEditing && !authService.hasPermission('Users-Edit')) ||
-          (!isEditing && !authService.hasPermission('Users-Add'))
-        "
+      <div
+        class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4"
       >
-        <i class="bi bi-save me-2"></i>
-        <span>{{ isEditing ? "Update" : "Save" }}</span>
-      </button>
-
-  </div>
-</form>
-
+        <a
+          class="btn btn-cancel flex-fill flex-sm-unset text-center d-flex justify-content-center align-items-center"
+          type="button"
+          [routerLink]="['/dashboard/Users']"
+        >
+          <i class="bi bi-x-circle me-2"></i><span>Cancel</span>
+        </a>
+        <button
+          class="btn btn-save flex-fill flex-sm-unset text-center"
+          type="submit"
+          [disabled]="
+            (userForm.invalid && userForm.submitted) ||
+            (isEditing && !authService.hasPermission('Users-Edit')) ||
+            (!isEditing && !authService.hasPermission('Users-Add'))
+          "
+        >
+          <i class="bi bi-save me-2"></i>
+          <span>{{ isEditing ? "Update" : "Save" }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

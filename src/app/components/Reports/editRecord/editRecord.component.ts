@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/Auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editRecord',
-  imports: [RouterLink],
+  imports: [RouterLink, CommonModule],
   templateUrl: './editRecord.component.html',
-  styleUrls: ['./editRecord.component.css']
+  styleUrls: ['./editRecord.component.css'],
 })
 export class EditRecordComponent implements OnInit {
+  constructor(public authService: AuthService) {}
 
-  constructor( public authService: AuthService) { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

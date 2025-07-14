@@ -18,7 +18,7 @@
             <input
               type="text"
               class="form-control search-box"
-              placeholder="Search by employee name"
+              placeholder="Search by role name"
               [(ngModel)]="searchTerm"
             />
           </div>
@@ -26,14 +26,13 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-end gap-3 p-3 pt-0">
-       <a 
-        *ngIf="authService.hasPermission('Roles-Add')" 
-        (click)="goToAddPage()" 
-        class="btn btn-primary fw-bold">
-        + Add Role
-      </a>
-
-
+        <a
+          *ngIf="authService.hasPermission('Roles-Add')"
+          (click)="goToAddPage()"
+          class="btn btn-primary fw-bold"
+        >
+          + Add Role
+        </a>
       </div>
 
       <!-- isLoading -->
@@ -66,15 +65,13 @@
           </thead>
           <tbody style="text-align: center">
             <tr *ngFor="let role of paginatedRoles; let i = index">
-              <td>{{ role.name }}</td>
+              <td data-label="Group Name">{{ role.name }}</td>
               <td *ngIf="canShowActionsColumn" data-label="Actions">
                 <div class="fw-bold">
                   <i *ngIf="authService.hasPermission('Roles-Edit')" class="bi bi-pencil-square fs-3 text-primary me-2" title="Edit" (click)="editRole(i)"></i>
                   <i *ngIf="authService.hasPermission('Roles-Delete')" class="bi bi-trash fs-3 text-danger" title="Delete" (click)="deleteRole(i)"></i>
                 </div>
               </td>
-
-
             </tr>
           </tbody>
         </table>
@@ -106,76 +103,15 @@
           </button>
         </div>
       </div>
-
-      <!-- 
+      <!-- No Matching -->
       <div
-        *ngIf="!isLoading && !isEmpty && hasResults"
-        class="table-responsive tablecontainer p-0 mb-4"
-        #tablecontainer
+        *ngIf="!isLoading && isEmpty"
+        class="empty-table-message text-center p-5 mb-3"
       >
-        <table class="table table-borderless m-0 align-middle">
-          <thead class="d-md-table-header-group">
-            <tr style="text-align: center">
-              <th style="min-width: 140px">Name</th>
-              <th>Department</th>
-              <th style="min-width: 131px">Base Salary</th>
-              <th>Phone</th>
-              <th>Gender</th>
-              <th style="min-width: 122px">Contract</th>
-              <th style="min-width: 122px">Start Time</th>
-              <th style="min-width: 122px">End Time</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody style="text-align: center">
-            <tr
-              *ngFor="
-                let emp of pagedEmployees;
-                let i = index;
-                trackBy: trackById
-              "
-            >
-              <td data-label="Employee Name">{{ emp.fullName }}</td>
-              <td data-label="Department">{{ emp.department }}</td>
-              <td data-label="Salary">
-                {{ emp.baseSalary | currency : "EGP" }}
-              </td>
-              <td style="min-width: 106px" data-label="Phone">
-                {{ emp.phone }}
-              </td>
-              <td data-label="Gender">{{ emp.gender }}</td>
-              <td data-label="ContractDate">
-                {{ emp.contractDate | date : "mediumDate" }}
-              </td>
-              <td data-label="StartTime">{{ emp.startTime }}</td>
-              <td data-label="EndTime">{{ emp.endTime }}</td>
-              <td data-label="Actions">
-                <div>
-                  <i
-                    style="cursor: pointer"
-                    class="bi bi-eye fs-5 text-success me-2"
-                    title="View Details"
-                    (click)="viewEmployeeDetails(emp.id)"
-                  ></i>
-                  <i
-                    style="cursor: pointer"
-                    class="bi bi-pencil-square fs-5 text-primary me-2"
-                    title="Edit"
-                    (click)="editEmployee(emp.id)"
-                  ></i>
-                  <i
-                    style="cursor: pointer"
-                    class="bi bi-trash fs-5 text-danger"
-                    title="Delete"
-                    (click)="deleteEmployee(emp.id)"
-                  ></i>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <i class="bi bi-people-fill fs-1 text-muted"></i>
+        <h4 class="mt-3">No Record Found</h4>
+        <p class="text-muted">There are currently no records to display.</p>
       </div>
-      -->
     </div>
   </main>
 </div>

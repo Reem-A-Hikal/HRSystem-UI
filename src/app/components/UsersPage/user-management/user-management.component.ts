@@ -1,41 +1,45 @@
-import { Component, OnInit } from '@angular/core'; 
-import { CommonModule } from '@angular/common'; 
-import { FormsModule } from '@angular/forms'; 
-import { Router, RouterModule } from '@angular/router'; 
-import { UserService, User } from '../../../services/user.service'; 
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { UserService, User } from '../../../services/user.service';
 import { AuthService } from '../../../services/Auth.service';
 import Swal from 'sweetalert2';
 
-@Component({ 
-  selector: 'app-user-management', 
-  standalone: true, 
-  imports: [CommonModule, FormsModule, RouterModule], 
-  templateUrl: './user-management.component.html', 
-  styleUrls: ['./user-management.component.css'], 
-}) 
-export class UserManagementComponent implements OnInit { 
-  searchTerm: string = ''; 
-  currentPage: number = 1; 
-  pageSize: number = 5; 
-  users: User[] = []; 
+@Component({
+  selector: 'app-user-management',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.css'],
+})
+export class UserManagementComponent implements OnInit {
+  searchTerm: string = '';
+  currentPage: number = 1;
+  pageSize: number = 5;
+  users: User[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private userService: UserService,
     public authService: AuthService
-  ) {} 
+  ) {}
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.loadUsers();
-  } 
+  }
+
+  get isEmpty(): boolean {
+    return !this.isLoading && this.paginatedUsers.length === 0;
+  }
 
   private loadUsers() {
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     this.userService.getUsers().subscribe({
       next: (data) => {
         this.users = data;
@@ -45,7 +49,7 @@ export class UserManagementComponent implements OnInit {
         console.error('Error loading users:', error);
         this.errorMessage = 'Failed to load users';
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -120,41 +124,41 @@ export class UserManagementComponent implements OnInit {
   });
 }
 
-  addUser() { 
-    this.userService.clearEditingUser(); 
+  addUser() {
+    this.userService.clearEditingUser();
     this.router.navigate(['/dashboard/Users/add-user']);
-  } 
+  }
 
- get filteredUsers(): User[] {
-  if (!this.searchTerm) {
-    return this.users.filter(user => 
-      !user.roles?.includes('HR') && !user.roles?.includes('User')
+  get filteredUsers(): User[] {
+    if (!this.searchTerm) {
+      return this.users.filter(
+        (user) => !user.roles?.includes('HR') && !user.roles?.includes('User')
+      );
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    return this.users.filter(
+      (user) =>
+        (user.fullName.toLowerCase().includes(term) ||
+          user.userName.toLowerCase().includes(term) ||
+          user.email.toLowerCase().includes(term) ||
+          (user.roles &&
+            user.roles.some((role) => role.toLowerCase().includes(term)))) &&
+        !user.roles?.includes('HR') &&
+        !user.roles?.includes('User')
     );
   }
 
-  const term = this.searchTerm.toLowerCase();
-  return this.users.filter(user =>
-    (
-      user.fullName.toLowerCase().includes(term) ||
-      user.userName.toLowerCase().includes(term) ||
-      user.email.toLowerCase().includes(term) ||
-      (user.roles && user.roles.some(role => role.toLowerCase().includes(term)))
-    ) &&
-    !user.roles?.includes('HR') &&
-    !user.roles?.includes('User')
-  );
-}
+  get paginatedUsers(): User[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredUsers.slice(start, start + this.pageSize);
+  }
 
+  get totalPages(): number[] {
+    const total = Math.ceil(this.filteredUsers.length / this.pageSize);
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
 
-  get paginatedUsers(): User[] { 
-    const start = (this.currentPage - 1) * this.pageSize; 
-    return this.filteredUsers.slice(start, start + this.pageSize); 
-  } 
-
-  get totalPages(): number[] { 
-    const total = Math.ceil(this.filteredUsers.length / this.pageSize); 
-    return Array.from({ length: total }, (_, i) => i + 1); 
-  } 
   get canShowActionsColumn(): boolean {
   return this.authService.canShowActionsColumn('Users-Edit', 'Users-Delete');
 }
@@ -167,7 +171,7 @@ export class UserManagementComponent implements OnInit {
 
 
   onSearchChange() {
-    this.currentPage = 1; 
+    this.currentPage = 1;
   }
 
   clearMessages() {

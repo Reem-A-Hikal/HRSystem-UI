@@ -10,14 +10,21 @@ export const routes: Routes = [
     component: DashboardComponent,
     children: [
       {
-  
+        path: '',
+        loadComponent() {
+          return import(
+            './components/dashboard-view/dashboard-view.component'
+          ).then((m) => m.DashboardViewComponent);
+        },
+      },
+      {
         path: 'Employees',
         loadComponent: () =>
           import(
             './components/EmployeesPage/employeesdata/employeesdata.component'
           ).then((m) => m.EmployeesdataComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'Employees-View' }
+        data: { permission: 'Employees-View' },
       },
       {
         path: 'Employees/add-employee',
@@ -26,7 +33,7 @@ export const routes: Routes = [
             './components/EmployeesPage/add-employee/add-employee.component'
           ).then((m) => m.AddEmployeeComponent),
         canActivate: [AuthGuard],
-        data: { permission:'Employees-Add'}
+        data: { permission: 'Employees-Add' },
       },
       {
         path: 'Employees/view-employee/:id',
@@ -35,7 +42,7 @@ export const routes: Routes = [
             './components/EmployeesPage/view-employee/view-employee.component'
           ).then((m) => m.ViewEmployeeComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'Employees-View' }
+        data: { permission: 'Employees-View' },
       },
       {
         path: 'Employees/edit-employee/:id',
@@ -44,7 +51,7 @@ export const routes: Routes = [
             './components/EmployeesPage/edit-employee/edit-employee.component'
           ).then((m) => m.EditEmployeeComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'Employees-Edit' }
+        data: { permission: 'Employees-Edit' },
       },
 
       {
@@ -54,7 +61,7 @@ export const routes: Routes = [
             './components/AttendancePage/Attendance/Attendance.component'
           ).then((m) => m.AttendanceComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'Attendance-View' }
+        data: { permission: 'Attendance-View' },
       },
       {
         path: 'Attendance/ManageAttendance',
@@ -63,7 +70,7 @@ export const routes: Routes = [
             './components/AttendancePage/manageAttendance/manageAttendance.component'
           ).then((m) => m.ManageAttendanceComponent),
         canActivate: [AuthGuard],
-        data: { permission: ['Attendance-Add', 'Attendance-Edit'] }
+        data: { permission: ['Attendance-Add', 'Attendance-Edit'] },
       },
       {
         path: 'Attendance/ManageAttendance/:id',
@@ -72,7 +79,7 @@ export const routes: Routes = [
             './components/AttendancePage/manageAttendance/manageAttendance.component'
           ).then((m) => m.ManageAttendanceComponent),
         canActivate: [AuthGuard],
-        data: { permission: ['Attendance-Add', 'Attendance-Edit'] }
+        data: { permission: ['Attendance-Add', 'Attendance-Edit'] },
       },
 
       {
@@ -82,7 +89,7 @@ export const routes: Routes = [
             './components/Reports/SalaryReport/SalaryReport.component'
           ).then((m) => m.SalaryReportComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'SalaryReport-View' }
+        data: { permission: 'SalaryReport-View' },
       },
       {
         path: 'SalaryReport/EditRecord',
@@ -91,7 +98,7 @@ export const routes: Routes = [
             (m) => m.EditRecordComponent
           ),
         canActivate: [AuthGuard],
-        data: { permission: ['SalaryReport-Add', 'SalaryReport-Edit'] }
+        data: { permission: ['SalaryReport-Add', 'SalaryReport-Edit'] },
       },
       {
         path: 'SalaryReport/PrintReport',
@@ -100,8 +107,7 @@ export const routes: Routes = [
             (m) => m.PrintReportComponent
           ),
         canActivate: [AuthGuard],
-        data: { permission: 'SalaryReport-View' }
-
+        data: { permission: 'SalaryReport-View' },
       },
 
       {
@@ -111,7 +117,7 @@ export const routes: Routes = [
             './components/RolesPage/role-management/role-management.component'
           ).then((m) => m.RoleManagementComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'Roles-View' }
+        data: { permission: 'Roles-View' },
       },
       {
         path: 'Roles/manageRole',
@@ -120,7 +126,7 @@ export const routes: Routes = [
             (m) => m.AddRoleComponent
           ),
         canActivate: [AuthGuard],
-        data: { permission: ['Roles-Add', 'Roles-Edit'] }
+        data: { permission: ['Roles-Add', 'Roles-Edit'] },
       },
 
       {
@@ -130,7 +136,7 @@ export const routes: Routes = [
             './components/UsersPage/user-management/user-management.component'
           ).then((m) => m.UserManagementComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'Users-View' }
+        data: { permission: 'Users-View' },
       },
       {
         path: 'Users/add-user',
@@ -139,7 +145,7 @@ export const routes: Routes = [
             (m) => m.AddUserComponent
           ),
         canActivate: [AuthGuard],
-        data: { permission: ['Users-Add', 'Users-Edit'] }
+        data: { permission: ['Users-Add', 'Users-Edit'] },
       },
 
       {
@@ -149,7 +155,7 @@ export const routes: Routes = [
             './components/official-holiday/official-holiday.component'
           ).then((m) => m.OfficialHolidayComponent),
         canActivate: [AuthGuard],
-        data: { permission: 'OfficialHoliday-View' }
+        data: { permission: 'OfficialHoliday-View' },
       },
       {
         path: 'general-setting',
@@ -158,9 +164,8 @@ export const routes: Routes = [
             (m) => m.GeneralSettingComponent
           ),
         canActivate: [AuthGuard],
-        data: { permission: 'Settings-View' }
-      }
-
+        data: { permission: 'Settings-View' },
+      },
     ],
   },
   {
@@ -171,5 +176,4 @@ export const routes: Routes = [
       ),
   },
   { path: '**', redirectTo: '' },
- 
 ];

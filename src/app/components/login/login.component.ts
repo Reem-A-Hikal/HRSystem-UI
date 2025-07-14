@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/Auth.service';
-import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -37,16 +36,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // hasError(controlName: string): Boolean {
-  //   const control = this.loginForm.get(controlName);
-  //   if (!control) return false;
-
-  //   return (
-  //     !!control?.invalid &&
-  //     (this.isSubmitted || control?.touched || control?.dirty)
-  //   );
-  // }
-
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
@@ -60,7 +49,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log(this.loginForm.value, this.loginForm.controls);
     this.isSubmitted = true;
     if (this.loginForm.invalid) {
       this.toastr.error(
@@ -71,16 +59,16 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.loginForm.value).subscribe(
-      (response) => this.toastr.success('Login successful', 'Success'),
+      () => {
+        this.toastr.success('Login successful', 'Success');
+        this.loginForm.reset();
+        this.isSubmitted = false;
+        this.showPassword = false;
+      },
       (error) => {
         this.toastr.error('Invalid credentials', 'Error');
         console.log(error);
       }
     );
-
-    // Reset the form after successful submission
-    this.loginForm.reset();
-    this.isSubmitted = false;
-    this.showPassword = false;
   }
 }
