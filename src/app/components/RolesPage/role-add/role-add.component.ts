@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { RoleService } from '../../../services/role.service';
 import { PermissionService } from '../../../services/permission.service';
 import { AuthService } from '../../../services/Auth.service';
+import { FormsModule, NgForm } from '@angular/forms';
+
 
 
 @Component({
@@ -128,8 +129,7 @@ saveRole() {
   const editingRole = this.roleService.getEditingRole();
 
   if (editingRole) {
-    // التعديل
-  (roleData as any).id = editingRole.id;
+// Edit  
 
     this.roleService.updateRole(roleData).subscribe({
       next: () => {
@@ -143,6 +143,7 @@ saveRole() {
     });
 
   } else {
+// Add 
     this.roleService.addRole(roleData).subscribe({
       next: () => {
         console.log('Role added successfully');
@@ -153,6 +154,13 @@ saveRole() {
       }
     });
   }
+}
+onSubmit(form: NgForm) {
+  if (form.invalid) {
+    return; 
+  }
+
+  this.saveRole(); 
 }
 
 }

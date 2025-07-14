@@ -90,6 +90,10 @@ export class AttendanceComponent implements OnInit {
         }
       );
   }
+  get canShowActionsColumn(): boolean {
+  return this.authService.canShowActionsColumn('Attendance-Edit', 'Attendance-Delete');
+}
+
 
   get isEmpty(): boolean {
     return this.filteredList.length === 0;

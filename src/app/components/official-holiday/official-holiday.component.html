@@ -94,14 +94,14 @@
             <tr>
               <th>Holiday name</th>
               <th>Date</th>
-              <th style="width: 140px">Actions</th>
+              <th  *ngIf="canShowActionsColumn" style="width: 140px">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let holiday of holidays">
               <td>{{ holiday.name }}</td>
               <td>{{ holiday.date | date : "MMM d, y" }}</td>
-              <td>
+              <td *ngIf="canShowActionsColumn">
                 <div>
                   <a>
                     <i
@@ -112,7 +112,7 @@
                       (click)="editHoliday(holiday.id)"
                     ></i>
                   </a>
-                  |
+                  
                   <i
                     *ngIf="authService.hasPermission('OfficialHoliday-Delete')"
                     style="cursor: pointer"
