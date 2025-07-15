@@ -30,7 +30,7 @@
     }
   </div>
   <div class="sidenav-nav">
-    <li class="sidenav-nav-item">
+    <li *ngIf="authService.hasPermission('dashboard-View')" class="sidenav-nav-item">
       <a
         class="sidenav-nav-link"
         routerLink="/dashboard"

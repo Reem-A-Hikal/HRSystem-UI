@@ -68,8 +68,18 @@
               <td data-label="Group Name">{{ role.name }}</td>
               <td *ngIf="canShowActionsColumn" data-label="Actions">
                 <div class="fw-bold">
-                  <i *ngIf="authService.hasPermission('Roles-Edit')" class="bi bi-pencil-square fs-3 text-primary me-2" title="Edit" (click)="editRole(i)"></i>
-                  <i *ngIf="authService.hasPermission('Roles-Delete')" class="bi bi-trash fs-3 text-danger" title="Delete" (click)="deleteRole(i)"></i>
+                  <i
+                    *ngIf="authService.hasPermission('Roles-Edit')"
+                    class="bi bi-pencil-square fs-3 text-primary me-2"
+                    title="Edit"
+                    (click)="editRole(i)"
+                  ></i>
+                  <i
+                    *ngIf="authService.hasPermission('Roles-Delete')"
+                    class="bi bi-trash fs-3 text-danger"
+                    title="Delete"
+                    (click)="deleteRole(i)"
+                  ></i>
                 </div>
               </td>
             </tr>

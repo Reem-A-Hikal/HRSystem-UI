@@ -54,7 +54,7 @@ export class SidebarComponent {
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = navbarData;
 
-  constructor(private authService: AuthService) {}
+  constructor(public authService: AuthService) {}
 
   toggleCollapse(): void {
     this.changeIsLeftSidebarCollapsed.emit(!this.isLeftSidebarCollapsed());

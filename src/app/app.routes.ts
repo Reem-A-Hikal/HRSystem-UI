@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -174,7 +175,7 @@ export const routes: Routes = [
           import(
             './components/EmployeesPage/employee-dashboard/employee-dashboard.component'
           ).then((m) => m.EmployeeDashboardComponent),
-      }
+      },
     ],
   },
   {
@@ -184,6 +185,12 @@ export const routes: Routes = [
         (m) => m.AccessDeniedComponent
       ),
   },
-  { path: '**', redirectTo: '' }, //????
-  // { path: '**', loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent) }
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./components/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      ),
+  },
+  // {path: '**', component: NotFoundComponent}, // Redirect to login for any unknown routes
 ];

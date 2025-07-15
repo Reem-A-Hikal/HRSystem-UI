@@ -11,6 +11,7 @@ import {
   IAverageSalary,
 } from '../../models/IDashboard';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { AuthService } from '../../services/Auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +29,7 @@ export class DashboardViewComponent implements OnInit {
   averageDailyAttendance?: number;
   averageSalary?: number;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService, public Authser:AuthService) {}
 
   ngOnInit(): void {
     this.loadDashboardData();

@@ -6,8 +6,6 @@ import { PermissionService } from '../../../services/permission.service';
 import { AuthService } from '../../../services/Auth.service';
 import { FormsModule, NgForm } from '@angular/forms';
 
-
-
 @Component({
   selector: 'app-add-role',
   standalone: true,
@@ -18,9 +16,9 @@ import { FormsModule, NgForm } from '@angular/forms';
 export class AddRoleComponent implements OnInit {
   isEditing: boolean = false;
   roleName = '';
-  
-  permissions: any[] = []; 
-  selectedPermissions: Set<number> = new Set(); 
+
+  permissions: any[] = [];
+  selectedPermissions: Set<number> = new Set();
 
   constructor(
     private roleService: RoleService,
@@ -29,138 +27,136 @@ export class AddRoleComponent implements OnInit {
     public authService: AuthService
   ) {}
 
-ngOnInit() {
-  const editingRole = this.roleService.getEditingRole();
+  ngOnInit() {
+    const editingRole = this.roleService.getEditingRole();
 
-  this.permissionService.getAllPermissions().subscribe((data: any[]) => {
-    if (editingRole) {
-      this.roleName = editingRole.name;
-      this.isEditing = true;
+    this.permissionService.getAllPermissions().subscribe((data: any[]) => {
+      if (editingRole) {
+        this.roleName = editingRole.name;
+        this.isEditing = true;
 
-      this.permissions = data.map((perm) => {
-        const matched = editingRole.permissions.find((p: any) => p.page === perm.page);
-        return {
+        this.permissions = data.map((perm) => {
+          const matched = editingRole.permissions.find(
+            (p: any) => p.page === perm.page
+          );
+          return {
+            ...perm,
+            isView: matched?.isView || false,
+            isAdd: matched?.isAdd || false,
+            isEdit: matched?.isEdit || false,
+            isDelete: matched?.isDelete || false,
+          };
+        });
+      } else {
+        this.isEditing = false;
+        this.roleName = '';
+
+        this.permissions = data.map((perm) => ({
           ...perm,
-          isView: matched?.isView || false,
-          isAdd: matched?.isAdd || false,
-          isEdit: matched?.isEdit || false,
-          isDelete: matched?.isDelete || false,
-        };
-      });
-    } else {
-      this.isEditing = false;
-      this.roleName = '';
-
-      this.permissions = data.map((perm) => ({
-        ...perm,
-        isView: false,
-        isAdd: false,
-        isEdit: false,
-        isDelete: false,
-      }));
-    }
-  });
-}
-
+          isView: false,
+          isAdd: false,
+          isEdit: false,
+          isDelete: false,
+        }));
+      }
+    });
+  }
 
   getModules(): string[] {
-    const uniqueModules = new Set(this.permissions.map(p => p.page));
+    const uniqueModules = new Set(this.permissions.map((p) => p.page));
     return Array.from(uniqueModules);
   }
 
- isPermissionSelected(page: string, action: string): boolean {
-  const perm = this.permissions.find(p => p.page === page);
-  if (!perm) return false;
+  isPermissionSelected(page: string, action: string): boolean {
+    const perm = this.permissions.find((p) => p.page === page);
+    if (!perm) return false;
 
-  switch (action) {
-    case 'View':
-      return perm.isView;
-    case 'Add':
-      return perm.isAdd;
-    case 'Edit':
-      return perm.isEdit;
-    case 'Delete':
-      return perm.isDelete;
-    default:
-      return false;
+    switch (action) {
+      case 'View':
+        return perm.isView;
+      case 'Add':
+        return perm.isAdd;
+      case 'Edit':
+        return perm.isEdit;
+      case 'Delete':
+        return perm.isDelete;
+      default:
+        return false;
+    }
   }
-}
 
+  togglePermission(page: string, action: string, event: any) {
+    const perm = this.permissions.find((p) => p.page === page);
+    if (!perm) return;
 
- togglePermission(page: string, action: string, event: any) {
-  const perm = this.permissions.find(p => p.page === page);
-  if (!perm) return;
-
-  switch (action) {
-    case 'View':
-      perm.isView = event.target.checked;
-      break;
-    case 'Add':
-      perm.isAdd = event.target.checked;
-      break;
-    case 'Edit':
-      perm.isEdit = event.target.checked;
-      break;
-    case 'Delete':
-      perm.isDelete = event.target.checked;
-      break;
+    switch (action) {
+      case 'View':
+        perm.isView = event.target.checked;
+        break;
+      case 'Add':
+        perm.isAdd = event.target.checked;
+        break;
+      case 'Edit':
+        perm.isEdit = event.target.checked;
+        break;
+      case 'Delete':
+        perm.isDelete = event.target.checked;
+        break;
+    }
   }
-}
 
+  saveRole() {
+    const modules = this.getModules();
 
-saveRole() {
-  const modules = this.getModules();
+    const permissionPayload = modules.map((module) => {
+      return {
+        page: module,
+        isView: this.isPermissionSelected(module, 'View'),
+        isAdd: this.isPermissionSelected(module, 'Add'),
+        isEdit: this.isPermissionSelected(module, 'Edit'),
+        isDelete: this.isPermissionSelected(module, 'Delete'),
+      };
+    });
 
-  const permissionPayload = modules.map(module => {
-    return {
-      page: module,
-      isView: this.isPermissionSelected(module, 'View'),
-      isAdd: this.isPermissionSelected(module, 'Add'),
-      isEdit: this.isPermissionSelected(module, 'Edit'),
-      isDelete: this.isPermissionSelected(module, 'Delete'),
+    const roleData = {
+      roleName: this.roleName,
+      permissions: permissionPayload,
     };
-  });
 
-  const roleData = {
-    roleName: this.roleName,
-    permissions: permissionPayload
-  };
+    const editingRole = this.roleService.getEditingRole();
 
-  const editingRole = this.roleService.getEditingRole();
+    if (editingRole) {
+      // Edit
+      (roleData as any).id = editingRole.id;
 
-  if (editingRole) {
-// Edit  
-
-    this.roleService.updateRole(roleData).subscribe({
-      next: () => {
-        console.log('Role updated successfully');
-        this.roleService.clearEditingRole();
-       this.router.navigate(['/dashboard/Roles']);
-      },
-      error: (err) => {
-        console.error('Error updating role:', err);
-      }
-    });
-
-  } else {
-// Add 
-    this.roleService.addRole(roleData).subscribe({
-      next: () => {
-        console.log('Role added successfully');
-        this.router.navigate(['/dashboard/Roles']);
-      },
-      error: (err) => {
-        console.error('Error adding role:', err);
-      }
-    });
+      this.roleService.updateRole(roleData).subscribe({
+        next: () => {
+          console.log('Role updated successfully');
+          this.roleService.clearEditingRole();
+          this.router.navigate(['/dashboard/Roles']);
+        },
+        error: (err) => {
+          console.error('Error updating role:', err);
+        },
+      });
+    } else {
+      // Add
+      this.roleService.addRole(roleData).subscribe({
+        next: () => {
+          console.log('Role added successfully');
+          this.router.navigate(['/dashboard/Roles']);
+        },
+        error: (err) => {
+          console.error('Error adding role:', err);
+        },
+      });
+    }
   }
-}
-onSubmit(form: NgForm) {
-  if (form.invalid) {
-    return; 
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+
+    this.saveRole();
   }
-
-  this.saveRole(); 
-}
-
 }

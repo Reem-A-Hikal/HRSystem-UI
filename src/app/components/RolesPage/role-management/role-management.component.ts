@@ -72,6 +72,7 @@ export class RoleManagementComponent implements OnInit {
       this.router.navigate(['/dashboard/Roles/manageRole']);
     });
   }
+  
   get canShowActionsColumn(): boolean {
     return this.authService.canShowActionsColumn('Roles-Edit', 'Roles-Delete');
   }
