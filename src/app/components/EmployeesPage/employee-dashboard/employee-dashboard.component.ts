@@ -117,4 +117,9 @@ export class EmployeeDashboardComponent implements OnInit {
   refreshSalaryData(): void {
     this.loadSalaryData();
   }
+
+  onLogout() {
+    console.log('clicked');
+    this.authService.logout();
+  }
 }
