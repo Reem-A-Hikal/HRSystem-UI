@@ -54,7 +54,7 @@ export class DashboardService {
     );
   }
 
-  getAverageDailyAttendance(): Observable<IAverageDailyAttendance> {
+  getDailyAttendance(): Observable<IAverageDailyAttendance> {
     return this.http.get<IAverageDailyAttendance>(
       `${environment.apiBaseUrl}/Attendance/dashboard/averageDailyAttendance`
     );

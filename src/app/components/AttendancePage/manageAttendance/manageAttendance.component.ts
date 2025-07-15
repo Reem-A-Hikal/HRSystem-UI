@@ -20,7 +20,6 @@ import {
   AttendanceDto,
   AttendanceUpdateDto,
 } from '../../../models/IAttendance';
-import { ReportService } from '../../../services/Report.service';
 
 function timeToMinutes(timeStr: string): number {
   const [hours, minutes] = timeStr.split(':').map(Number);
@@ -58,7 +57,6 @@ export class ManageAttendanceComponent implements OnInit {
     private attendanceService: AttendanceService,
     private empService: EmployeeService,
     private toastr: ToastrService,
-    private salaryService:ReportService,
     public authService: AuthService,
   ) {
     this.attendanceForm = this.fb.group(
