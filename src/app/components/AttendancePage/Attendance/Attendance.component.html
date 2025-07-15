@@ -114,7 +114,7 @@
               <th style="min-width: 140px">Check-in Time</th>
               <th style="min-width: 140px">Check-out Time</th>
               <th style="min-width: 140px">Date</th>
-              <th style="min-width: 120px; color: #5c748a">Actions</th>
+              <th *ngIf="canShowActionsColumn" style="min-width: 120px; color: #5c748a">Actions</th>
             </tr>
           </thead>
           <tbody class="text-center">
@@ -134,7 +134,7 @@
               <td data-label="Date" class="time-col">
                 {{ record.date | date : "yyyy-MM-dd" }}
               </td>
-              <td data-label="Actions" class="actions-col">
+              <td *ngIf="canShowActionsColumn" data-label="Actions" class="actions-col">
                 <div>
                   <a [routerLink]="['ManageAttendance', record.id]">
                     <i
@@ -144,7 +144,7 @@
                       title="Edit"
                     ></i>
                   </a>
-                  |
+                  
                   <i
                     *ngIf="authService.hasPermission('Attendance-Delete')"
                     style="cursor: pointer"

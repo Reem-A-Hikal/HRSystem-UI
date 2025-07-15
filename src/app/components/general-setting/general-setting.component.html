@@ -1,4 +1,7 @@
-<div *ngIf="authService.hasPermission('Settings-View')" class="min-vh-100 d-flex flex-column">
+<div
+  *ngIf="authService.hasPermission('Settings-View')"
+  class="min-vh-100 d-flex flex-column"
+>
   <main class="main-content flex-grow-1 d-flex justify-content-center">
     <div class="content-container">
       <div>
@@ -55,7 +58,7 @@
                   <span
                     class="badge bg-gradient fs-6 px-3 py-2 rounded-pill shadow-sm"
                   >
-                    {{ paymentType === SettingType.Hour ? 'Hour' : 'Pound' }}
+                    {{ paymentType === "Hour" ? "Hour" : "Pound" }}
                   </span>
                 </div>
                 <div class="col-12 col-md-6">
@@ -86,7 +89,6 @@
                 >
                   <i class="bi bi-pencil me-2"></i>Edit
                 </button>
-
               </div>
             </div>
           </div>
@@ -119,17 +121,13 @@
                 name="additional"
                 required
               />
-              <div
-                *ngIf="additionalInvalid"
-                class="text-danger small mt-1"
-              >
+              <div *ngIf="additionalInvalid" class="text-danger small mt-1">
                 {{
-                  paymentType === SettingType.Hour
-                    ? 'Hour must be 1–10 (including 0.5 steps)'
-                    : 'Pound must be between 50 and 20000'
+                  paymentType === "Hour"
+                    ? "Hour must be 1–10 (including 0.5 steps)"
+                    : "Pound must be between 50 and 20000"
                 }}
               </div>
-
             </div>
             <div class="col-12 col-md-6">
               <label
@@ -147,14 +145,11 @@
                 name="deduction"
                 required
               />
-              <div
-                *ngIf="deductionInvalid"
-                class="text-danger small mt-1"
-              >
+              <div *ngIf="deductionInvalid" class="text-danger small mt-1">
                 {{
-                  paymentType === SettingType.Hour
-                    ? 'Hour must be 1–10 (including 0.5 steps)'
-                    : 'Pound must be between 50 and 20000'
+                  paymentType === "Hour"
+                    ? "Hour must be 1–10 (including 0.5 steps)"
+                    : "Pound must be between 50 and 20000"
                 }}
               </div>
             </div>
@@ -175,19 +170,29 @@
                   name="paymentType"
                   id="hour"
                   [(ngModel)]="paymentType"
-                  [value]="SettingType.Hour"
+                  value="Hour"
                 />
-                <label class="btn btn-outline-secondary" for="hour">Hour</label>
-                            
+                <label
+                  class="btn btn-outline-secondary"
+                  for="hour"
+                  [class.active]="paymentType === 'Hour'"
+                  >Hour</label
+                >
+
                 <input
                   type="radio"
                   class="btn-check"
                   name="paymentType"
                   id="pound"
                   [(ngModel)]="paymentType"
-                  [value]="SettingType.Pound"
+                  value="Pound"
                 />
-                <label class="btn btn-outline-secondary" for="pound">Pound</label>
+                <label
+                  class="btn btn-outline-secondary"
+                  for="pound"
+                  [class.active]="paymentType === 'Pound'"
+                  >Pound</label
+                >
               </div>
             </div>
             <div class="col-12 col-md-6">
@@ -200,12 +205,25 @@
                 <div class="col-6">
                   <select
                     [(ngModel)]="holiday1"
+                    title="Select Holiday 1"
                     name="holiday1"
                     class="form-select form-select-lg"
                     required
                   >
                     <option disabled value="">Select Holiday 1</option>
-                    <option *ngFor="let day of ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']">
+                    <option
+                      *ngFor="
+                        let day of [
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday'
+                        ]
+                      "
+                    >
                       {{ day }}
                     </option>
                   </select>
@@ -242,18 +260,20 @@
             >
               <i class="bi bi-x-lg me-1"></i>Cancel
             </button>
-           <button
-            type="submit"
-            [disabled]="!generalForm.valid ||
-                        additionalInvalid ||
-                        deductionInvalid ||
-                        isHolidayConflict()||
-                        !authService.hasPermission('GeneralSettings-Edit')"
-            class="btn btn-save fw-bold px-4 rounded-pill"
-            (click)="saveSettings()"
-          >
-            <i class="bi bi-save me-1"></i>Save
-          </button>
+            <button
+              type="submit"
+              [disabled]="
+                !generalForm.valid ||
+                additionalInvalid ||
+                deductionInvalid ||
+                isHolidayConflict() ||
+                !authService.hasPermission('Settings-Edit')
+              "
+              class="btn btn-save fw-bold px-4 rounded-pill"
+              (click)="saveSettings()"
+            >
+              <i class="bi bi-save me-1"></i>Save
+            </button>
           </div>
         </form>
       </div>

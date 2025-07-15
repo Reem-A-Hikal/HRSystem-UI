@@ -83,6 +83,9 @@ export class OfficialHolidayComponent implements OnInit {
       }
     );
   }
+  get canShowActionsColumn(): boolean {
+  return this.authService.canShowActionsColumn('OfficialHoliday-Edit', 'OfficialHoliday-Delete');
+}
 
   private isDateInPast(date: string): boolean {
     const selectedDate = new Date(date);

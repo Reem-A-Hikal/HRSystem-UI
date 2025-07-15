@@ -18,6 +18,7 @@ import { navbarData } from './navData';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/Auth.service';
 
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -53,11 +54,15 @@ export class SidebarComponent {
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = navbarData;
 
-  constructor(private authService: AuthService) {}
+  constructor(public authService: AuthService) {}
 
   toggleCollapse(): void {
     this.changeIsLeftSidebarCollapsed.emit(!this.isLeftSidebarCollapsed());
   }
+  hasPermission(permission: string): boolean {
+  return this.authService.hasPermission(permission);
+}
+
 
   closeSidenav(): void {
     this.changeIsLeftSidebarCollapsed.emit(true);

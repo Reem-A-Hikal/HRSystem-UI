@@ -8,9 +8,8 @@ export enum SettingType {
   Pound = 2,
 }
 
-
 export interface EditSettingDto {
-  type: SettingType;
+  type: string;
   overTime: number;
   deduction: number;
   firstHoliday: string;
@@ -18,11 +17,10 @@ export interface EditSettingDto {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SettingService {
-
-  constructor(private http :HttpClient ) { }
+  constructor(private http: HttpClient) {}
   getSettings(): Observable<EditSettingDto> {
     return this.http.get<EditSettingDto>(`${environment.apiBaseUrl}/settings`);
   }

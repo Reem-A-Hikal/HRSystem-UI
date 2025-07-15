@@ -11,6 +11,7 @@ import {
   IAverageSalary,
 } from '../../models/IDashboard';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { AuthService } from '../../services/Auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,10 +26,10 @@ export class DashboardViewComponent implements OnInit {
   genderDistribution: IGenderDistribution[] = [];
   ageGroups: IAgeGroup[] = [];
   nationalityDistribution: INationalityDistribution[] = [];
-  averageDailyAttendance?: number;
+  dailyAttendance?: number;
   averageSalary?: number;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService, public Authser:AuthService) {}
 
   ngOnInit(): void {
     this.loadDashboardData();
@@ -57,8 +58,8 @@ export class DashboardViewComponent implements OnInit {
       this.nationalityDistribution = res;
     });
 
-    this.dashboardService.getAverageDailyAttendance().subscribe((res) => {
-      this.averageDailyAttendance = res.averageDailyAttendance;
+    this.dashboardService.getDailyAttendance().subscribe((res) => {
+      this.dailyAttendance = res.dailyAttendance;
     });
 
     this.dashboardService.getAverageSalary().subscribe((res) => {

@@ -30,7 +30,7 @@
     }
   </div>
   <div class="sidenav-nav">
-    <li class="sidenav-nav-item">
+    <li *ngIf="authService.hasPermission('dashboard-View')" class="sidenav-nav-item">
       <a
         class="sidenav-nav-link"
         routerLink="/dashboard"
@@ -44,6 +44,7 @@
       </a>
     </li>
     @for (item of items; track $index) {
+      @if(hasPermission(item.permission)) {
     <li class="sidenav-nav-item">
       <a
         class="sidenav-nav-link"
@@ -56,7 +57,7 @@
         }
       </a>
     </li>
-    }
+    }}
     <li
       class="sidenav-nav-item logout-item"
       style="margin-top: auto; display: flex"

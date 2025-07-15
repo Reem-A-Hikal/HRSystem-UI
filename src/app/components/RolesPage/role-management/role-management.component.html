@@ -60,13 +60,13 @@
           <thead class="d-md-table-header-group text-center">
             <tr>
               <th>Group Name</th>
-              <th>Actions</th>
+              <th *ngIf="canShowActionsColumn">Actions</th>
             </tr>
           </thead>
           <tbody style="text-align: center">
             <tr *ngFor="let role of paginatedRoles; let i = index">
               <td data-label="Group Name">{{ role.name }}</td>
-              <td data-label="Actions">
+              <td *ngIf="canShowActionsColumn" data-label="Actions">
                 <div class="fw-bold">
                   <i
                     *ngIf="authService.hasPermission('Roles-Edit')"
@@ -74,15 +74,6 @@
                     title="Edit"
                     (click)="editRole(i)"
                   ></i>
-
-                  <span
-                    *ngIf="
-                      authService.hasPermission('Roles-Edit') &&
-                      authService.hasPermission('Roles-Delete')
-                    "
-                    >|</span
-                  >
-
                   <i
                     *ngIf="authService.hasPermission('Roles-Delete')"
                     class="bi bi-trash fs-3 text-danger"

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RoleService } from '../../../services/role.service';
 import { AuthService } from '../../../services/Auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-role-management',
@@ -30,6 +31,9 @@ export class RoleManagementComponent implements OnInit {
     this.roleService.getRoles().subscribe((data) => {
       this.roles = data;
     });
+  }
+  get isEmpty(): boolean {
+    return !this.isLoading && this.filteredRoles.length === 0;
   }
   get filteredRoles() {
     return this.roles
@@ -68,27 +72,71 @@ export class RoleManagementComponent implements OnInit {
       this.router.navigate(['/dashboard/Roles/manageRole']);
     });
   }
+  
+  get canShowActionsColumn(): boolean {
+    return this.authService.canShowActionsColumn('Roles-Edit', 'Roles-Delete');
+  }
 
   deleteRole(index: number) {
     const role = this.paginatedRoles[index];
-    const confirmed = confirm(
-      `Are you sure you want to delete the role "${role.name}"?`
-    );
 
-    if (confirmed) {
-      this.roleService.deleteRole(role.id).subscribe(() => {
-        const globalIndex = this.roles.findIndex((r) => r.id === role.id);
-        if (globalIndex !== -1) {
-          this.roles.splice(globalIndex, 1);
-          const maxPage = Math.ceil(this.filteredRoles.length / this.pageSize);
-          if (this.currentPage > maxPage) {
-            this.currentPage = maxPage;
+    Swal.fire({
+      title: `Are you sure?`,
+      text: `You are about to delete the role "${role.name}". This action cannot be undone!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#4a739c',
+      cancelButtonColor: '#e74c3c',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      background: '#ffffff',
+      color: '#101518',
+      customClass: {
+        popup: 'custom-swal-popup',
+        confirmButton: 'custom-swal-confirm',
+        cancelButton: 'custom-swal-cancel',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.roleService.deleteRole(role.id).subscribe(
+          () => {
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'The role has been deleted.',
+              icon: 'success',
+              confirmButtonColor: '#4a739c',
+              customClass: {
+                popup: 'custom-swal-popup',
+                confirmButton: 'custom-swal-confirm',
+              },
+            });
+
+            const globalIndex = this.roles.findIndex((r) => r.id === role.id);
+            if (globalIndex !== -1) {
+              this.roles.splice(globalIndex, 1);
+
+              const maxPage = Math.ceil(
+                this.filteredRoles.length / this.pageSize
+              );
+              if (this.currentPage > maxPage) {
+                this.currentPage = maxPage;
+              }
+            }
+          },
+          (error) => {
+            Swal.fire({
+              title: 'Error!',
+              text: error.error?.message || 'Failed to delete role.',
+              icon: 'error',
+              confirmButtonColor: '#4a739c',
+              customClass: {
+                popup: 'custom-swal-popup',
+                confirmButton: 'custom-swal-confirm',
+              },
+            });
           }
-        }
-      });
-    }
-  }
-  get isEmpty(): boolean {
-    return !this.isLoading && this.filteredRoles.length === 0;
+        );
+      }
+    });
   }
 }
