@@ -63,7 +63,7 @@ export class AddRoleComponent implements OnInit {
   }
 
   getModules(): string[] {
-    const uniqueModules = new Set(this.permissions.map((p) => p.page));
+    const uniqueModules = new Set(this.permissions.map((p) => p.page).filter((p)=>p != 'dashboard'));
     return Array.from(uniqueModules);
   }
 

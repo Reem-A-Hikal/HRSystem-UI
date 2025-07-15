@@ -37,6 +37,13 @@ export class AuthService {
       );
   }
   redirectToFirstAccessiblePage(permissions: string[]) {
+    // If user has "User" role, redirect to employee dashboard
+    if (this.hasRole('User')) {
+      this.router.navigate(['/employee-dashboard']);
+      return;
+    }
+    
+    // Otherwise, redirect to first accessible page based on permissions
     const routesMap = [
       { permission: 'Users-View', path: '/dashboard/Users' },
       { permission: 'Roles-View', path: '/dashboard/Roles' },
@@ -172,5 +179,10 @@ export class AuthService {
       console.error('Error parsing user roles from localStorage', e);
       return [];
     }
+  }
+
+  hasRole(role: string): boolean {
+    const userRoles = this.getCurrentUserRoles();
+    return userRoles.includes(role);
   }
 }

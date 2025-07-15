@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IEmployee } from '../../../models/IEmployee';
 import { IEmployeeSalary, SalaryApiResponse } from '../../../models/IEmployeeSalary';
-import { ToastrService } from '../../../services/Toastr.service';
+import { ToastrService } from 'ngx-toastr';
 
 export interface Employee {
   id: number;
@@ -25,28 +25,6 @@ export interface Employee {
   endTime: Date;
 }
 
-// export interface SalaryRecord {
-//   id: number;
-//   employeeId: number;
-//   employeeName: string;
-//   departmentName: string;
-//   basicSalary: number;
-//   presentDays: number;
-//   absentDays: number;
-//   extraHours: number;
-//   deductionInHours: number;
-//   totalAddition: number;
-//   totalDeduction: number;
-//   netSalary: number;
-//   month: number;
-//   year: number;
-//   createdDate: Date;
-// }
-
-// export interface Month {
-//   value: number;
-//   name: string;
-// }
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -72,7 +50,7 @@ export class EmployeeDashboardComponent implements OnInit {
     public authService: AuthService,
     private employeeService: EmployeeService,
     private salaryService: ReportService,
-    private toaster:ToastrService
+    private toaster:ToastrService 
   ) { }
 
   ngOnInit(): void {
@@ -126,9 +104,9 @@ export class EmployeeDashboardComponent implements OnInit {
           error: () => {
             this.employees = [];
             this.isLoadingSalary = false;
-            this.toaster.onError(
+            this.toaster.warning(
               'There was no salary data for this month added yet.',
-              'Error'
+              'Warning'
             );
           },
         });
