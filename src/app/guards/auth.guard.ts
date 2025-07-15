@@ -27,6 +27,15 @@ export class AuthGuard implements CanActivate {
       });
     }
 
+    // Special handling for employee dashboard - allow access if user has "User" role
+    if (state.url.includes('/employee-dashboard')) {
+      if (this.authService.hasRole('User')) {
+        return true;
+      }
+      // If not a "User" role, redirect to access denied
+      return this.router.parseUrl('/access-denied');
+    }
+
     if (requiredPermissions) {
       if (typeof requiredPermissions === 'string') {
         if (!this.authService.hasPermission(requiredPermissions)) {
