@@ -23,7 +23,7 @@ export interface INationalityDistribution {
 }
 
 export interface IAverageDailyAttendance {
-  averageDailyAttendance: number;
+  dailyAttendance: number;
 }
 
 export interface IAverageSalary {
