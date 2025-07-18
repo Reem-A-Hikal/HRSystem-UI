@@ -37,12 +37,18 @@ export class AuthService {
       );
   }
   redirectToFirstAccessiblePage(permissions: string[]) {
+
+    if (this.hasRole('HR')) {
+      this.router.navigate(['/dashboard']);
+      return;
+    }
+
     // If user has "User" role, redirect to employee dashboard
     if (this.hasRole('User')) {
       this.router.navigate(['/employee-dashboard']);
       return;
     }
-    
+
     // Otherwise, redirect to first accessible page based on permissions
     const routesMap = [
       { permission: 'Users-View', path: '/dashboard/Users' },

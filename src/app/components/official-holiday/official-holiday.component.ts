@@ -48,6 +48,13 @@ export class OfficialHolidayComponent implements OnInit {
     this.service.getHolidays().subscribe((data) => (this.holidays = data));
   }
 
+  private formatDateToISO(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T00:00:00`;
+  }
+
   createHoliday() {
     this.formSubmitted = true;
 
@@ -65,7 +72,7 @@ export class OfficialHolidayComponent implements OnInit {
 
     const newHoliday: IHoliday = {
       name: this.holidayName.trim(),
-      date: this.holidayDate,
+      date: this.formatDateToISO(new Date(this.holidayDate)),
     };
 
     this.service.createHoliday(newHoliday).subscribe(
@@ -84,8 +91,11 @@ export class OfficialHolidayComponent implements OnInit {
     );
   }
   get canShowActionsColumn(): boolean {
-  return this.authService.canShowActionsColumn('OfficialHoliday-Edit', 'OfficialHoliday-Delete');
-}
+    return this.authService.canShowActionsColumn(
+      'OfficialHoliday-Edit',
+      'OfficialHoliday-Delete'
+    );
+  }
 
   private isDateInPast(date: string): boolean {
     const selectedDate = new Date(date);
